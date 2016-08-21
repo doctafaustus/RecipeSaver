@@ -107,7 +107,7 @@ app.post('/update', function(req, res) {
   } else if (req.body.category === 'tag') {
   	console.log('adding tag');
   	recipeToUpdate.tags.push({"id": Math.random() * 1000, "name": req.body.tag, "color": "red"});
-  }
+  } 
 
   
 
@@ -151,18 +151,58 @@ app.post('/recipe-update', function(req, res) {
     recipeToUpdate.more = req.body.recipeDescription;
   }
 
+  if (req.body.tagToRemove) {
+    recipeToUpdate.tags = recipeToUpdate.tags.filter(function(e) {
+      return e.id != req.body.tagToRemove;
+    });
+  }
+
+
   res.json(recipeToUpdate);
 });
+
+// Get recipes by tag
+app.get('/get-recipes-by-tags', function(req, res) {
+  console.log('/get-recipes-by-tags');
+
+  // First get all user-defined tags
+  var uniqueTags = [];
+  for (var i = 0; i < recipes.length; i++) {
+    for (var j = 0; j < recipes[i].tags.length; j++) {
+      pushIfNew(uniqueTags, recipes[i].tags[j]);
+    }
+  }
+
+  console.log(uniqueTags);
+
+  res.sendStatus(200);
+});
+
+
 
 app.listen(3000, function() {
 	console.log('App listening on port 3000');
 });
 
+
+/* --- Helper functionss --- */
+// Temporary function to get a recipe by id
 function getRecipe(id) {
   return recipes.filter(function(v) {
     return v.id == id;
   })[0];
 }
+
+// Temporary function to push only unique vales into a specified array
+function pushIfNew(arr, obj) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].name === obj.name) {
+      return;
+    }
+  }
+  arr.push(obj);
+}
+
 
 
 

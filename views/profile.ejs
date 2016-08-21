@@ -60,7 +60,7 @@
 		.tag {
 	    height: 26px;
 	    line-height: 26px;
-	    padding: 0px 9px;
+	    padding: 0px 6px 0px 9px;
 	    font-size: 12px;
 	    margin-left: 5px;
 	    max-width: 120px;
@@ -74,6 +74,25 @@
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	    border-radius: 15px;
+		}
+		.tag-name {
+			float: left;
+		}
+		.tag-close {
+			background-image: url(/images/x.png);
+			background-repeat: no-repeat;
+			background-position: center right 2px;
+			background-size: 8px 8px;
+			width: 12px;
+			height: 12px;
+			float: right;
+			margin-top: 7px;
+			margin-left: 3px;
+		}
+		.tag-close:hover {
+			background-image: url(/images/x-hover.png);
+			background-size: 12px 12px;
+			background-position: center right 0px;
 		}
 		#detail-add-tag-button {
 			margin-left: auto;
@@ -139,8 +158,15 @@
 			<!-- Recipe ID -->
 			<p id="detail-id" style="color: blue">{{ recipeID }}</p>
 		</div>
-
 	</div>
+
+	<ul>
+		<li id="get-recipes-by-tags">Tags</li>
+		<li>All Recipes</li>
+		<li>Most Recent</li>
+		<li>Favorites</li>
+		<li>Uncategorized</li>
+	</ul>
 	<script src="app.js"></script>
 </body>
 </html>

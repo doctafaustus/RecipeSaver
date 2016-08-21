@@ -16,7 +16,7 @@ function populatePanel(id) {
 				var tags = data.tags;
 				var tagList = '';
 				for (var i = 0; i < tags.length; i++) {
-					tagList += '<li class="tag" data="' + tags[i].id + '" style="background-color: ' + tags[i].color + ';">' + tags[i].name + '</li>';
+					tagList += '<li class="tag" data-tag-id="' + tags[i].id + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-close"></div></li>';
 				}
 
 				$('#detail-tag-list').prepend(tagList);
@@ -103,6 +103,27 @@ $('#profile').on('blur', '#detail-new-tag-input', function(e) {
 });
 
 
+// Remove tag
+$('#profile').on('click', '.tag-close', function(e) {
+	var recipeID = $('#detail-id').text();
+	var $tag = $(this).closest('.tag');
+	var tagID = $tag.data('tag-id');
+	$.ajax({
+		type: 'POST',
+	  url: '/recipe-update',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: { id: recipeID, tagToRemove: tagID },
+	  success: function() {
+	  	console.log('Removed recipe tag!');
+
+	  	// Artifically hide removed tag
+	  	$tag.hide();
+	  }
+	});
+
+});
+
+
 // Edit recipe title
 $('#profile').on('blur', '#detail-name', function(e) {
 	var id = $('#detail-id').text();
@@ -151,7 +172,17 @@ $('#profile').on('blur', '#detail-description', function(e) {
 	  	populatePanel(id);
 	  }
 	});
+});
 
 
-
+// Get recipes by tag
+$('body').on('click', '#get-recipes-by-tags', function(e) {
+	$.ajax({
+		type: 'GET',
+	  url: '/get-recipes-by-tags',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  success: function() {
+	  	console.log('Got recipes by tags!');
+	  }
+	});
 });
