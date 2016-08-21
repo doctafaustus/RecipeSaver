@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html ng-app="passport">
+<head>
+	<title></title>
+	<script src="js/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<style>
+		body {
+			font-family: 'Montserrat', sans-serif;
+		}
+		ul {
+			list-style-type: none;
+		}
+		#profile {
+			display: flex;
+			flex-direction: row;
+			box-sizing: border-box;
+		}
+		.recipe-list {
+			border: solid 1px black;
+			width: 40%;
+			margin-right: 14px;
+		}
+		.detail-recipe {
+			border: solid 1px black;
+			width: 60%;
+			padding: 10px;
+		}
+		#detail-name {
+
+		}
+		#detail-ingredients {
+			margin-bottom: 20px;
+			border-bottom: solid 1px gray;
+		}
+		#detail-description {
+			margin-top: 20px;
+		}
+		#detail-tags {
+			display: flex;
+		}
+		#detail-tag-list {
+			padding: 0;
+			margin: 0;
+			margin-right: 3px;
+			padding-top: 4px;
+			width: 100%;
+		}
+		#detail-tag-list.editable {
+			border: solid 1px gray;
+		}
+		#detail-tag-icon {
+			display: inline-block;
+			margin-right: 3px;
+		}
+		#detail-tag-icon img {
+			margin-top: 10px;
+		}
+		.tag {
+	    height: 26px;
+	    line-height: 26px;
+	    padding: 0px 9px;
+	    font-size: 12px;
+	    margin-left: 5px;
+	    max-width: 120px;
+	    color: white;
+	    background-color: #AA62E3;
+	    box-sizing: border-box;
+	    cursor: pointer;
+	    display: inline-block;
+	    font-weight: 300;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+	    border-radius: 15px;
+		}
+		#detail-add-tag-button {
+			margin-left: auto;
+			width: 24px;
+			height: 24px;
+			cursor: pointer;
+		}
+		#detail-new-tag-input {
+			display: none;
+	    height: 26px;
+	    line-height: 26px;
+	    padding: 0px 9px;
+	    font-size: 12px;
+	    box-sizing: border-box;
+	    font-weight: 300;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    white-space: nowrap;
+		}
+	</style>
+</head>
+<body>
+	<h1>Profile</h1>
+
+	<div id="profile">
+		<ul class="recipe-list">
+			<% for (var i = 0; i < recipes.length; i++) { %>
+				<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><%= recipes[i].name %></li>
+			<% } %>
+		</ul>
+
+		<!-- Recipe Detail Panel -->
+		<div class="detail-recipe">
+
+		<!-- Recipe Tags -->
+			<div id="detail-tags">
+				<!-- Tag Icon -->
+				<div id="detail-tag-icon"><img src="/images/tag-icon.jpg"></div>
+				<!-- Tag List -->
+				<ul id="detail-tag-list">
+
+					<!-- Recipe Tags will be prepended here -->
+
+					<!-- New Tag Input -->
+					<li id="detail-new-tag-input" contenteditable ng-model="tags"></li>
+				</ul>
+				<img id="detail-add-tag-button" src="images/plus-button.jpg" ng-click="addTag()">
+			</div>
+
+			<!-- Recipe Name -->
+			<h2 id="detail-name" contenteditable>{{ recipeName }}</h2>
+
+			<!-- Recipe Ingredients -->
+			<div id="detail-ingredients">
+				{{ recipeIngredients }}
+			</div>
+
+			<!-- Recipe Description -->
+			<div contenteditable id="detail-description" ng-bind-html="recipeDetail | rawHtml">
+				{{ recipeMore }}
+			</div>
+
+			<!-- Recipe ID -->
+			<p id="detail-id" style="color: blue">{{ recipeID }}</p>
+		</div>
+
+	</div>
+	<script src="app.js"></script>
+</body>
+</html>
+
