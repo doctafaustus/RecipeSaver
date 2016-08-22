@@ -161,9 +161,9 @@ app.post('/recipe-update', function(req, res) {
   res.json(recipeToUpdate);
 });
 
-// Get recipes by tag
-app.get('/get-recipes-by-tags', function(req, res) {
-  console.log('/get-recipes-by-tags');
+// Get all tags
+app.get('/get-all-tags', function(req, res) {
+  console.log('/get-all-tags');
 
   // First get all user-defined tags
   var uniqueTags = [];
@@ -173,11 +173,35 @@ app.get('/get-recipes-by-tags', function(req, res) {
     }
   }
 
-  console.log(uniqueTags);
-
-  res.sendStatus(200);
+  console.log(uniqueTags)
+  res.json(uniqueTags);
 });
 
+
+// Get recipes by tag
+app.post('/get-recipes-by-tag', function(req, res) {
+  console.log('/get-recipes-by-tag');
+  var tagName = req.body.tagName;
+
+  var recipesToSend = [];
+
+  for (var i = 0; i < recipes.length; i++) {
+    for (var j = 0; j < recipes[i].tags.length; j++) {
+      if (recipes[i].tags[j].name === tagName) {
+        recipesToSend.push(recipes[i]);
+      }
+    }
+  }
+
+  res.json(recipesToSend);
+});
+
+
+// Get all recipes
+app.get('/get-all-recipes', function(req, res) {
+  console.log('/get-all-recipes');
+  res.json(recipes);
+});
 
 
 app.listen(3000, function() {
@@ -233,6 +257,13 @@ var recipes = [
     "name": "Cream Cheese Penguins",
     "ingredients": "olives, carrot",
     "more": "Cut a slit from top to bottom, lengthwise, into the side of each jumbo olive. Carefully insert about 1 teaspoon of cream cheese into each olive. Slice the carrot into eighteen 1/4 inch thick rounds; cut a small notch out of each carrot slice to form feet. Save the cut out piece and press into center of small olive to form the beak. If necessary cut a small slit into each olive before inserting the beak.",
+      "tags": [{"id": 1, "name": "dinner", "color": "goldenrod"}, {"id": 2, "name": "brunch", "color": "orange"}]
+  },
+  {
+    "id": 5,
+    "name": "Veal Piccata",
+    "ingredients": "milk, veal",
+    "more": "In a shallow bowl or plate combine the flour, 1 1/2 teaspoons of the salt and pepper and stir to combine thoroughly. Quickly dredge the veal scallops in the seasoned flour mixture, shaking to remove any excess flour",
       "tags": [{"id": 1, "name": "dinner", "color": "goldenrod"}, {"id": 2, "name": "brunch", "color": "orange"}]
   },
 ];

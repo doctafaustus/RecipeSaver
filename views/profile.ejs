@@ -17,10 +17,12 @@
 			flex-direction: row;
 			box-sizing: border-box;
 		}
-		.recipe-list {
+		#list-panel {
 			border: solid 1px black;
 			width: 40%;
 			margin-right: 14px;
+		}
+		.recipe-list {
 		}
 		.detail-recipe {
 			border: solid 1px black;
@@ -118,11 +120,15 @@
 	<h1>Profile</h1>
 
 	<div id="profile">
-		<ul class="recipe-list">
-			<% for (var i = 0; i < recipes.length; i++) { %>
-				<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><%= recipes[i].name %></li>
-			<% } %>
-		</ul>
+
+		<!-- List Panel -->
+		<div id="list-panel">
+			<ul class="recipe-list">
+				<% for (var i = 0; i < recipes.length; i++) { %>
+					<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><%= recipes[i].name %></li>
+				<% } %>
+			</ul>
+		</div>
 
 		<!-- Recipe Detail Panel -->
 		<div class="detail-recipe">
@@ -162,7 +168,7 @@
 
 	<ul>
 		<li id="get-recipes-by-tags">Tags</li>
-		<li>All Recipes</li>
+		<li id='get-all-recipes'>All Recipes</li>
 		<li>Most Recent</li>
 		<li>Favorites</li>
 		<li>Uncategorized</li>

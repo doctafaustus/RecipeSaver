@@ -175,14 +175,92 @@ $('#profile').on('blur', '#detail-description', function(e) {
 });
 
 
-// Get recipes by tag
+// Get all tags
 $('body').on('click', '#get-recipes-by-tags', function(e) {
+	if (window.stage !== 'allTags') {
+		$.ajax({
+			type: 'GET',
+		  url: '/get-all-tags',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+
+		  success: function(data) {
+		  	console.log('Got all tags!');
+		  	var tags = data;
+
+		  	var tagList = '<ul id="tag-list">';
+		  	for (var i = 0; i < tags.length; i++) {
+		  		tagList += '<li class="tag-list-name" data-tag-list-id="' + tags[i].id + '">' + tags[i].name + '</li>';
+		  	}
+
+		  	tagList += '</ul>';
+
+		  	$('#list-panel').html(tagList);
+
+		  	// Mark stage
+				window.stage = 'allTags';
+		  }
+		});
+	}
+
+});
+
+
+// Get recipes by tag
+$('body').on('click', '.tag-list-name', function(e) {
+	var tagName = $(this).text();
 	$.ajax({
-		type: 'GET',
-	  url: '/get-recipes-by-tags',
+		type: 'POST',
+	  url: '/get-recipes-by-tag',
 	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  success: function() {
-	  	console.log('Got recipes by tags!');
+	  data: { tagName: tagName },
+
+	  success: function(data) {
+	  	console.log('Got recipes by tag!');
+		  	var recipes = data;
+
+		  	var recipeList = '<ul id="recipe-list-by-tag">';
+		  	for (var i = 0; i < recipes.length; i++) {
+		  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '">' + recipes[i].name + '</li>';
+		  	}
+
+		  	recipeList += '</ul>';
+
+		  	$('#list-panel').html(recipeList);
+
+		  	// Mark stage
+				window.stage = 'recipesByTag';
 	  }
 	});
+
 });
+
+
+// Get all recipes
+$('body').on('click', '#get-all-recipes', function(e) {
+	if (window.stage !== 'allRecipes') {
+		$.ajax({
+			type: 'GET',
+		  url: '/get-all-recipes',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  success: function(data) {
+		  	console.log('Got all recipes!');
+		  	var recipes = data;
+
+		  	var recipeList = '<ul id="recipe-list">';
+		  	for (var i = 0; i < recipes.length; i++) {
+		  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '">' + recipes[i].name + '</li>';
+		  	}
+
+		  	recipeList += '</ul>';
+
+		  	$('#list-panel').html(recipeList);
+
+		  	// Mark stage
+				window.stage = 'allRecipes';
+		  }
+		});
+	}
+
+});
+
+
