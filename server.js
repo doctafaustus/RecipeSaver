@@ -182,7 +182,7 @@ app.get('/get-all-tags', function(req, res) {
 app.post('/get-recipes-by-tag', function(req, res) {
   console.log('/get-recipes-by-tag');
   var tagName = req.body.tagName;
-
+  var tagColor = req.body.tagColor;
   var recipesToSend = [];
 
   for (var i = 0; i < recipes.length; i++) {
@@ -193,7 +193,7 @@ app.post('/get-recipes-by-tag', function(req, res) {
     }
   }
 
-  res.json(recipesToSend);
+  res.json({recipesToSend: recipesToSend, tagColor: tagColor});
 });
 
 

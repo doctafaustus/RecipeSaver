@@ -189,7 +189,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 
 		  	var tagList = '<ul id="tag-list">';
 		  	for (var i = 0; i < tags.length; i++) {
-		  		tagList += '<li class="tag-list-name" data-tag-list-id="' + tags[i].id + '">' + tags[i].name + '</li>';
+		  		tagList += '<li class="tag-list-name" data-tag-color="' + tags[i].color + '" data-tag-list-id="' + tags[i].id + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-color-picker"></div></li>';
 		  	}
 
 		  	tagList += '</ul>';
@@ -208,17 +208,21 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 // Get recipes by tag
 $('body').on('click', '.tag-list-name', function(e) {
 	var tagName = $(this).text();
+	var tagColor = $(this).data('tag-color');
 	$.ajax({
 		type: 'POST',
 	  url: '/get-recipes-by-tag',
 	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  data: { tagName: tagName },
+	  data: { tagName: tagName, tagColor: tagColor },
 
 	  success: function(data) {
 	  	console.log('Got recipes by tag!');
-		  	var recipes = data;
+	  	console.log(data);
+		  	var recipes = data.recipesToSend;
+		  	var color = data.tagColor;
 
 		  	var recipeList = '<ul id="recipe-list-by-tag">';
+		  	recipeList += '<li class="tag-category" style="background-color: ' + color + ';">' + tagName + '</li>';
 		  	for (var i = 0; i < recipes.length; i++) {
 		  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '">' + recipes[i].name + '</li>';
 		  	}
