@@ -206,7 +206,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 
 
 // Get recipes by tag
-$('body').on('click', '.tag-list-name', function(e) {
+$('body').on('click', '.tag-name', function(e) {
 	var tagName = $(this).text();
 	var tagColor = $(this).data('tag-color');
 	$.ajax({
@@ -268,3 +268,11 @@ $('body').on('click', '#get-all-recipes', function(e) {
 });
 
 
+
+
+// Pick new tag color
+$('body').on('click', '.tag-color-picker', function(e) {
+	var position = $(this).offset();
+	$('#tag-colors').attr('style', 'display: block; position: absolute; top: ' + (position.top + 10) +'px; left: ' + (position.left + 20) + 'px;');
+
+});

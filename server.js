@@ -193,7 +193,7 @@ app.post('/get-recipes-by-tag', function(req, res) {
     }
   }
 
-  res.json({recipesToSend: recipesToSend, tagColor: tagColor});
+  res.json({recipesToSend: recipesToSend, tagColor: tagColor, tagName: tagName});
 });
 
 
