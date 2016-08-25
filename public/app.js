@@ -270,9 +270,24 @@ $('body').on('click', '#get-all-recipes', function(e) {
 
 
 
-// Pick new tag color
+// Select new Tag Color
 $('body').on('click', '.tag-color-picker', function(e) {
+	// Save reference to picked tag
+	$(this).closest('.tag-list-name').addClass('picked-tag');
+
 	var position = $(this).offset();
 	$('#tag-colors').attr('style', 'display: block; position: absolute; top: ' + (position.top + 10) +'px; left: ' + (position.left + 20) + 'px;');
 
+});
+
+
+// Update tag color
+$('body').on('click', '.tag-color-selection', function(e) {
+	var tagColorToChange = $('.picked-tag').data('tag-color');
+	var newTagColor = $(this).data('color');
+
+	console.log(tagColorToChange);
+	console.log(newTagColor);
+
+	$('.picked-tag').removeClass('picked-tag');
 });

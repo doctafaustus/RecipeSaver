@@ -236,34 +236,34 @@ var recipes = [
 		"name": "Pasta",
 		"ingredients": "pasta, tomato",
 		"more": "Boil potatoes about 12 to 15 minutes. Drain, slice them up. Slice or chop a medium onion. Heat about 1/4\" of oil in frying pan. When hot, add potatoes and spread them out. Allow them to start to brown before flipping/turning. From this point on, keep turning once in a while until they look like you want them. Keep enough oil in the pan. Also, add the onion after that first turn. If you add sooner, the onions will start to burn. Sometimes I sprinkle with a little paprika, but always with black pepper (to taste). Also add salt to taste. If you have to, drain them on paper towels on newspaper, but if you do it right you shouldn't have to do that.",
-			"tags": [{"id": 1, "name": "dinner", "color": "blue"}, {"id": 2, "name": "lunch", "color": "red"}]
+			"tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}]
 	},
 	{
 		"id": 2,
 		"name": "Eggs",
 		"ingredients": "eggs, stuff",
 		"more": "Chicken coated in panko bread crumbs and hot wing sauce, deep fried, and glazed over with swiss cheese or season with spices",
-		"tags": [{"id": 1, "name": "breakfast", "color": "green"}, {"id": 2, "name": "to try", "color": "red"}]
+		"tags": [{"id": 1, "name": "breakfast", "color": "#22da00"}, {"id": 2, "name": "to try", "color": "#ff0000"}]
 	},
   {
     "id": 3,
     "name": "Soup",
     "ingredients": "beets, water",
     "more": "Mix Parmesan cheese, melted butter, mayonnaise, green onions, and 2 tablespoons lemon juice in a bowl; spoon over the fillets.",
-      "tags": [{"id": 1, "name": "dinner", "color": "blue"}, {"id": 2, "name": "lunch", "color": "red"}]
+      "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}]
   },
   {
     "id": 4,
     "name": "Cream Cheese Penguins",
     "ingredients": "olives, carrot",
     "more": "Cut a slit from top to bottom, lengthwise, into the side of each jumbo olive. Carefully insert about 1 teaspoon of cream cheese into each olive. Slice the carrot into eighteen 1/4 inch thick rounds; cut a small notch out of each carrot slice to form feet. Save the cut out piece and press into center of small olive to form the beak. If necessary cut a small slit into each olive before inserting the beak.",
-      "tags": [{"id": 1, "name": "dinner", "color": "goldenrod"}, {"id": 2, "name": "brunch", "color": "orange"}]
+      "tags": [{"id": 1, "name": "dinner", "color": "#dec688"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
   },
   {
     "id": 5,
     "name": "Veal Piccata",
     "ingredients": "milk, veal",
     "more": "In a shallow bowl or plate combine the flour, 1 1/2 teaspoons of the salt and pepper and stir to combine thoroughly. Quickly dredge the veal scallops in the seasoned flour mixture, shaking to remove any excess flour",
-      "tags": [{"id": 1, "name": "dinner", "color": "goldenrod"}, {"id": 2, "name": "brunch", "color": "orange"}]
+      "tags": [{"id": 1, "name": "dinner", "color": "#dec688"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
   },
 ];
