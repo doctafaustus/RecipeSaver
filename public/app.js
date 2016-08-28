@@ -284,10 +284,31 @@ $('body').on('click', '.tag-color-picker', function(e) {
 // Update tag color
 $('body').on('click', '.tag-color-selection', function(e) {
 	var tagColorToChange = $('.picked-tag').data('tag-color');
+	var tagName = $('.picked-tag').find('.tag-name').text();
 	var newTagColor = $(this).data('color');
 
 	console.log(tagColorToChange);
 	console.log(newTagColor);
 
-	$('.picked-tag').removeClass('picked-tag');
+	$.ajax({
+		type: 'POST',
+	  url: '/update-tag-color',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: { tagColorToChange: tagColorToChange, tagName: tagName, newTagColor: newTagColor },
+	  success: function(data) {
+	  	console.log('Updated tag color!');
+
+	  	// Artificially change picked tag color
+	  	$('.picked-tag').attr('style', 'background-color: ' + newTagColor + ';');
+
+	  	// Hide tag color selection box
+	  	$('#tag-colors').hide();
+
+
+	  	$('.picked-tag').removeClass('picked-tag');
+	  }
+	});
+
+
+	
 });

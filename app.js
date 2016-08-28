@@ -203,6 +203,25 @@ app.get('/get-all-recipes', function(req, res) {
   res.json(recipes);
 });
 
+// Update tag color
+app.post('/update-tag-color', function(req, res) {
+	var tagColorToChange = req.body.tagColorToChange;
+	var newTagColor = req.body.newTagColor;
+	var tagName = req.body.tagName;
+	console.log(tagName);
+
+	for (var i = 0; i < recipes.length; i++) {
+		for (var j = 0; j < recipes[i].tags.length; j++) {
+			if (recipes[i].tags[j].color === tagColorToChange && recipes[i].tags[j].name === tagName) {
+				recipes[i].tags[j].color = newTagColor;
+			}
+		}
+	}
+
+	res.sendStatus(200);
+
+});
+
 
 app.listen(3000, function() {
 	console.log('App listening on port 3000');
