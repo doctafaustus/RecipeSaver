@@ -208,7 +208,8 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 // Get recipes by tag
 $('body').on('click', '.tag-name', function(e) {
 	var tagName = $(this).text();
-	var tagColor = $(this).data('tag-color');
+	var tagColor = $(this).closest('.tag-list-name').attr('data-tag-color');('tag-color');
+
 	$.ajax({
 		type: 'POST',
 	  url: '/get-recipes-by-tag',
@@ -299,7 +300,7 @@ $('body').on('click', '.tag-color-selection', function(e) {
 	  	console.log('Updated tag color!');
 
 	  	// Artificially change picked tag color
-	  	$('.picked-tag').attr('style', 'background-color: ' + newTagColor + ';');
+	  	$('.picked-tag').attr('style', 'background-color: ' + newTagColor + ';').attr('data-tag-color', newTagColor);
 
 	  	// Hide tag color selection box
 	  	$('#tag-colors').hide();
