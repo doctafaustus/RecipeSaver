@@ -93,27 +93,43 @@ app.get('/recipes', function(req, res) {
 	res.json(recipes);
 });
 
-app.post('/update', function(req, res) {
-  var recipeToUpdate = recipes.filter(function(v) {
-	  return v.id == req.body.id;
-	})[0];
+// app.post('/update', function(req, res) {
+//   var recipeToUpdate = recipes.filter(function(v) {
+// 	  return v.id == req.body.id;
+// 	})[0];
 
-  if (req.body.category === 'recipeMore') {
-    console.log('updating recipeMore')
-    recipeToUpdate.more = req.body.recipeMore;
-  } else if (req.body.category === 'recipeName') {
-    console.log('updating recipeName')
-    recipeToUpdate.name = req.body.recipeName;
-  } else if (req.body.category === 'tag') {
-  	console.log('adding tag');
-  	recipeToUpdate.tags.push({"id": Math.random() * 1000, "name": req.body.tag, "color": "red"});
-  } 
+//   if (req.body.category === 'recipeMore') {
+//     console.log('updating recipeMore')
+//     recipeToUpdate.more = req.body.recipeMore;
+//   } else if (req.body.category === 'recipeName') {
+//     console.log('updating recipeName')
+//     recipeToUpdate.name = req.body.recipeName;
+//   } else if (req.body.category === 'tag') {
+//   	console.log('adding tag');
+
+//   	// Set default new color
+//   	var color = '#808080';
+
+// 	  // First get all user-defined tags
+// 	  var uniqueTags = [];
+// 	  for (var i = 0; i < recipes.length; i++) {
+// 	    for (var j = 0; j < recipes[i].tags.length; j++) {
+// 	      if (req.body.tag.toLowerCase().trim() === recipes[i].tags[j].name.toLowerCase.trim()) {
+// 	      	console.log("FOUND!");
+// 	      }
+// 	    }
+// 	  }
+
+
+
+//   	recipeToUpdate.tags.push({"id": Math.random() * 1000, 'name': req.body.tag, 'color': color});
+//   } 
 
   
 
 
-  res.sendStatus(200);
-});
+//   res.sendStatus(200);
+// });
 
 
 
@@ -138,7 +154,20 @@ app.post('/recipe-update', function(req, res) {
 
   // Add new tag
   if (req.body.tagName) {
-    recipeToUpdate.tags.push({"id": Math.random() * 1000, "name": req.body.tagName, "color": "red"});
+
+  	// Set default new color
+  	var color = '#808080';
+
+  	// Loop through all tags and see if a color is already used for that tag, if so then use it
+	  for (var i = 0; i < recipes.length; i++) {
+	    for (var j = 0; j < recipes[i].tags.length; j++) {
+	      if (req.body.tagName.toLowerCase().trim() === recipes[i].tags[j].name.toLowerCase().trim()) {
+	      	color = recipes[i].tags[j].color;
+	      }
+	    }
+	  }
+
+    recipeToUpdate.tags.push({'id': Math.random() * 1000, 'name': req.body.tagName, 'color': color});
   }
 
   // Update recipe name
@@ -286,3 +315,15 @@ var recipes = [
       "tags": [{"id": 1, "name": "dinner", "color": "#dec688"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
   },
 ];
+
+
+/* TO DO
+
+Disallow the same tag to be added twice on the same recipe
+
+Convert ingredients that can be converted
+https://www.npmjs.com/package/unitz
+
+.25x, .5x, 1x, 2x, 4x
+
+*/
