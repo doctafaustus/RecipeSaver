@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html ng-app="passport">
+<html>
 <head>
 	<title></title>
 	<script src="js/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 	<style>
 		body {
 			font-family: 'Montserrat', sans-serif;
+			font-family: 'Source Sans Pro', sans-serif;
 		}
 		ul {
 			list-style-type: none;
@@ -34,7 +36,20 @@
 		}
 		#detail-ingredients {
 			margin-bottom: 20px;
+			padding-left: 0;
 			border-bottom: solid 1px gray;
+		}
+		#detail-new-ingredient-input {
+			display: none;
+			height: 26px;
+			line-height: 26px;
+			padding: 0px 9px;
+			font-size: 12px;
+			box-sizing: border-box;
+			font-weight: 300;
+		}
+		.ingredient {
+			margin-bottom: 4px;
 		}
 		#detail-description {
 			margin-top: 20px;
@@ -196,21 +211,25 @@
 					<!-- Recipe Tags will be prepended here -->
 
 					<!-- New Tag Input -->
-					<li id="detail-new-tag-input" contenteditable ng-model="tags"></li>
+					<li id="detail-new-tag-input" contenteditable></li>
 				</ul>
-				<img id="detail-add-tag-button" src="images/plus-button.jpg" ng-click="addTag()">
+				<img id="detail-add-tag-button" src="images/plus-button.jpg">
 			</div>
 
 			<!-- Recipe Name -->
 			<h2 id="detail-name" contenteditable>{{ recipeName }}</h2>
 
 			<!-- Recipe Ingredients -->
-			<div id="detail-ingredients">
-				{{ recipeIngredients }}
-			</div>
+			<ul id="detail-ingredients">
+
+				<!-- Recipe Ingredients will be prepended here -->
+
+				<!-- New Ingredient Input -->
+				<li id="detail-new-ingredient-input" class="ingredient" contenteditable></li>
+			</ul>
 
 			<!-- Recipe Description -->
-			<div contenteditable id="detail-description" ng-bind-html="recipeDetail | rawHtml">
+			<div contenteditable id="detail-description">
 				{{ recipeMore }}
 			</div>
 
@@ -220,8 +239,8 @@
 	</div>
 
 	<ul>
-		<li id="get-recipes-by-tags">Tags</li>
 		<li id='get-all-recipes'>All Recipes</li>
+		<li id="get-recipes-by-tags">Tags</li>
 		<li>Most Recent</li>
 		<li>Favorites</li>
 		<li>Uncategorized</li>

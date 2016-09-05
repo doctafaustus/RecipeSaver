@@ -26,7 +26,16 @@ function populatePanel(id) {
 			$('#detail-name').text(data.name);
 
 			// Recipe Ingredients
-			$('#detail-ingredients').text(data.ingredients);
+			$('.ingredient:not("#detail-new-ingredient-input")').remove();
+			if (data.ingredients.length) {
+				var ingredients = data.ingredients;
+				var ingredientsList = '';
+				for (var i = 0; i < ingredients.length; i++) {
+					ingredientsList += '<li contenteditable class="ingredient" data-ingredient-id="' + ingredients[i].id + '">' + ingredients[i].name + '</li>';
+				}
+				$('#detail-ingredients').prepend(ingredientsList);
+			}
+
 
 			// Recipe Description
 			$('#detail-description').html(data.more)
@@ -44,6 +53,56 @@ $('#profile').on('click', '.recipe-list-entry', function(e) {
 	populatePanel(id);
 });
 
+
+// Show new ingredient input
+$('#profile').on('keypress', '.ingredient', function(e) {
+	console.log('test');
+
+	// If enter key was pressed then submit edits
+  if (e.which == 13) {
+
+  	// Immediately remove contenteditable attribute so the input doesn't weirdly jump to new line momentarily
+  	$(this).attr('contenteditable', 'false');
+
+  	var ingredientText = $(this).text().trim();
+  	var id = $('#detail-id').text();
+  	var ingredientID = $(this).attr('data-ingredient-id');
+  	console.log(ingredientText, id);
+
+		// Determine if this is the last item in the list
+  	var addNewIngredient = false;
+		if ($(this).index() == $(this).siblings().length-1) {
+			addNewIngredient = true;
+		}
+
+
+		$.ajax({
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: { id: id, ingredientID: ingredientID, ingredientText: ingredientText },
+		  success: function() {
+		  	console.log('Edited ingredient!');
+		  	populatePanel(id);
+
+				if (addNewIngredient) {
+					console.log('adding new input');
+					// Show new content editable div for new ingredient
+					$('#detail-new-ingredient-input').attr('style', 'display: block;');
+					showFocus('detail-new-ingredient-input');
+				}
+		  }
+		});
+
+
+
+
+
+  }
+});
+
+
+
 // Show new tag input
 $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	e.preventDefault();
@@ -52,45 +111,43 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	$('#detail-new-tag-input').attr('style', 'display: inline-block;');
 
   // Put focus in contenteditable div
-  var newTagInput = document.getElementById("detail-new-tag-input");
-  newTagInput.onfocus = function() {
-      window.setTimeout(function() {
-          var sel, range;
-          if (window.getSelection && document.createRange) {
-              range = document.createRange();
-              range.selectNodeContents(newTagInput);
-              range.collapse(true);
-              sel = window.getSelection();
-              sel.removeAllRanges();
-              sel.addRange(range);
-          } else if (document.body.createTextRange) {
-              range = document.body.createTextRange();
-              range.moveToElementText(newTagInput);
-              range.collapse(true);
-              range.select();
-          }
-      }, 1);
-  };
-  newTagInput.focus();
+  showFocus('detail-new-tag-input');
 
   // Submit new tag if enter key pressed
   $(document).on('keypress', function(e) {
     if (e.which == 13) {
       $(document).off('keypress');
     	console.log('Submitting new tag...');
-    	var tagName = $('#detail-new-tag-input').text().trim()
+
+
+    	var tagName = $('#detail-new-tag-input').text().trim();
     	$('#detail-new-tag-input').text('').hide();
     	var id = $('#detail-id').text();
-			$.ajax({
-				type: 'POST',
-			  url: '/recipe-update',
-			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-			  data: { id: id, tagName: tagName },
-			  success: function() {
-			  	console.log('Added new tag!');
-			  	populatePanel(id);
-			  }
+
+
+    	// Check to see if this tag exists on the recipe already
+    	var tagUnique = true;
+			$('.tag-name').each(function() {
+				if ($(this).text().trim() === tagName) {
+					alert('Tag already being used');
+					tagUnique = false;
+				}
 			});
+
+
+			if (tagUnique) {
+				$.ajax({
+					type: 'POST',
+				  url: '/recipe-update',
+				  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				  data: { id: id, tagName: tagName },
+				  success: function() {
+				  	console.log('Added new tag!');
+				  	populatePanel(id);
+				  }
+				});
+			}
+
     }
   });
   
@@ -313,3 +370,29 @@ $('body').on('click', '.tag-color-selection', function(e) {
 
 	
 });
+
+
+
+// Helper functions
+function showFocus(id) {
+  var newTagInput = document.getElementById(id);
+  newTagInput.onfocus = function() {
+      window.setTimeout(function() {
+          var sel, range;
+          if (window.getSelection && document.createRange) {
+              range = document.createRange();
+              range.selectNodeContents(newTagInput);
+              range.collapse(true);
+              sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+          } else if (document.body.createTextRange) {
+              range = document.body.createTextRange();
+              range.moveToElementText(newTagInput);
+              range.collapse(true);
+              range.select();
+          }
+      }, 1);
+  };
+  newTagInput.focus();
+}
