@@ -153,14 +153,29 @@ app.post('/recipe-update', function(req, res) {
   var recipeToUpdate = getRecipe(req.body.id);
 
   // Edit ingredient
-  if (req.body.ingredientText) {
+  if (req.body.ingredientFlag) {
   	var ingredient = recipeToUpdate.ingredients.filter(function(e) {
       return e.id == req.body.ingredientID;
     });
 
-    ingredient[0].name = req.body.ingredientText;
+    // If text is equal to nothing then delete that ingredient
+    if (req.body.ingredientText === '') {
+	    recipeToUpdate.ingredients = recipeToUpdate.ingredients.filter(function(e) {
+	      return e.id != req.body.ingredientID;
+	    });
+    } else {
+    	ingredient[0].name = req.body.ingredientText;
+    }
+
+
 
     console.log(ingredient)
+  }
+
+  // Add ingredient
+  if (req.body.newIngredientText) {
+  	var randomId = Math.random() * 1000;
+  	recipeToUpdate.ingredients.push({"name": req.body.newIngredientText, id: randomId});
   }
 
 
@@ -357,7 +372,7 @@ var recipes = [
 				}
 			],
     "more": "Cut a slit from top to bottom, lengthwise, into the side of each jumbo olive. Carefully insert about 1 teaspoon of cream cheese into each olive. Slice the carrot into eighteen 1/4 inch thick rounds; cut a small notch out of each carrot slice to form feet. Save the cut out piece and press into center of small olive to form the beak. If necessary cut a small slit into each olive before inserting the beak.",
-      "tags": [{"id": 1, "name": "dinner", "color": "#dec688"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
+      "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
   },
   {
     "id": 5,
@@ -373,7 +388,7 @@ var recipes = [
 				}
 			],
     "more": "In a shallow bowl or plate combine the flour, 1 1/2 teaspoons of the salt and pepper and stir to combine thoroughly. Quickly dredge the veal scallops in the seasoned flour mixture, shaking to remove any excess flour",
-      "tags": [{"id": 1, "name": "dinner", "color": "#dec688"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
+      "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}]
   },
 ];
 

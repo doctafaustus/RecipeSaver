@@ -43,10 +43,8 @@
 			display: none;
 			height: 26px;
 			line-height: 26px;
-			padding: 0px 9px;
-			font-size: 12px;
+			font-size: 16px;
 			box-sizing: border-box;
-			font-weight: 300;
 		}
 		.ingredient {
 			margin-bottom: 4px;
@@ -182,7 +180,13 @@
 			margin: 0;
 			padding: 20px;
 		}
-	</style>
+		[contenteditable=true]:empty:before{
+		  content: attr(placeholder);
+		  display: block; /* For Firefox */
+		  cursor: text;
+		  color: red;
+		}
+ 	</style>
 </head>
 <body>
 	<h1>Profile</h1>
@@ -211,13 +215,13 @@
 					<!-- Recipe Tags will be prepended here -->
 
 					<!-- New Tag Input -->
-					<li id="detail-new-tag-input" contenteditable></li>
+					<li id="detail-new-tag-input" contenteditable="true"></li>
 				</ul>
 				<img id="detail-add-tag-button" src="images/plus-button.jpg">
 			</div>
 
 			<!-- Recipe Name -->
-			<h2 id="detail-name" contenteditable>{{ recipeName }}</h2>
+			<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
 
 			<!-- Recipe Ingredients -->
 			<ul id="detail-ingredients">
@@ -225,11 +229,11 @@
 				<!-- Recipe Ingredients will be prepended here -->
 
 				<!-- New Ingredient Input -->
-				<li id="detail-new-ingredient-input" class="ingredient" contenteditable></li>
+				<li id="detail-new-ingredient-input" contenteditable="true"></li>
 			</ul>
 
 			<!-- Recipe Description -->
-			<div contenteditable id="detail-description">
+			<div contenteditable="true" id="detail-description">
 				{{ recipeMore }}
 			</div>
 
@@ -244,6 +248,7 @@
 		<li>Most Recent</li>
 		<li>Favorites</li>
 		<li>Uncategorized</li>
+		<li id="add-recipe">Add Recipe</li>
 	</ul>
 
 	<ul id="tag-colors">

@@ -16,7 +16,7 @@ function populatePanel(id) {
 				var tags = data.tags;
 				var tagList = '';
 				for (var i = 0; i < tags.length; i++) {
-					tagList += '<li class="tag" data-tag-id="' + tags[i].id + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-close"></div></li>';
+					tagList += '<li class="tag" data-tag-id="' + tags[i].id + '" data-tag-color="' + tags[i].color + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-close"></div></li>';
 				}
 
 				$('#detail-tag-list').prepend(tagList);
@@ -54,53 +54,141 @@ $('#profile').on('click', '.recipe-list-entry', function(e) {
 });
 
 
-// Show new ingredient input
-$('#profile').on('keypress', '.ingredient', function(e) {
-	console.log('test');
 
-	// If enter key was pressed then submit edits
-  if (e.which == 13) {
-
-  	// Immediately remove contenteditable attribute so the input doesn't weirdly jump to new line momentarily
-  	$(this).attr('contenteditable', 'false');
-
-  	var ingredientText = $(this).text().trim();
-  	var id = $('#detail-id').text();
-  	var ingredientID = $(this).attr('data-ingredient-id');
-  	console.log(ingredientText, id);
-
-		// Determine if this is the last item in the list
-  	var addNewIngredient = false;
-		if ($(this).index() == $(this).siblings().length-1) {
-			addNewIngredient = true;
-		}
+// Save reference to ingredient text on click so we can compare on the blur/enter events if it needs to be updated
+$('#profile').on('click', '.ingredient', function(e) {
+	window.ingredientComparisonText = $(this).text().trim();
+});
 
 
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe-update',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: { id: id, ingredientID: ingredientID, ingredientText: ingredientText },
-		  success: function() {
-		  	console.log('Edited ingredient!');
-		  	populatePanel(id);
+function editIngredient($el, enterPressed) {
+	// Immediately remove contenteditable attribute so the input doesn't weirdly jump to new line momentarily
+	$el.attr('contenteditable', 'false');
 
+	var ingredientText = $el.text().trim();
+	var id = $('#detail-id').text();
+	var ingredientID = $el.attr('data-ingredient-id');
+
+
+
+	// Determine if this is the last item in the list
+	var addNewIngredient = false;
+	if ($el.index() == $el.siblings().length-1) {
+		addNewIngredient = true;
+	}
+
+	// Determine if this ingredient should be removed
+	var removeIngredient = false;
+	if (ingredientText === '') {
+		removeIngredient = true;
+	}
+
+	$.ajax({
+		type: 'POST',
+	  url: '/recipe-update',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: { id: id, ingredientID: ingredientID, ingredientText: ingredientText, ingredientFlag: true },
+	  success: function() {
+	  	console.log('Edited ingredient!');
+
+	  	// Remove the populate panel function so you can easily click off one ingredient to another without the flashing of the input since the content is being replaced
+	  	//populatePanel(id);
+
+	  	// Re-enabling all .ingredient class elements to be contenteditable
+	  	$('.ingredient').attr('contenteditable', 'true');
+
+	  	// Artifically remove ingredient if there was no text submitted
+	  	if (removeIngredient) {
+	  		$el.remove();
+	  	}
+
+			if (enterPressed) {
 				if (addNewIngredient) {
 					console.log('adding new input');
 					// Show new content editable div for new ingredient
 					$('#detail-new-ingredient-input').attr('style', 'display: block;');
 					showFocus('detail-new-ingredient-input');
 				}
-		  }
-		});
+			}
 
+	  	window.ingredientEditedViaEnter = false;
 
+	  }
+	});
+}
 
-
-
+// // Edit ingredient - ENTER
+// $('#profile').on('keypress', '.ingredient', function(e) {
+// 	// If enter key was pressed then submit edits
+//   if (e.which == 13) {
+//   	editIngredient($(this), true);
+//   }
+// });
+// // Edit ingredient - BLUR
+// $('#profile').on('blur', '.ingredient', function(e) {
+//   editIngredient($(this), false);
+// });
+$('#profile').on('keypress blur', '.ingredient', function(e) {
+  if (e.type === 'keypress' && e.which === 13) {
+  	window.ingredientEditedViaEnter = true;
+  	editIngredient($(this), true);
+  } else if (e.type === 'focusout' && !window.ingredientEditedViaEnter) {
+  	if ($(this).text().trim() === window.ingredientComparisonText) {
+  		console.log('ingredient text the same - not updating');
+  		return;
+  	}
+		editIngredient($(this), false);
   }
 });
 
+
+
+
+
+
+function submitNewIngredient($el) {
+	// Immediately remove contenteditable attribute so the input doesn't weirdly jump to new line momentarily
+	$el.attr('contenteditable', 'false');
+	var newIngredientText = $el.text().trim();
+	var id = $('#detail-id').text();
+
+	$.ajax({
+		type: 'POST',
+	  url: '/recipe-update',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: { id: id, newIngredientText: newIngredientText },
+	  success: function() {
+	  	console.log('Added new ingredient!');
+	  	populatePanel(id);
+
+			$('#detail-new-ingredient-input').attr('style', 'display: block;');
+			$('#detail-new-ingredient-input').text('').attr('contenteditable', 'true');
+			showFocus('detail-new-ingredient-input');
+
+			window.ingredientSubmittedViaEnter = false;
+	  }
+	});
+}
+
+
+// Submit new ingredient
+$('#profile').on('keypress blur', '#detail-new-ingredient-input', function(e) {
+	// If enter key was pressed then submit new ingredient
+  if (e.type === 'keypress' && e.which === 13) {
+  	console.log('Addine new ingredients via ENTER');
+  	window.ingredientSubmittedViaEnter = true;
+  	submitNewIngredient($(this));
+  } else if (e.type === 'focusout' && !window.ingredientSubmittedViaEnter) {
+  	console.log('Addine new ingredients via BLUR');
+		if ($(this).text().trim() === "") {
+			$('#detail-new-ingredient-input').attr('style', 'display: none;');
+			console.log('Nothing in input - hiding');
+		} else {
+			submitNewIngredient($(this));
+		}
+  }
+
+});
 
 
 // Show new tag input
@@ -213,8 +301,18 @@ $('#profile').on('keydown', '#detail-name', function(e) {
 });
 
 
+// Save reference to current recipe description so we can compare later so we don't need to fire extra network calls
+$('#profile').on('click', '#detail-description', function(e) {
+	window.descriptionComparisonText = $(this).text().trim();
+});
+
 // Edit recipe description
 $('#profile').on('blur', '#detail-description', function(e) {
+	if ($(this).text().trim() === window.descriptionComparisonText) {
+		console.log('Description text the same - not updating.');
+		return;
+	}
+
 	var id = $('#detail-id').text();
 	var newRecipeDescription = $(this).html();
 
@@ -265,7 +363,9 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 // Get recipes by tag
 $('body').on('click', '.tag-name', function(e) {
 	var tagName = $(this).text();
-	var tagColor = $(this).closest('.tag-list-name').attr('data-tag-color');('tag-color');
+	var tagColor = $(this).closest('.tag-list-name').attr('data-tag-color') ||  $(this).closest('.tag').attr('data-tag-color');
+
+	console.info('tagColor: ' + tagColor)
 
 	$.ajax({
 		type: 'POST',
@@ -371,6 +471,27 @@ $('body').on('click', '.tag-color-selection', function(e) {
 	
 });
 
+
+
+// Add Recipe
+$('#add-recipe').click(function() {
+	console.log('Adding new recipe');
+	// Clear id
+	$('#detail-id').html('');
+
+	// Clear tags
+	$('.tag').remove();
+
+	// Clear name
+	$('#detail-name').html('');
+
+	// Clear ingredients
+	$('.ingredient').remove();
+
+	// Clear description
+	$('#detail-description').html('');
+
+});
 
 
 // Helper functions
