@@ -49,6 +49,7 @@ function populatePanel(id) {
 // Populate detail panel on recipe list entry click
 $('#profile').on('click', '.recipe-list-entry', function(e) {
 	e.preventDefault();
+	window.stage = 'Edit recipe';
 	var id = $(this).data('id');
 	populatePanel(id);
 });
@@ -57,7 +58,9 @@ $('#profile').on('click', '.recipe-list-entry', function(e) {
 
 // Save reference to ingredient text on click so we can compare on the blur/enter events if it needs to be updated
 $('#profile').on('click', '.ingredient', function(e) {
-	window.ingredientComparisonText = $(this).text().trim();
+	if (window.stage === 'Edit recipe') {
+		window.ingredientComparisonText = $(this).text().trim();
+	}
 });
 
 
@@ -129,16 +132,27 @@ function editIngredient($el, enterPressed) {
 //   editIngredient($(this), false);
 // });
 $('#profile').on('keypress blur', '.ingredient', function(e) {
-  if (e.type === 'keypress' && e.which === 13) {
-  	window.ingredientEditedViaEnter = true;
-  	editIngredient($(this), true);
-  } else if (e.type === 'focusout' && !window.ingredientEditedViaEnter) {
-  	if ($(this).text().trim() === window.ingredientComparisonText) {
-  		console.log('ingredient text the same - not updating');
-  		return;
-  	}
-		editIngredient($(this), false);
-  }
+	if (window.stage === 'Edit recipe') {
+	  if (e.type === 'keypress' && e.which === 13) {
+	  	window.ingredientEditedViaEnter = true;
+	  	editIngredient($(this), true);
+	  } else if (e.type === 'focusout' && !window.ingredientEditedViaEnter) {
+	  	if ($(this).text().trim() === window.ingredientComparisonText) {
+	  		console.log('ingredient text the same - not updating');
+	  		return;
+	  	}
+			editIngredient($(this), false);
+	  }
+	} else if (window.stage === 'Add recipe') {
+	  if (e.type === 'keypress' && e.which === 13) {
+			console.log('adfas');
+			$(this).attr('contenteditable', 'false');
+			var input = $(this);
+			setTimeout(function() {
+				input.attr('contenteditable', 'true');
+			}, 100);
+		}	
+	}
 });
 
 
@@ -173,21 +187,41 @@ function submitNewIngredient($el) {
 
 // Submit new ingredient
 $('#profile').on('keypress blur', '#detail-new-ingredient-input', function(e) {
-	// If enter key was pressed then submit new ingredient
-  if (e.type === 'keypress' && e.which === 13) {
-  	console.log('Addine new ingredients via ENTER');
-  	window.ingredientSubmittedViaEnter = true;
-  	submitNewIngredient($(this));
-  } else if (e.type === 'focusout' && !window.ingredientSubmittedViaEnter) {
-  	console.log('Addine new ingredients via BLUR');
-		if ($(this).text().trim() === "") {
-			$('#detail-new-ingredient-input').attr('style', 'display: none;');
-			console.log('Nothing in input - hiding');
-		} else {
-			submitNewIngredient($(this));
-		}
-  }
 
+	// Edit recipe stage
+	if (window.stage === 'Edit recipe') {
+		// If enter key was pressed then submit new ingredient
+	  if (e.type === 'keypress' && e.which === 13) {
+	  	console.log('Addine new ingredients via ENTER');
+	  	window.ingredientSubmittedViaEnter = true;
+	  	submitNewIngredient($(this));
+	  } else if (e.type === 'focusout' && !window.ingredientSubmittedViaEnter) {
+	  	console.log('Addine new ingredients via BLUR');
+			if ($(this).text().trim() === "") {
+				$('#detail-new-ingredient-input').attr('style', 'display: none;');
+				console.log('Nothing in input - hiding');
+			} else {
+				submitNewIngredient($(this));
+			}
+	  }
+	}
+
+	// Add recipe stage
+	if (window.stage === 'Add recipe') {
+	  if (e.type === 'keypress' && e.which === 13) {
+	  	console.log('Adding new ingredient row');
+	  	$(this).attr('contenteditable', 'false').hide();;
+
+	  	$('#detail-ingredients').append(['<li contenteditable="true" class="ingredient">' + $(this).text() + '</li>', $(this)]);
+	  	$(this).attr('contenteditable', 'true')
+	  	setTimeout(function() {
+	  		$('#detail-new-ingredient-input').html('');
+	  		$('#detail-new-ingredient-input').attr('style', 'display: block;');
+	  		showFocus('detail-new-ingredient-input');
+	  }, 50);
+
+	  }
+	}
 });
 
 
@@ -475,6 +509,8 @@ $('body').on('click', '.tag-color-selection', function(e) {
 
 // Add Recipe
 $('#add-recipe').click(function() {
+	window.stage = 'Add recipe';
+
 	console.log('Adding new recipe');
 	// Clear id
 	$('#detail-id').html('');
@@ -487,6 +523,8 @@ $('#add-recipe').click(function() {
 
 	// Clear ingredients
 	$('.ingredient').remove();
+	// Show new ingredient input
+	$('#detail-new-ingredient-input').show();
 
 	// Clear description
 	$('#detail-description').html('');
