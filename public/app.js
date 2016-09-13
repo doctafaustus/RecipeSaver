@@ -342,25 +342,27 @@ $('#profile').on('click', '#detail-description', function(e) {
 
 // Edit recipe description
 $('#profile').on('blur', '#detail-description', function(e) {
-	if ($(this).text().trim() === window.descriptionComparisonText) {
-		console.log('Description text the same - not updating.');
-		return;
+	if (window.stage === 'Edit recipe') {
+		if ($(this).text().trim() === window.descriptionComparisonText) {
+			console.log('Description text the same - not updating.');
+			return;
+		}
+
+		var id = $('#detail-id').text();
+		var newRecipeDescription = $(this).html();
+
+		$.ajax({
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: { id: id, recipeDescription: newRecipeDescription },
+
+		  success: function() {
+		  	console.log('Updated recipe description!');
+		  	populatePanel(id);
+		  }
+		});
 	}
-
-	var id = $('#detail-id').text();
-	var newRecipeDescription = $(this).html();
-
-	$.ajax({
-		type: 'POST',
-	  url: '/recipe-update',
-	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  data: { id: id, recipeDescription: newRecipeDescription },
-
-	  success: function() {
-	  	console.log('Updated recipe description!');
-	  	populatePanel(id);
-	  }
-	});
 });
 
 
