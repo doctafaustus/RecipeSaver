@@ -237,43 +237,71 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
 
   // Submit new tag if enter key pressed
   $(document).on('keypress', function(e) {
-    if (e.which == 13) {
-      $(document).off('keypress');
-    	console.log('Submitting new tag...');
+  	if (window.stage === 'Edit Recipe') {
+	    if (e.which == 13) {
+	      $(document).off('keypress');
+	    	console.log('Submitting new tag...');
 
 
-    	var tagName = $('#detail-new-tag-input').text().trim();
-    	$('#detail-new-tag-input').text('').hide();
-    	var id = $('#detail-id').text();
+	    	var tagName = $('#detail-new-tag-input').text().trim();
+	    	$('#detail-new-tag-input').text('').hide();
+	    	var id = $('#detail-id').text();
 
 
-    	// Check to see if this tag exists on the recipe already
-    	var tagUnique = true;
-			$('.tag-name').each(function() {
-				if ($(this).text().trim() === tagName) {
-					alert('Tag already being used');
-					tagUnique = false;
+	    	// Check to see if this tag exists on the recipe already
+				checkUniqueTag();
+
+
+				if (tagUnique) {
+					$.ajax({
+						type: 'POST',
+					  url: '/recipe-update',
+					  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					  data: { id: id, tagName: tagName },
+					  success: function() {
+					  	console.log('Added new tag!');
+					  	populatePanel(id);
+					  }
+					});
 				}
-			});
+
+	    }
+  	}
+
+  	if (window.stage === 'Add recipe') {
+	    if (e.which == 13) {
+	      $(document).off('keypress');
+	    	console.log('Add tag...');
+
+	    	var tagName = $('#detail-new-tag-input').text().trim();
+
+	    	// Check to see if this tag exists on the recipe already
+	    	checkUniqueTag();
+
+	    	// Transform tag text into a temporary tag
+	    	$('#detail-tag-list').append(["<li>test</li>", $('#detail-new-tag-input')]);
+
+	    	// Clear tag input
+	    	$('#detail-new-tag-input').text('');
 
 
-			if (tagUnique) {
-				$.ajax({
-					type: 'POST',
-				  url: '/recipe-update',
-				  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-				  data: { id: id, tagName: tagName },
-				  success: function() {
-				  	console.log('Added new tag!');
-				  	populatePanel(id);
-				  }
-				});
-			}
 
-    }
+	    }
+  	}
   });
   
 });
+
+
+function checkUniqueTag() {
+	var tagUnique = true;
+	$('.tag-name').each(function() {
+		if ($(this).text().trim() === tagName) {
+			alert('Tag already being used');
+			tagUnique = false;
+		}
+	});
+}
 
 
 // Hide new tag input on blur
