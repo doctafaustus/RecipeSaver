@@ -273,13 +273,13 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	      $(document).off('keypress');
 	    	console.log('Add tag...');
 
-	    	var tagName = $('#detail-new-tag-input').text().trim();
+	    	var tagName = $('#detail-new-tag-input').text().trim().toLowerCase();
 
 	    	// Check to see if this tag exists on the recipe already
 	    	checkUniqueTag();
 
 	    	// Transform tag text into a temporary tag
-	    	$('#detail-tag-list').append(["<li>test</li>", $('#detail-new-tag-input')]);
+	    	$('#detail-tag-list').append(['<li class="tag" data-tag-id="2" data-tag-color="#808080" style="background-color: #808080;"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>', $('#detail-new-tag-input')]);
 
 	    	// Clear tag input
 	    	$('#detail-new-tag-input').text('');
