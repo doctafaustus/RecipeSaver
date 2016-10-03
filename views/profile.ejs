@@ -25,12 +25,19 @@
 			flex-direction: row;
 			box-sizing: border-box;
 		}
-		#list-panel {
-			border: solid 1px black;
-			width: 40%;
-			margin-right: 14px;
+		#list-panel, .detail-recipe {
+			border-radius: 3px;
+			box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
 			background-color: white;
 			height: 100vh;
+			margin-top: 15px;
+			padding: 10px 25px;
+
+		}
+		#list-panel {
+			width: 40%;
+			margin-left: 14px;
+			margin-right: 14px;
 		}
 		.recipe-list {
 		}
@@ -38,18 +45,13 @@
 			cursor: pointer;
 		}
 		.detail-recipe {
-			border: solid 1px black;
 			width: 60%;
-			padding: 10px;
-			background-color: white;
-			height: 100vh;
 			margin-right: 12px;
 		}
 		#detail-name {
 
 		}
 		#left-nav {
-			margin-right: 10px;
 			border: solid 1px black;
 			width: 225px;
 			float: left;
@@ -102,6 +104,11 @@
 		}
 		#menu li:hover {
 			background-color: #008dff;
+		}
+		#top-bar {
+			overflow: hidden;
+			background-color: white;
+			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
 		}
 		#detail-ingredients {
 			margin-bottom: 20px;
@@ -289,9 +296,19 @@
 		</ul>
 	</div>
 
-
+	<div id="top-bar">
+		<ul>
+			<li><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Account</a></li>
+			<li><a href="#">Logout</a></li>
+		</ul>
+	</div>
 
 	<div id="profile">
+
+
+
 
 		<!-- List Panel -->
 		<div id="list-panel">
