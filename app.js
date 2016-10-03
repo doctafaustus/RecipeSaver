@@ -279,6 +279,72 @@ app.post('/update-tag-color', function(req, res) {
 });
 
 
+app.post('/new-recipe', function(req, res) {
+	console.log(req.body.tags);
+
+	// Assign this new recipe an id (CHANGE THIS)
+	var id = Math.random();
+
+	var newRecipe = {
+		id: id,
+		name: req.body.recipeName,
+		more: req.body.recipeDetails,
+	};
+
+	// Assign each ingredient an id
+	if (req.body.ingredients) {
+		var ingredients = req.body.ingredients;
+		var newIngredients = [];
+		console.log('Assignining indredient ids');
+		for (var i = 0; i < ingredients.length; i++) {
+			var obj = {};
+			obj.name = ingredients[i];
+			obj.id = i + 1;
+			newIngredients.push(obj);
+		}
+		newRecipe.ingredients = newIngredients;
+	} else {
+		newRecipe.ingredients = [];
+	}
+
+	// Assign each tag an id
+	if (req.body.tags) {
+		var tags = req.body.tags;
+		var newTags = [];
+		console.log('Assignining tag ids');
+		for (var k = 0; k < tags.length; k++) {
+			var obj = {};
+			obj.name = tags[k].toLowerCase().trim();
+			obj.id = k + 1;
+			newTags.push(obj);
+
+			// Loop through all tags and see if a color is already used for that tag, if so then use it
+		  for (var i = 0; i < recipes.length; i++) {
+		    for (var j = 0; j < recipes[i].tags.length; j++) {
+		      if (obj.name === recipes[i].tags[j].name.toLowerCase().trim()) {
+		      	obj.color = recipes[i].tags[j].color;
+		      }
+		    }
+		  }
+
+		}
+		newRecipe.tags = newTags;
+	} else {
+		newRecipe.tags = [];
+	}
+
+
+
+
+	recipes.push(newRecipe);
+
+	console.log(newRecipe);
+
+	res.sendStatus(201);
+
+});
+
+
 app.listen(3000, function() {
 	console.log('App listening on port 3000');
 });
