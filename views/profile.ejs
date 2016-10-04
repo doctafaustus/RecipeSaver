@@ -31,13 +31,22 @@
 			background-color: white;
 			height: 100vh;
 			margin-top: 15px;
-			padding: 10px 25px;
-
+		}
+		#list-panel:before {
+    content: "";
+    display: inline-block;
+    min-width: 200px;
 		}
 		#list-panel {
+			padding: 10px 25px;
 			width: 40%;
-			margin-left: 14px;
-			margin-right: 14px;
+			max-width: 400px;
+			margin-left: auto;
+			margin-right: 20px;
+		}
+		#list-panel-heading {
+			margin: 0;
+			font-size: 28px;
 		}
 		.recipe-list {
 		}
@@ -46,7 +55,9 @@
 		}
 		.detail-recipe {
 			width: 60%;
-			margin-right: 12px;
+			max-width: 700px;
+			margin-right: auto;
+			padding: 10px;
 		}
 		#detail-name {
 
@@ -110,10 +121,13 @@
 			background-color: white;
 			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
 		}
+		#detail-lower {
+			padding: 0 20px;
+		}
 		#detail-ingredients {
 			margin-bottom: 20px;
 			padding-left: 0;
-			border-bottom: solid 1px gray;
+			border-bottom: solid 1px #dadada;
 		}
 		#detail-new-ingredient-input {
 			display: none;
@@ -126,12 +140,17 @@
 			margin-bottom: 4px;
 		}
 		#detail-description {
+	    box-sizing: border-box;
+	    padding-left: 8px;
+	    padding-right: 2px;
 			margin-top: 20px;
 			min-height: 150px;
 			border: solid 1px gray;
 		}
 		#detail-tags {
 			display: flex;
+			border-bottom: solid 1px #dadada;
+			padding-bottom: 8px;
 		}
 		#detail-tag-list {
 			padding: 0;
@@ -202,10 +221,32 @@
 	    background-image: url(/images/color-picker-hover.png);
 		}
 		#detail-add-tag-button {
-			margin-left: auto;
-			width: 24px;
+			margin-right: 8px;
+			margin-top: 7px;
+			cursor: pointer;
+			width: 25px;
+			height: 22px;
+			background: url(images/tag-sprite.png) 0 0;
+			background-repeat: no-repeat;
+			padding-right: 5px;
+		}
+		#detail-add-tag-button:hover {
+			background: url(images/tag-sprite.png) 0 -22px;
+			background-repeat: no-repeat;
+		}
+		#detail-add-tag-button img {
+			width: 21px;
+		}
+		#detail-options {
+			background: url(images/plus-sprite.jpg) 0 -24px;
+			background-repeat: no-repeat;
+			width: 27px;
 			height: 24px;
 			cursor: pointer;
+		}
+		#detail-options:hover {
+			background: url(images/plus-sprite.jpg) 0 0px;
+			background-repeat: no-repeat;
 		}
 		#detail-new-tag-input {
 			display: none;
@@ -277,7 +318,14 @@
 			width: 100%;
 			margin: 0 auto;
 		}
-
+	@media screen and (max-width: 1464px) {
+    #list-panel {
+    	margin-left: 20px;
+    }
+    .detail-recipe {
+    	margin-right: 20px;
+    }
+	}
  	</style>
 </head>
 <body>
@@ -300,6 +348,7 @@
 		<ul>
 			<li><a href="#">Home</a></li>
 			<li><a href="#">About</a></li>
+			<li><a href="#">Feedback</a></li>
 			<li><a href="#">Account</a></li>
 			<li><a href="#">Logout</a></li>
 		</ul>
@@ -312,6 +361,9 @@
 
 		<!-- List Panel -->
 		<div id="list-panel">
+
+		<h1 id="list-panel-heading">All Recipes</h1>
+
 			<ul class="recipe-list">
 				<% for (var i = 0; i < recipes.length; i++) { %>
 					<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><a><%= recipes[i].name %></a></li>
@@ -325,7 +377,7 @@
 		<!-- Recipe Tags -->
 			<div id="detail-tags">
 				<!-- Tag Icon -->
-				<div id="detail-tag-icon"><img src="/images/tag-icon.jpg"></div>
+				<div id="detail-add-tag-button"></div>
 				<!-- Tag List -->
 				<ul id="detail-tag-list">
 
@@ -334,31 +386,35 @@
 					<!-- New Tag Input -->
 					<li id="detail-new-tag-input" contenteditable="true"></li>
 				</ul>
-				<img id="detail-add-tag-button" src="images/plus-button.jpg">
+				<div id="detail-options"></div>
 			</div>
 
-			<!-- Recipe Name -->
-			<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
+			<div id="detail-lower">
+				<!-- Recipe Name -->
+				<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
 
-			<!-- Recipe Ingredients -->
-			<ul id="detail-ingredients">
+				<!-- Recipe Ingredients -->
+				<ul id="detail-ingredients">
 
-				<!-- Recipe Ingredients will be prepended here -->
+					<!-- Recipe Ingredients will be prepended here -->
 
-				<!-- New Ingredient Input -->
-				<li id="detail-new-ingredient-input" contenteditable="true" placeholder="Ingredients (Press Enter to add more)"></li>
-			</ul>
+					<!-- New Ingredient Input -->
+					<li id="detail-new-ingredient-input" contenteditable="true" placeholder="Ingredients (Press Enter to add more)"></li>
+				</ul>
 
-			<!-- Recipe Description -->
-			<div contenteditable="true" id="detail-description" placeholder="Recipe details">
-				{{ recipeMore }}
+				<!-- Recipe Description -->
+				<div contenteditable="true" id="detail-description" placeholder="Recipe details">
+					{{ recipeMore }}
+				</div>
+
+				<!-- Recipe ID -->
+				<p id="detail-id" style="color: blue">{{ recipeID }}</p>
+
+				<!-- Recipe Submit Button -->
+				<button id="submit-recipe">Submit</button>
 			</div>
 
-			<!-- Recipe ID -->
-			<p id="detail-id" style="color: blue">{{ recipeID }}</p>
 
-			<!-- Recipe Submit Button -->
-			<button id="submit-recipe">Submit</button>
 		</div>
 	</div>
 
