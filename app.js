@@ -375,6 +375,7 @@ var recipes = [
 	{
 		"id": 1,
 		"name": "Pasta",
+		"url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
 		"ingredients": [
 				{
 					"name": "1 tsp. Olive Oil",
@@ -395,6 +396,7 @@ var recipes = [
 	{
 		"id": 2,
 		"name": "Eggs",
+		"url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
 		"ingredients": [
 				{
 					"name": "1 tablespoon White Sugar",
@@ -411,6 +413,7 @@ var recipes = [
   {
     "id": 3,
     "name": "Soup",
+    "url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
 		"ingredients": [
 				{
 					"name": "4 cups pepper",
@@ -427,6 +430,7 @@ var recipes = [
   {
     "id": 4,
     "name": "Cream Cheese Penguins",
+    "url": "",
 		"ingredients": [
 				{
 					"name": "1 tablespoon chocolate",
@@ -443,6 +447,7 @@ var recipes = [
   {
     "id": 5,
     "name": "Veal Piccata",
+    "url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
 		"ingredients": [
 				{
 					"name": "1 tablespoon sauce",

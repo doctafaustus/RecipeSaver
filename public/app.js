@@ -19,6 +19,9 @@ function populatePanel(id) {
 				$('#detail-tag-list').prepend(tagList);
 			}
 
+			// Recipe URL
+			$('#detail-link').text(data.url).attr('href', data.url);
+
 			// Recipe Name
 			$('#detail-name').text(data.name);
 

@@ -17,6 +17,9 @@
 			-o-background-size: cover;
 			background-size: cover;
 		}
+		a:hover {
+			color: #0093ff !important;
+		}
 		ul {
 			list-style-type: none;
 		}
@@ -60,13 +63,22 @@
 			padding: 10px;
 		}
 		#detail-name {
-
+			margin: 10px 0;
+		}
+		#detail-link-container {
+			margin-top: 6px;
+			word-wrap: break-word;
+		}
+		#detail-link {
+			text-decoration: none;
+			color: #898E95;
+			font-size: 14px;
 		}
 		#left-nav {
 			border: solid 1px black;
 			width: 225px;
 			float: left;
-			background-color: #161616;
+			background-color: rgba(22, 22, 22, 0.9);;
 			height: 100vh;
 		}
 		#logo img {
@@ -390,6 +402,8 @@
 			</div>
 
 			<div id="detail-lower">
+				<div id="detail-link-container"><a id="detail-link" href="#" target="_blank">{{ test }}</a></div>
+
 				<!-- Recipe Name -->
 				<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
 
