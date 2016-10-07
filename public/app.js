@@ -49,7 +49,7 @@ function populatePanel(id) {
 // Populate detail panel on recipe list entry click
 $('#profile').on('click', '.recipe-list-entry', function(e) {
 	e.preventDefault();
-	window.stage = 'Edit recipe';
+	changeStage('Edit recipe');
 	var id = $(this).data('id');
 	populatePanel(id);
 });
@@ -419,7 +419,7 @@ $('#profile').on('blur', '#detail-description', function(e) {
 
 // Get all tags
 $('body').on('click', '#get-recipes-by-tags', function(e) {
-	if (window.stage !== 'allTags') {
+	if (window.stage !== 'All tags') {
 		$.ajax({
 			type: 'GET',
 		  url: '/get-all-tags',
@@ -439,7 +439,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 		  	$('#list-panel').html(tagList);
 
 		  	// Mark stage
-				window.stage = 'allTags';
+		  	changeStage('All tags');
 		  }
 		});
 	}
@@ -477,7 +477,7 @@ $('body').on('click', '.tag-name', function(e) {
 		  	$('#list-panel').html(recipeList);
 
 		  	// Mark stage
-				window.stage = 'recipesByTag';
+		  	changeStage('Recipes by tag');
 	  }
 	});
 
@@ -486,7 +486,7 @@ $('body').on('click', '.tag-name', function(e) {
 
 // Get all recipes
 $('body').on('click', '#get-all-recipes', function(e) {
-	window.stage = 'allRecipes';
+	changeStage('All recipes');
 
 	adjustPanels();
 
@@ -563,7 +563,7 @@ $('body').on('click', '.tag-color-selection', function(e) {
 
 // Add Recipe Stage
 $('#add-recipe').click(function() {
-	window.stage = 'Add recipe';
+	changeStage('Add recipe');
 
 	adjustPanels();
 
@@ -671,4 +671,16 @@ function adjustPanels() {
 			$('.detail-recipe').removeClass('singular');
 			$('#list-panel').animate({width: 'show'}, 190);
 	}
+}
+
+// Slugify
+function slugify(text) {
+  return text.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+}
+
+// Change the window state and HTML class
+function changeStage(state) {
+	window.stage = state;
+	$('html').removeClass();
+	$('html').addClass(slugify(state));
 }
