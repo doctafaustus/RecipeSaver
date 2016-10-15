@@ -36,9 +36,9 @@
 			margin-top: 15px;
 		}
 		#list-panel:before {
-    content: "";
-    display: inline-block;
-    min-width: 200px;
+	    content: "";
+	    display: inline-block;
+	    min-width: 200px;
 		}
 		#list-panel {
 			padding: 10px 25px;
@@ -67,6 +67,14 @@
 		}
 		#detail-link-container {
 			margin-top: 6px;
+		}
+		#detail-link-editable {
+			border: solid 1px black;
+			height: 24px;
+			padding-left: 8px;
+			width: 100%;
+			margin-right: 20px;
+			box-sizing: border-box;
 		}
 		#detail-link {
 			text-decoration: none;
@@ -411,7 +419,10 @@
 			</div>
 
 			<div id="detail-lower">
-				<div id="detail-link-container"><a id="detail-link" href="#" target="_blank">{{ test }}</a></div>
+				<div id="detail-link-container">
+					<a id="detail-link" href="#" target="_blank">{{ test }}</a>
+					<input type="test" id="detail-link-editable" placeholder="URL">
+				</div>
 
 				<!-- Recipe Name -->
 				<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>

@@ -574,17 +574,19 @@ $('#add-recipe').click(function() {
 	// Clear tags
 	$('.tag').remove();
 
+	// Clear url
+	$('#detail-link-editable').val('');
+
 	// Clear name
 	$('#detail-name').html('');
 
 	// Clear ingredients
 	$('.ingredient').remove();
-	// Show new ingredient input
-	$('#detail-new-ingredient-input').show();
+	// Show new ingredient input and clear it
+	$('#detail-new-ingredient-input').show().text('');
 
 	// Clear description
 	$('#detail-description').html('');
-
 
 });
 
@@ -607,6 +609,7 @@ $('#profile').on('click', '#submit-recipe', function(e) {
 	// Compile form data
 	var data = {
 		tags: tags,
+		url: $('#detail-link-editable').val().trim(),
 		recipeName: $('#detail-name').text(),
 		ingredients: ingredients,
 		recipeDetails: $('#detail-description').html(),
@@ -683,4 +686,13 @@ function changeStage(state) {
 	window.stage = state;
 	$('html').removeClass();
 	$('html').addClass(slugify(state));
+
+	// Show URL input and hide formatted link
+	if (state !== 'Add recipe') {
+		$('#detail-link-editable').hide();
+		$('#detail-link').show();
+	} else {
+		$('#detail-link-editable').show();
+		$('#detail-link').hide();
+	}
 }

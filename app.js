@@ -285,8 +285,11 @@ app.post('/new-recipe', function(req, res) {
 	// Assign this new recipe an id (CHANGE THIS)
 	var id = Math.random();
 
+	console.log(req.body.url);
+
 	var newRecipe = {
 		id: id,
+		url: req.body.url,
 		name: req.body.recipeName,
 		more: req.body.recipeDetails,
 	};
