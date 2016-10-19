@@ -22,6 +22,8 @@
 		}
 		ul {
 			list-style-type: none;
+			padding: 0;
+			margin: 0;
 		}
 		#profile {
 			display: flex;
@@ -174,6 +176,7 @@
 			display: flex;
 			border-bottom: solid 1px #dadada;
 			padding-bottom: 8px;
+			position: relative;
 		}
 		#detail-tag-list {
 			padding: 0;
@@ -347,14 +350,25 @@
 		.add-recipe #submit-recipe {
 			display: block;
 		}
-	@media screen and (max-width: 1464px) {
-    #list-panel {
-    	margin-left: 20px;
-    }
-    .detail-recipe {
-    	margin-right: 20px;
-    }
-	}
+		#detail-options-dropdown {
+			position: absolute;
+			display: none;
+			border: solid 1px blue;
+			right: 10px;
+			width: 125px;
+			top: 25px;
+			background-color: white;
+    	padding: 10px 15px;
+		}
+
+		@media screen and (max-width: 1464px) {
+	    #list-panel {
+	    	margin-left: 20px;
+	    }
+	    .detail-recipe {
+	    	margin-right: 20px;
+	    }
+		}
  	</style>
 </head>
 <body>
@@ -416,7 +430,7 @@
 					<li id="detail-new-tag-input" contenteditable="true"></li>
 				</ul>
 				<div id="detail-options"></div>
-				<ul id="deatil-options-dropdown">
+				<ul id="detail-options-dropdown">
 					<li><a href="#">Favorite</a></li>
 					<li><a href="#">Edit URL</a></li>
 					<li><a href="#">Delete Recipe</a></li>
