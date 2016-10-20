@@ -632,14 +632,16 @@ $('#profile').on('click', '#submit-recipe', function(e) {
 
 // Submenu dropdown
 $('#profile').on('click', '#detail-options', function(e) {
-	$('#detail-options-dropdown').slideDown(function() {
+	var $el = $(this);
+	$el.addClass('active');
+	$('#detail-options-dropdown').slideDown('fast', function() {
 			$('body').on('click.dd', function(e) {
 				var container = $('#detail-options-dropdown');
     		if (!container.is(e.target) && container.has(e.target).length === 0) {
-        	$('#detail-options-dropdown').slideUp();
+        	$('#detail-options-dropdown').slideUp('fast');
         	$('body').unbind('click.dd');
+        	$el.removeClass('active');
     		}
-				console.log(e);
 			});
 	});
 });
