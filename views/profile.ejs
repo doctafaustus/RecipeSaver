@@ -374,6 +374,16 @@
 			background-color: #008dff;
 			color: white;
 		}
+		#detail-options-dropdown li#spacer {
+			border-bottom: solid 1px #dadada;
+			height: 5px;
+		}
+		#detail-options-dropdown li#spacer:hover {
+			background-color: white;
+		}
+		#delete-recipe {
+			margin-top: 9px;
+		}
 		@media screen and (max-width: 1464px) {
 	    #list-panel {
 	    	margin-left: 20px;
@@ -446,7 +456,8 @@
 				<ul id="detail-options-dropdown">
 					<li>Favorite</li>
 					<li>Edit URL</li>
-					<li>Delete Recipe</li>
+					<li id="spacer"></li>
+					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
 			</div>
 

@@ -347,6 +347,15 @@ app.post('/new-recipe', function(req, res) {
 
 });
 
+// Delete recipe
+app.post('/delete-recipe', function(req, res) {
+	recipes = recipes.filter(function(e) {
+    return e.id != req.body.id;
+  });
+	res.sendStatus(200);
+});
+
+
 
 app.listen(3000, function() {
 	console.log('App listening on port 3000');

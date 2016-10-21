@@ -647,6 +647,22 @@ $('#profile').on('click', '#detail-options', function(e) {
 });
 
 
+// Delete recipe
+$('#profile').on('click', '#delete-recipe', function(e) {
+	var id = $('#detail-id').text();
+
+	$.ajax({
+		type: 'POST',
+	  url: '/delete-recipe',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: {id: id},
+	  success: function(data) {
+	  	console.log('Recipe deleted!');
+	  }
+	});
+
+});
+
 /* HELPER FUNCTIONS */
 
 // Show focus on contenteditable div
