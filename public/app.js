@@ -46,6 +46,31 @@ function populatePanel(id) {
 	});
 }
 
+
+function refreshRecipeList() {
+	$.ajax({
+		type: 'GET',
+	  url: '/get-all-recipes',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  success: function(data) {
+	  	console.log('Got all recipes!');
+
+			var recipes = data;
+			var recipeList = '<ul id="recipe-list">';
+			for (var i = 0; i < recipes.length; i++) {
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
+			}
+			recipeList += '</ul>';
+			$('#list-panel').html(recipeList);
+
+
+	  	$('#list-panel').html(recipeList);
+	  }
+	});
+}
+
+
+
 // Populate detail panel on recipe list entry click
 $('#profile').on('click', '.recipe-list-entry', function(e) {
 	e.preventDefault();
@@ -463,25 +488,27 @@ $('body').on('click', '.tag-name', function(e) {
 	  success: function(data) {
 	  	console.log('Got recipes by tag!');
 	  	console.log(data);
-		  	var recipes = data.recipesToSend;
-		  	var color = data.tagColor;
+	  	var recipes = data.recipesToSend;
+	  	var color = data.tagColor;
 
-		  	var recipeList = '<ul id="recipe-list-by-tag">';
-		  	recipeList += '<li class="tag-category" style="background-color: ' + color + ';">' + tagName + '</li>';
-		  	for (var i = 0; i < recipes.length; i++) {
-		  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
-		  	}
+	  	var recipeList = '<ul id="recipe-list-by-tag">';
+	  	recipeList += '<li class="tag-category" style="background-color: ' + color + ';">' + tagName + '</li>';
+	  	for (var i = 0; i < recipes.length; i++) {
+	  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
+	  	}
 
-		  	recipeList += '</ul>';
+	  	recipeList += '</ul>';
 
-		  	$('#list-panel').html(recipeList);
+	  	$('#list-panel').html(recipeList);
 
-		  	// Mark stage
-		  	changeStage('Recipes by tag');
+	  	// Mark stage
+	  	changeStage('Recipes by tag');
 	  }
 	});
 
 });
+
+
 
 
 // Get all recipes
@@ -490,28 +517,10 @@ $('body').on('click', '#get-all-recipes', function(e) {
 
 	adjustPanels();
 
-
-	$.ajax({
-		type: 'GET',
-	  url: '/get-all-recipes',
-	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  success: function(data) {
-	  	console.log('Got all recipes!');
-	  	var recipes = data;
-
-	  	var recipeList = '<ul id="recipe-list">';
-	  	for (var i = 0; i < recipes.length; i++) {
-	  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
-	  	}
-
-	  	recipeList += '</ul>';
-
-	  	$('#list-panel').html(recipeList);
-	  }
-	});
-	
-
+	refreshRecipeList();
 });
+
+
 
 
 
@@ -658,6 +667,14 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	  data: {id: id},
 	  success: function(data) {
 	  	console.log('Recipe deleted!');
+
+	  	
+			$('#detail-description').append('<div id="detail-message-overlay"><div id="detail-message-overlay-inner">Recipe deleted</div></div>');
+
+	  	// Show "Recipe deleted" overlay
+	  	$('#detail-message-overlay').fadeIn('slow');
+	  	// Refresh recipe list to reflect delete
+	  	refreshRecipeList();
 	  }
 	});
 
