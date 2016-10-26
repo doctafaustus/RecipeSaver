@@ -66,13 +66,18 @@
 			padding: 10px;
 		}
 		#detail-name {
-			margin: 10px 0;
+			margin-top: 20px;
+			margin-bottom: 0;
 		}
 		#detail-link-container {
-			margin-top: 6px;
+			margin-top: 20px;
+			display: block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		#detail-link-editable {
-			border: solid 1px black;
+			border: solid 1px #dadada;
 			height: 24px;
 			padding-left: 8px;
 			width: 100%;
@@ -81,12 +86,8 @@
 		}
 		#detail-link {
 			text-decoration: none;
-			color: #898E95;
+			color: #40b145;
 			font-size: 14px;
-			display: block;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
 		}
 		#left-nav {
 			border: solid 1px black;
@@ -100,10 +101,7 @@
 			display: block;
 			margin: 20px auto;
 		}
-		#add-recipe {
-			margin: 0 auto;
-			margin-top: 75px;
-			margin-bottom: 40px;
+		#add-recipe, #submit-recipe {
 			width: 167px;
 			text-align: center;
 			border-radius: 4px;
@@ -120,13 +118,19 @@
 	    color: #fff;
 	    text-shadow: 0 1px 0 rgba(0,0,0,0.3);
 		}
-		#add-recipe:hover {
+		#add-recipe:hover, #submit-recipe:hover {
 	    background: #016bdc;
 	    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#008aea),to(#024dcf));
 	    background: -webkit-linear-gradient(0% 0%,0% 100%,from(#008aea),to(#024dcf));
 	    background: -moz-linear-gradient(center top,#008aea,#024dcf);
 	    background: linear-gradient(#008aea,#024dcf);
 	    border-color: #0055a7;
+		}
+		#add-recipe {
+			margin: 75px auto 40px auto;
+		}
+		#submit-recipe {
+			margin-top: 25px;
 		}
 		#menu {
 			margin: 0;
@@ -151,7 +155,7 @@
 			padding: 0 20px;
 		}
 		#detail-ingredients {
-			margin-bottom: 20px;
+			margin-top: 20px;
 			padding-left: 0;
 			border-bottom: solid 1px #dadada;
 		}
@@ -167,11 +171,11 @@
 		}
 		#detail-description {
 	    box-sizing: border-box;
-	    padding-left: 8px;
+	    padding-left: 3px;
 	    padding-right: 2px;
-			margin-top: 20px;
+			margin-top: 30px;
 			min-height: 150px;
-			border: solid 1px gray;
+			border: solid 1px #dadada;
 		}
 		#detail-tags {
 			display: flex;
@@ -279,6 +283,9 @@
 			background: url(images/plus-sprite.jpg) 0 0px;
 			background-repeat: no-repeat;
 		}
+		.add-recipe #detail-options {
+			display: none;
+		}
 		#detail-new-tag-input {
 			display: none;
 	    height: 26px;
@@ -334,7 +341,8 @@
 		  content: attr(placeholder);
 		  display: block; /* For Firefox */
 		  cursor: text;
-		  color: red;
+		  color: darkgrey;
+		  padding-left: 3px;
 		}
 /*		#list-panel.singular {
 			max-width: 900px;
@@ -347,7 +355,7 @@
 		.detail-recipe.singular {
 			max-width: 900px;
 			width: 100%;
-			margin: 0 auto;
+			margin: 15px auto 0 auto;
 		}
 		#submit-recipe {
 			display: none;
@@ -473,7 +481,7 @@
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown">
 					<li>Favorite</li>
-					<li>Edit URL</li>
+					<li id="edit-url">Edit URL</li>
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
@@ -506,7 +514,7 @@
 				<p id="detail-id" style="color: blue">{{ recipeID }}</p>
 
 				<!-- Recipe Submit Button -->
-				<button id="submit-recipe">Submit</button>
+				<div id="submit-recipe">Submit</div>
 			</div>
 		</div>
 	</div>

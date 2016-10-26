@@ -42,6 +42,13 @@ function populatePanel(id) {
 
 			// Recipe ID
 			$('#detail-id').text(data.id);
+
+			// Show/Hide Recipe URL
+			if ($('#detail-link').attr('href').length) {
+				$('#detail-link-container').show();
+			} else {
+				$('#detail-link-container').hide();
+			}
 	  },
 	});
 }
@@ -656,8 +663,41 @@ $('#profile').on('click', '#detail-options', function(e) {
 });
 
 
+// Edit url
+$('#profile').on('click', '#edit-url', function(e) {
+	$('#detail-options').trigger('click');
+
+	// Show url container
+	$('#detail-link-container').show();
+
+	// Show url input
+	$('#detail-link-editable').show().val($('#detail-link').attr('href'));
+	// Hide url link
+	$('#detail-link').hide();
+
+
+});
+$('#detail-link-editable').focusout(function() {
+	if (window.stage === 'Edit recipe') {
+		var id = $('#detail-id').text();
+
+
+		$.ajax({
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: {id: id, newURL: $('#detail-link-editable').val()},
+		  success: function(data) {
+		  	console.log('Recipe url updated!');
+		  }
+		});
+	}
+});
+
+
 // Delete recipe
 $('#profile').on('click', '#delete-recipe', function(e) {
+	$('#detail-options').trigger('click');
 	var id = $('#detail-id').text();
 
 	$.ajax({
@@ -679,6 +719,9 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	});
 
 });
+
+
+
 
 /* HELPER FUNCTIONS */
 

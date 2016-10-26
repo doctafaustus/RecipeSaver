@@ -214,6 +214,11 @@ app.post('/recipe-update', function(req, res) {
     });
   }
 
+  // Update URL
+  if (req.body.newURL === '' || req.body.newURL) {
+  	recipeToUpdate.url = req.body.newURL;
+  }
+
   res.json(recipeToUpdate);
 });
 
@@ -408,7 +413,7 @@ var recipes = [
 	{
 		"id": 2,
 		"name": "Eggs",
-		"url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
+		"url": "https://www.youtube.com/watch?v=z15ipHV4Now",
 		"ingredients": [
 				{
 					"name": "1 tablespoon White Sugar",
@@ -425,7 +430,7 @@ var recipes = [
   {
     "id": 3,
     "name": "Soup",
-    "url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
+    "url": "http://www.rachaelray.com/recipes/tournedos-pizzaiola-on-charred-ciabatta",
 		"ingredients": [
 				{
 					"name": "4 cups pepper",
@@ -459,7 +464,7 @@ var recipes = [
   {
     "id": 5,
     "name": "Veal Piccata",
-    "url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
+    "url": "http://www.health.com/health/recipe/0,,10000000522028,00.html",
 		"ingredients": [
 				{
 					"name": "1 tablespoon sauce",
