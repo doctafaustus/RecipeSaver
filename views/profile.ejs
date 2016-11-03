@@ -454,13 +454,16 @@
 		<!-- List Panel -->
 		<div id="list-panel">
 
-		<h1 id="list-panel-heading">All Recipes</h1>
+			<h1 id="list-panel-heading">All Recipes</h1>
 
-			<ul class="recipe-list">
-				<% for (var i = 0; i < recipes.length; i++) { %>
-					<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><a><%= recipes[i].name %></a></li>
-				<% } %>
-			</ul>
+			<div id="list-panel-inner">
+				<ul class="recipe-list">
+					<% for (var i = 0; i < recipes.length; i++) { %>
+						<li class="recipe-list-entry" data-id="<%= recipes[i].id %>"><a><%= recipes[i].name %></a></li>
+					<% } %>
+				</ul>
+			</div>
+			
 		</div>
 
 		<!-- Recipe Detail Panel -->

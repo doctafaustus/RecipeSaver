@@ -68,10 +68,7 @@ function refreshRecipeList() {
 				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
 			}
 			recipeList += '</ul>';
-			$('#list-panel').html(recipeList);
-
-
-	  	$('#list-panel').html(recipeList);
+			$('#list-panel-inner').html(recipeList);
 	  }
 	});
 }
@@ -468,7 +465,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 
 		  	tagList += '</ul>';
 
-		  	$('#list-panel').html(tagList);
+		  	$('#list-panel-inner').html(tagList);
 
 		  	// Mark stage
 		  	changeStage('All tags');
