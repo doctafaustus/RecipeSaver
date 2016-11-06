@@ -17,6 +17,7 @@
 			-o-background-size: cover;
 			background-size: cover;
 		}
+		textarea, input { outline: none; }
 		a:hover {
 			color: #0093ff;
 		}
@@ -53,6 +54,7 @@
 		#list-panel-heading {
 			margin: 0;
 			font-size: 28px;
+			margin-bottom: 20px;
 		}
 		.recipe-list {
 		}
@@ -86,7 +88,7 @@
 		}
 		#detail-link {
 			text-decoration: none;
-			color: #40b145;
+			color: #1AAFD0;
 			font-size: 14px;
 		}
 		#left-nav {
@@ -95,6 +97,7 @@
 			float: left;
 			background-color: rgba(22, 22, 22, 0.9);;
 			height: 100vh;
+			box-sizing: border-box;
 		}
 		#logo img {
 			width: 83%;
@@ -331,11 +334,22 @@
 	    border-radius: 15px;
 		}
 		#tag-colors {
-			border: solid 1px blue;
+			display: none;
 			background-color: white;
-			width: 400px;
+			width: 325px;
 			margin: 0;
-			padding: 20px;
+	    padding: 15px;
+	    border-radius: 3px 3px 3px 3px;
+	    border: 1px solid #B9BCC0;
+	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+		}
+		.tag-colors-title {
+			font-weight: bold;
+			margin-bottom: 15px;
+		}
+		#tag-colors .tag-color-selection {
+			display: inline-block;
+			margin-right: 4px;
 		}
 		[contenteditable=true]:empty:before{
 		  content: attr(placeholder);
@@ -410,6 +424,48 @@
 	    color: white;
 	    font-size: 20px;
 		}
+		#nav {
+			border-bottom: 1px solid #B9BCC0;
+			height: 50px;
+		}
+		#nav li {
+			line-height: 50px;
+			display: inline-block;
+			margin-left: 15px;
+		}
+		#nav li a {
+			text-transform: uppercase;
+			color: #898e95;
+			text-decoration: none;
+			font-size: 14px;
+		}
+		#nav li a:hover {
+			color: #1AAFD0;
+		}
+		#logout, #feedback {
+			float: right;
+    	margin-right: 15px;
+		}
+		#nav li#logout {
+			margin-left: 0;
+		}
+		#search-row {
+			height: 44px;
+		}
+		#search-form {
+			margin-top: 11px;
+			text-align: center;
+		}
+		#search-form-input {
+			width: 350px;
+			border: solid 1px #1aafd2;
+	    border-radius: 20px;
+	    height: 30px;
+		}
+		#search-form-input {
+			padding-left: 10px;
+		}
+
 		@media screen and (max-width: 1464px) {
 	    #list-panel {
 	    	margin-left: 20px;
@@ -437,13 +493,23 @@
 	</div>
 
 	<div id="top-bar">
-		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Feedback</a></li>
+
+		<ul id="nav">
+			<li><a href="#">My Recipes</a></li>
 			<li><a href="#">Account</a></li>
-			<li><a href="#">Logout</a></li>
+			<li><a href="#">Chrome Extension</a></li>
+			<li><a href="#">Blog</a></li>
+			<li><a href="#">About</a></li>
+			<li id="logout"><a href="#">Logout</a></li>
+			<li id="feedback"><a href="#">Feedback</a></li>
 		</ul>
+
+		<div id="search-row">
+			<form id="search-form">
+				<input type="text" placeholder="Search Recipes" id="search-form-input">
+			</form>
+		</div>
+
 	</div>
 
 	<div id="profile">
@@ -532,6 +598,7 @@
 		<li class="tag-color-selection" data-color="#dec688" style="background-color: #dec688;">gold</li>
 		<li class="tag-color-selection" data-color="#22da00" style="background-color: #22da00;">green</li>
 		<li class="tag-color-selection" data-color="#079212" style="background-color: #079212;">forest</li>
+		<li class="tag-color-selection" data-color="#6d0873" style="background-color: #6d0873;">eggplant</li>
 		<li class="tag-color-selection" data-color="#9522ff" style="background-color: #9522ff;">purple</li>
 		<li class="tag-color-selection" data-color="#ff05d6" style="background-color: #ff05d6;">pink</li>
 		<li class="tag-color-selection" data-color="#00c5ff" style="background-color: #00c5ff;">ocean</li>

@@ -69,6 +69,9 @@ function refreshRecipeList() {
 			}
 			recipeList += '</ul>';
 			$('#list-panel-inner').html(recipeList);
+
+			// Change panel title
+			$('#list-panel-heading').text('All Recipes');
 	  }
 	});
 }
@@ -448,6 +451,7 @@ $('#profile').on('blur', '#detail-description', function(e) {
 
 // Get all tags
 $('body').on('click', '#get-recipes-by-tags', function(e) {
+
 	if (window.stage !== 'All tags') {
 		$.ajax({
 			type: 'GET',
@@ -467,8 +471,15 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 
 		  	$('#list-panel-inner').html(tagList);
 
+		  	// Change panel title
+
+				// Change panel title
+				$('#list-panel-heading').text('Tags');
+
 		  	// Mark stage
 		  	changeStage('All tags');
+
+		  	adjustPanels();
 		  }
 		});
 	}
@@ -503,7 +514,10 @@ $('body').on('click', '.tag-name', function(e) {
 
 	  	recipeList += '</ul>';
 
-	  	$('#list-panel').html(recipeList);
+	  	$('#list-panel-inner').html(recipeList);
+
+	  	// Change panel title
+	  	$('#list-panel-heading').text('Recipes By Tag');
 
 	  	// Mark stage
 	  	changeStage('Recipes by tag');
@@ -531,46 +545,65 @@ $('body').on('click', '#get-all-recipes', function(e) {
 
 // Select new Tag Color
 $('body').on('click', '.tag-color-picker', function(e) {
+	// Remove any lingering picked tag classes
+	$('.tag-list-name').removeClass('picked-tag');
 	// Save reference to picked tag
 	$(this).closest('.tag-list-name').addClass('picked-tag');
 
 	var position = $(this).offset();
 	$('#tag-colors').attr('style', 'display: block; position: absolute; top: ' + (position.top + 10) +'px; left: ' + (position.left + 20) + 'px;');
 
-});
+
+	console.log(1);
+
+	// Update tag color
+	$('body').on('click.tagColor', function(e) {
+		console.info(e.target.className);
+
+		var container = $('#tag-colors');
+		if (!container.is(e.target) && container.has(e.target).length === 0) {
+    	$('#tag-colors').hide();
+    	$('body').unbind('click.tagColor');
+    	console.log('clicked outside box');
+    	return;
+		} else if (e.target.className === 'tag-color-selection') {
+			console.log('clicked new color');
+			$('body').unbind('click.tagColor');
+
+			var tagColorToChange = $('.picked-tag').data('tag-color');
+			var tagName = $('.picked-tag').find('.tag-name').text();
+			var newTagColor = $(e.target).data('color');
+
+			console.log(tagColorToChange);
+			console.log(newTagColor);
+
+			$.ajax({
+				type: 'POST',
+			  url: '/update-tag-color',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: { tagColorToChange: tagColorToChange, tagName: tagName, newTagColor: newTagColor },
+			  success: function(data) {
+			  	console.log('Updated tag color!');
+
+			  	// Artificially change picked tag color
+			  	$('.picked-tag').attr('style', 'background-color: ' + newTagColor + ';').attr('data-tag-color', newTagColor);
+
+			  	// Hide tag color selection box
+			  	$('#tag-colors').hide();
+
+			  	$('.picked-tag').removeClass('picked-tag');
+			  }
+			});
+
+		}
 
 
-// Update tag color
-$('body').on('click', '.tag-color-selection', function(e) {
-	var tagColorToChange = $('.picked-tag').data('tag-color');
-	var tagName = $('.picked-tag').find('.tag-name').text();
-	var newTagColor = $(this).data('color');
-
-	console.log(tagColorToChange);
-	console.log(newTagColor);
-
-	$.ajax({
-		type: 'POST',
-	  url: '/update-tag-color',
-	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  data: { tagColorToChange: tagColorToChange, tagName: tagName, newTagColor: newTagColor },
-	  success: function(data) {
-	  	console.log('Updated tag color!');
-
-	  	// Artificially change picked tag color
-	  	$('.picked-tag').attr('style', 'background-color: ' + newTagColor + ';').attr('data-tag-color', newTagColor);
-
-	  	// Hide tag color selection box
-	  	$('#tag-colors').hide();
-
-
-	  	$('.picked-tag').removeClass('picked-tag');
-	  }
 	});
 
-
-	
 });
+
+
+
 
 
 
@@ -748,6 +781,7 @@ function showFocus(id) {
 
 // Adjust view of panels
 function adjustPanels() {
+	console.log(window.stage);
 	switch(window.stage) {
 		case 'Add recipe':
 			if ($('#list-panel').is(':visible')) {
@@ -756,6 +790,7 @@ function adjustPanels() {
 			$('.detail-recipe').addClass('singular');
 			break;
 		default:
+			console.log('default');
 			// First remove existing special classes
 			$('.detail-recipe').removeClass('singular');
 			$('#list-panel').animate({width: 'show'}, 190);
