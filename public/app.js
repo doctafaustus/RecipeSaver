@@ -72,14 +72,17 @@ function refreshRecipeList() {
 
 			// Change panel title
 			$('#list-panel-heading').text('All Recipes');
+
+			// Save reference to recipes in global JS so they can be retrieved with search
+			window.recipes = data;
 	  }
 	});
 }
 
 
 
-// Populate detail panel on recipe list entry click
-$('#profile').on('click', '.recipe-list-entry', function(e) {
+// Populate detail panel on recipe list entry click or search suggestion click
+$('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion', function(e) {
 	e.preventDefault();
 	changeStage('Edit recipe');
 	var id = $(this).data('id');
@@ -681,14 +684,14 @@ $('#profile').on('click', '#detail-options', function(e) {
 	var $el = $(this);
 	$el.addClass('active');
 	$('#detail-options-dropdown').slideDown('fast', function() {
-			$('body').on('click.dd', function(e) {
-				var container = $('#detail-options-dropdown');
-    		if (!container.is(e.target) && container.has(e.target).length === 0) {
-        	$('#detail-options-dropdown').slideUp('fast');
-        	$('body').unbind('click.dd');
-        	$el.removeClass('active');
-    		}
-			});
+		$('body').on('click.dd', function(e) {
+			var container = $('#detail-options-dropdown');
+  		if (!container.is(e.target) && container.has(e.target).length === 0) {
+      	$('#detail-options-dropdown').slideUp('fast');
+      	$('body').unbind('click.dd');
+      	$el.removeClass('active');
+  		}
+		});
 	});
 });
 
@@ -817,3 +820,88 @@ function changeStage(state) {
 		$('#detail-link').hide();
 	}
 }
+
+
+
+
+
+
+
+
+
+
+/* --- Recipe Search --- */
+
+
+// Autopopulate search suggestions
+$('#search-form-input').keyup(function() {
+	var $suggestionDiv = $('#search-suggestions');
+	var input = $(this).val().toLowerCase().trim();
+
+	// If only empty text entered then return
+	if (input.length < 1) {
+		$suggestionDiv.hide();
+		return;
+	}
+
+	var recipes = window.recipes;
+
+	var foundRecipes = 0;
+	var limit = 10;
+
+	var list = '';
+
+	// Sort recipes by name first
+	recipes = recipes.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+
+	// Get all recipes that contain the input
+	for (var i = 0, recipesLength = recipes.length; i < recipesLength; i++) {
+		if (recipes[i].name.toLowerCase().indexOf(input) > -1 && foundRecipes < limit) {
+
+
+			// Bold the substring that was searched for by inserting a span
+			var startPos = recipes[i].name.toLowerCase().indexOf(input);
+			var endPos = startPos + input.length;
+
+			var strStart = recipes[i].name.substring(0, startPos);
+			var boldPart = recipes[i].name.substring(startPos, endPos);
+			var strEnd = recipes[i].name.substring(endPos);
+
+			var formattedStr = strStart + '<span class="sug-bold">' + boldPart + '</span>' + strEnd;
+
+
+			list += '<li class="suggestion" data-id="' + recipes[i].id + '">' + formattedStr + '</li>';
+			foundRecipes++;
+		}
+	}
+
+	// Replace the suggestion list with new suggestions
+	if (list) {
+		$('#search-suggestions').find('ul').html(list);
+	} else {
+		$('#search-suggestions').find('ul').html('<li>No recipes found</li>');
+	}
+	
+	// Show div
+	$suggestionDiv.show();
+
+	// Hide div on next click
+	$('body').one('click', function() {
+		$suggestionDiv.hide();
+	});
+});
+
+	// Select the first suggestion on enter press
+$('#search-form').submit(function(e) {
+	e.preventDefault();
+
+	// Trigger click on first suggestion
+	if ($('#search-suggestions').is(':visible')) {
+		$('#search-suggestions').find('.suggestion').first().trigger('click');
+	}
+});
+
+// Clear search form on suggestion selection
+$('#search-suggestions').click('.suggestion', function() {
+	$('#search-form-input').val('');
+});
