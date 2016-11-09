@@ -65,7 +65,7 @@ function refreshRecipeList() {
 			var recipes = data;
 			var recipeList = '<ul id="recipe-list">';
 			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
 			}
 			recipeList += '</ul>';
 			$('#list-panel-inner').html(recipeList);
@@ -509,11 +509,13 @@ $('body').on('click', '.tag-name', function(e) {
 	  	var recipes = data.recipesToSend;
 	  	var color = data.tagColor;
 
+	  	
+
 	  	var recipeList = '<ul id="recipe-list-by-tag">';
 	  	recipeList += '<li class="tag-category" style="background-color: ' + color + ';">' + tagName + '</li>';
-	  	for (var i = 0; i < recipes.length; i++) {
-	  		recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><a>' + recipes[i].name + '</a></li>';
-	  	}
+			for (var i = 0; i < recipes.length; i++) {
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
+			}
 
 	  	recipeList += '</ul>';
 
