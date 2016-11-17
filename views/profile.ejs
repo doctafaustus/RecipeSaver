@@ -133,9 +133,9 @@
 			box-sizing: border-box;
 		}
 		#logo img {
-			width: 83%;
+			width: 72%;
 			display: block;
-			margin: 20px auto;
+			margin: 10px 28px;
 		}
 		#add-recipe, #submit-recipe {
 			width: 167px;
@@ -511,7 +511,7 @@
 	    border: 1px solid #B9BCC0;
 	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 		}
-		.box li  {
+		.box li:not(.tag-color-selection)  {
 			padding: 3px 15px;
 			cursor: pointer;
 		}
@@ -576,7 +576,7 @@
 
 
 		<!-- List Panel -->
-		<div id="list-panel">
+		<div id="list-panel" class="singular">
 
 			<h1 id="list-panel-heading">All Recipes</h1>
 

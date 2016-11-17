@@ -1,3 +1,5 @@
+window.stage = 'initial';
+
 function populatePanel(id) {
 	$.ajax({
 		type: 'POST',
@@ -85,6 +87,7 @@ function refreshRecipeList() {
 $('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion', function(e) {
 	e.preventDefault();
 	changeStage('Edit recipe');
+	adjustPanels();
 	var id = $(this).data('id');
 	populatePanel(id);
 });
@@ -793,6 +796,11 @@ function adjustPanels() {
 				$('#list-panel').animate({width: 'hide'}, 190);
 			}
 			$('.detail-recipe').addClass('singular');
+			break;
+		case 'Edit recipe':
+			if (!$('.detail-recipe').is(':visible')) {
+				$('#list-panel').removeClass('singular');
+			}
 			break;
 		default:
 			console.log('default');
