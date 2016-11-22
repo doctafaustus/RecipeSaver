@@ -679,6 +679,9 @@ $('#profile').on('click', '#submit-recipe', function(e) {
 	  data: data,
 	  success: function(data) {
 	  	console.log('Submitted tag color!');
+
+	  	$('#get-all-recipes').trigger('click');
+	  	$('#success-box').animate({width:'toggle'}, 425);
 	  }
 	});
 
