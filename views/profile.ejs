@@ -137,7 +137,7 @@
 			display: block;
 			margin: 10px 28px;
 		}
-		#add-recipe, #submit-recipe {
+		#add-recipe, #submit-recipe, #save-recipe {
 			width: 167px;
 			text-align: center;
 			border-radius: 4px;
@@ -154,7 +154,7 @@
 	    color: #fff;
 	    text-shadow: 0 1px 0 rgba(0,0,0,0.3);
 		}
-		#add-recipe:hover, #submit-recipe:hover {
+		#add-recipe:hover, #submit-recipe:hover, #save-recipe:hover {
 	    background: #016bdc;
 	    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#008aea),to(#024dcf));
 	    background: -webkit-linear-gradient(0% 0%,0% 100%,from(#008aea),to(#024dcf));
@@ -165,8 +165,11 @@
 		#add-recipe {
 			margin: 75px auto 40px auto;
 		}
-		#submit-recipe {
+		#submit-recipe, #save-recipe {
 			margin-top: 25px;
+		}
+		#save-recipe {
+			display: none;
 		}
 		#menu {
 			margin: 0;
@@ -207,10 +210,8 @@
 		}
 		#detail-description {
 	    box-sizing: border-box;
-	    padding-left: 3px;
-	    padding-right: 2px;
+	    padding: 10px;
 			margin-top: 30px;
-			min-height: 150px;
 			border: solid 1px #dadada;
 		}
 		#detail-tags {
@@ -409,7 +410,7 @@
 		#detail-options-dropdown {
 			position: absolute;
 			display: none;
-			right: 10px;
+			right: 13px;
 			width: 125px;
 			top: 25px;
 		}
@@ -501,7 +502,9 @@
 		.sug-bold {
 			font-weight: bold;
 		}
-
+		.init-hide {
+			display: none;
+		}
 
 
 		.box {
@@ -625,6 +628,7 @@
 				</ul>
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown" class="box">
+					<li id="edit-recipe">Edit Recipe</li>
 					<li>Favorite</li>
 					<li id="edit-url">Edit URL</li>
 					<li id="spacer"></li>
@@ -633,16 +637,11 @@
 			</div>
 
 			<div id="detail-lower">
-				<div id="detail-link-container">
-					<a id="detail-link" href="#" target="_blank">{{ test }}</a>
-					<input type="test" id="detail-link-editable" placeholder="URL">
-				</div>
-
 				<!-- Recipe Name -->
 				<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
 
 				<!-- Recipe Ingredients -->
-				<ul id="detail-ingredients">
+				<ul id="detail-ingredients" class="init-hide">
 
 					<!-- Recipe Ingredients will be prepended here -->
 
@@ -651,15 +650,21 @@
 				</ul>
 
 				<!-- Recipe Description -->
-				<div contenteditable="true" id="detail-description" placeholder="Recipe details">
+				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description">
 					{{ recipeMore }}
 				</div>
 
+				<div id="detail-link-container" class="init-hide">
+					<a id="detail-link" href="#" target="_blank">{{ test }}</a>
+					<input type="test" id="detail-link-editable" placeholder="URL">
+				</div>
+
 				<!-- Recipe ID -->
-				<p id="detail-id" style="color: blue">{{ recipeID }}</p>
+				<p id="detail-id" style="color: blue; display: none;">{{ recipeID }}</p>
 
 				<!-- Recipe Submit Button -->
 				<div id="submit-recipe">Submit</div>
+				<div id="save-recipe">Save</div>
 			</div>
 		</div>
 	</div>

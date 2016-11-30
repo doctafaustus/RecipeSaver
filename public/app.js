@@ -9,6 +9,10 @@ function populatePanel(id) {
 	  success: function(data) {
 			console.log(data);
 
+			// Rehide everything first
+			$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
+
+
 			// Tags
 			$('.tag').remove();
 			if (data.tags.length) {
@@ -51,10 +55,23 @@ function populatePanel(id) {
 			} else {
 				$('#detail-link-container').hide();
 			}
+
+			showPopulatedInputs(data);
 	  },
 	});
 }
 
+function showPopulatedInputs(data) {
+	if (data.ingredients.length) {
+		$('#detail-ingredients').removeClass('init-hide');
+	}
+	if (data.more.length) {
+		$('#detail-description').removeClass('init-hide');
+	}
+	if (data.url.length) {
+		$('#detail-link-container').removeClass('init-hide');
+	}
+}
 
 function refreshRecipeList() {
 	$.ajax({
@@ -424,35 +441,35 @@ $('#profile').on('keydown', '#detail-name', function(e) {
 });
 
 
-// Save reference to current recipe description so we can compare later so we don't need to fire extra network calls
-$('#profile').on('click', '#detail-description', function(e) {
-	window.descriptionComparisonText = $(this).text().trim();
-});
+// // Save reference to current recipe description so we can compare later so we don't need to fire extra network calls
+// $('#profile').on('click', '#detail-description', function(e) {
+// 	window.descriptionComparisonText = $(this).text().trim();
+// });
 
-// Edit recipe description
-$('#profile').on('blur', '#detail-description', function(e) {
-	if (window.stage === 'Edit recipe') {
-		if ($(this).text().trim() === window.descriptionComparisonText) {
-			console.log('Description text the same - not updating.');
-			return;
-		}
+// // Edit recipe description
+// $('#profile').on('blur', '#detail-description', function(e) {
+// 	if (window.stage === 'Edit recipe') {
+// 		if ($(this).text().trim() === window.descriptionComparisonText) {
+// 			console.log('Description text the same - not updating.');
+// 			return;
+// 		}
 
-		var id = $('#detail-id').text();
-		var newRecipeDescription = $(this).html();
+// 		var id = $('#detail-id').text();
+// 		var newRecipeDescription = $(this).html();
 
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe-update',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: { id: id, recipeDescription: newRecipeDescription },
+// 		$.ajax({
+// 			type: 'POST',
+// 		  url: '/recipe-update',
+// 		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+// 		  data: { id: id, recipeDescription: newRecipeDescription },
 
-		  success: function() {
-		  	console.log('Updated recipe description!');
-		  	populatePanel(id);
-		  }
-		});
-	}
-});
+// 		  success: function() {
+// 		  	console.log('Updated recipe description!');
+// 		  	populatePanel(id);
+// 		  }
+// 		});
+// 	}
+// });
 
 
 // Get all tags
@@ -736,6 +753,51 @@ $('#detail-link-editable').focusout(function() {
 });
 
 
+// Edit recipe
+$('#profile').on('click', '#edit-recipe', function(e) {
+	$('#detail-options').trigger('click');
+
+	// Show save button
+	$('#save-recipe').show();
+
+	// Show all inputs
+	$('#detail-ingredients, #detail-description, #detail-link-container').removeClass('init-hide');
+
+	// Handle details
+	$('#detail-description').attr('contenteditable', true);
+
+});
+
+
+// Save recipe
+$('#profile').on('click', '#save-recipe', function(e) {
+
+
+	var id = $('#detail-id').text();
+	var newRecipeDescription = $('#detail-description').html();
+
+		$.ajax({
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: { id: id, recipeDescription: newRecipeDescription },
+
+		  success: function() {
+		  	console.log('Updated recipe description!');
+		  	populatePanel(id);
+		  	resetRecipeState();
+		  }
+		});
+});
+
+
+function resetRecipeState() {
+	$('#detail-description').attr('contenteditable', false);
+	$('#save-recipe').hide();
+}
+
+
+
 // Delete recipe
 $('#profile').on('click', '#delete-recipe', function(e) {
 	$('#detail-options').trigger('click');
@@ -760,7 +822,6 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	});
 
 });
-
 
 
 
