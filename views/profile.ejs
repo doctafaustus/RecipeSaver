@@ -194,9 +194,7 @@
 			padding: 0 20px;
 		}
 		#detail-ingredients {
-			margin-top: 20px;
-			padding-left: 0;
-			border-bottom: solid 1px #dadada;
+			padding: 20px 0 5px 0;
 		}
 		#detail-new-ingredient-input {
 			display: none;
@@ -204,6 +202,7 @@
 			line-height: 26px;
 			font-size: 16px;
 			box-sizing: border-box;
+			border-bottom: solid 1px #78bcff;
 		}
 		.ingredient {
 			margin-bottom: 4px;
@@ -213,6 +212,7 @@
 	    padding: 10px;
 			margin-top: 30px;
 			border: solid 1px #dadada;
+			min-height: 100px;
 		}
 		#detail-tags {
 			display: flex;
@@ -308,7 +308,7 @@
 		#detail-options {
 			background: url(images/plus-sprite.jpg) 0 -24px;
 			background-repeat: no-repeat;
-			width: 27px;
+			width: 29px;
 			height: 24px;
 			cursor: pointer;
 		}
@@ -387,6 +387,7 @@
 		  cursor: text;
 		  color: darkgrey;
 		  padding-left: 3px;
+		  font-size: 15px;
 		}
 		#list-panel.singular {
 			max-width: 900px;
@@ -411,7 +412,7 @@
 			position: absolute;
 			display: none;
 			right: 13px;
-			width: 125px;
+			width: 141px;
 			top: 25px;
 		}
 		#detail-options-dropdown li#spacer {
@@ -466,23 +467,33 @@
 		#nav li#logout {
 			margin-left: 0;
 		}
+		#search-icon {
+			content: url(images/search-icon.png);
+			position: relative;
+			top: 4px;
+		}
 		#search-row {
 			height: 44px;
 			position: relative;
 		}
 		#search-form {
+			margin: 0 auto;
 			margin-top: 11px;
 			text-align: center;
+			border: solid 1px #1aafd2;
+	    border-radius: 20px;
+	    width: 400px;
 		}
 		#search-form-input {
 			width: 350px;
-			border: solid 1px #1aafd2;
-	    border-radius: 20px;
 	    height: 30px;
-	    padding-left: 10px;
+	    padding-left: 5px;
+	    border: 0;
+	    background: transparent;
 		}
 		#search-form-input:focus {
-			border: solid 1px #43c84a;
+			border: 0;
+			outline: none;
 		}
 		#search-suggestions {
 			display: none;
@@ -505,6 +516,32 @@
 		.init-hide {
 			display: none;
 		}
+		.edit-recipe #detail-ingredients {
+			border-bottom: transparent;
+		}
+		.ingredient.ui-sortable-handle:before {
+			width: 40px;
+			height: 40px;
+			content: url('images/drag-icon.png');
+			position: relative;
+			top: 3px;
+		}
+		.ingredient input {
+			border-bottom: 0;
+			border-top: 0;
+    	border-left: 0;
+    	border-right: 0;
+	    padding-left: 3px;
+	    margin-left: 5px;
+	    height: 22px;
+	    width: calc(100% - 29px);
+	    font-size: 16px;
+	    font-family: 'Source Sans Pro', sans-serif;
+		}
+		.edit-recipe .ingredient {
+			margin-bottom: 0;
+		}
+
 
 
 		.box {
@@ -573,6 +610,7 @@
 
 		<div id="search-row">
 			<form id="search-form">
+				<span id="search-icon"></span>
 				<input type="text" placeholder="Search Recipes" id="search-form-input" autocomplete="off">
 			</form>
 		</div>
@@ -624,13 +662,14 @@
 					<!-- Recipe Tags will be prepended here -->
 
 					<!-- New Tag Input -->
-					<li id="detail-new-tag-input" contenteditable="true"></li>
+					<li id="detail-new-tag-input" contenteditable="false"></li>
 				</ul>
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
 					<li>Favorite</li>
 					<li id="edit-url">Edit URL</li>
+					<li id="convert">Adjust Servings</li>
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
@@ -638,16 +677,14 @@
 
 			<div id="detail-lower">
 				<!-- Recipe Name -->
-				<h2 id="detail-name" contenteditable="true" placeholder="Recipe Name">{{ recipeName }}</h2>
+				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
 
 				<!-- Recipe Ingredients -->
 				<ul id="detail-ingredients" class="init-hide">
-
-					<!-- Recipe Ingredients will be prepended here -->
-
-					<!-- New Ingredient Input -->
-					<li id="detail-new-ingredient-input" contenteditable="true" placeholder="Ingredients (Press Enter to add more)"></li>
+					<!-- Recipe Ingredients will be added here -->
 				</ul>
+				<!-- New Ingredient Input -->
+				<div id="detail-new-ingredient-input" contenteditable="true" placeholder="New Ingredient (Press Enter to Add)"></div>
 
 				<!-- Recipe Description -->
 				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description">
@@ -689,7 +726,10 @@
 		<li class="tag-color-selection" data-color="#2c77ff" style="background-color: #2c77ff;">blue</li>
 		<li class="tag-color-selection" data-color="#000000" style="background-color: #000000;">black</li>
 	</ul>
-	<script src="app.js"></script>
+	<script src="main.js"></script>
+	<script src="edit.js"></script>
+	<script src="jquery-ui.min.js"></script>
+	<script src="fraction.js"></script>
 	<script>
 		// Save global reference to recipes so we can find retrieve them wit search
 		window.recipes = <%- JSON.stringify(recipes) %>;

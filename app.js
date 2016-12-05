@@ -4,7 +4,9 @@ var Strategy = require('passport-twitter').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var Unitz = require('unitz');
 
+console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
 
 passport.use(new Strategy({
     consumerKey: 'sujQmls5lvQVViAog5HTmNr6Z',
@@ -152,6 +154,18 @@ app.post('/recipe', function(req, res) {
 app.post('/recipe-update', function(req, res) {
   var recipeToUpdate = getRecipe(req.body.id);
 
+  // Update recipe name
+  if (req.body.recipeName) {
+    recipeToUpdate.name = req.body.recipeName;
+  }
+
+  // Edit ingredient
+  if (req.body.ingredients) {
+  	console.log('Updating recipe ingredients');
+  	console.log(req.body.ingredients);
+  	recipeToUpdate.ingredients = req.body.ingredients
+  }
+
   // Edit ingredient
   if (req.body.ingredientFlag) {
   	var ingredient = recipeToUpdate.ingredients.filter(function(e) {
@@ -197,10 +211,7 @@ app.post('/recipe-update', function(req, res) {
     recipeToUpdate.tags.push({'id': Math.random() * 1000, 'name': req.body.tagName, 'color': color});
   }
 
-  // Update recipe name
-  if (req.body.recipeName) {
-    recipeToUpdate.name = req.body.recipeName;
-  }
+
 
   // Update recipe description
   if (req.body.recipeDescription) {
@@ -393,20 +404,7 @@ var recipes = [
 		"id": 1,
 		"name": "Pasta",
 		"url": "http://www.thedoctorstv.com/recipes/dr-travis-dark-chocolate-mousse",
-		"ingredients": [
-				{
-					"name": "1 tsp. Olive Oil",
-					"id": 1
-				},
-				{
-					"name": ".5 Cups Chile Powder",
-					"id": 2
-				},
-				{
-					"name": ".75 tablespoon tomato",
-					"id": 14
-				}
-			],
+		"ingredients": ["1 tsp. Olive Oil", ".5 Cups Chile Powder", ".75 tablespoon tomato"],
 		"more": "Boil potatoes about 12 to 15 minutes. Drain, slice them up. Slice or chop a medium onion. Heat about 1/4\" of oil in frying pan. When hot, add potatoes and spread them out. Allow them to start to brown before flipping/turning. From this point on, keep turning once in a while until they look like you want them. Keep enough oil in the pan. Also, add the onion after that first turn. If you add sooner, the onions will start to burn. Sometimes I sprinkle with a little paprika, but always with black pepper (to taste). Also add salt to taste. If you have to, drain them on paper towels on newspaper, but if you do it right you shouldn't have to do that.",
 			"tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}],
 			date: '6/6/15',
@@ -415,16 +413,7 @@ var recipes = [
 		"id": 2,
 		"name": "Eggs",
 		"url": "https://www.youtube.com/watch?v=z15ipHV4Now",
-		"ingredients": [
-				{
-					"name": "1 tablespoon White Sugar",
-					"id": 3
-				},
-				{
-					"name": "3 Cups Chile Powder",
-					"id": 4
-				}
-			],
+		"ingredients": ["12 cups water"],
 		"more": "Chicken coated in panko bread crumbs and hot wing sauce, deep fried, and glazed over with swiss cheese or season with spices",
 		"tags": [{"id": 1, "name": "breakfast", "color": "#22da00"}, {"id": 2, "name": "to try", "color": "#ff0000"}],
 		date: '11/7/16',
@@ -433,16 +422,7 @@ var recipes = [
     "id": 3,
     "name": "Soup",
     "url": "http://www.rachaelray.com/recipes/tournedos-pizzaiola-on-charred-ciabatta",
-		"ingredients": [
-				{
-					"name": "4 cups pepper",
-					"id": 5
-				},
-				{
-					"name": "1 tsp vinegar",
-					"id": 6
-				}
-			],
+		"ingredients": ["1 ripe apple", "2 peppers"],
     "more": "Mix Parmesan cheese, melted butter, mayonnaise, green onions, and 2 tablespoons lemon juice in a bowl; spoon over the fillets.",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}],
       date: '1/13/14',
@@ -451,16 +431,7 @@ var recipes = [
     "id": 4,
     "name": "Cream Cheese Penguins",
     "url": "",
-		"ingredients": [
-				{
-					"name": "1 tablespoon chocolate",
-					"id": 7
-				},
-				{
-					"name": "3 lbs. sugar",
-					"id": 8
-				}
-			],
+		"ingredients": ["1 cup milk", "2 cups bread"],
     "more": "Cut a slit from top to bottom, lengthwise, into the side of each jumbo olive. Carefully insert about 1 teaspoon of cream cheese into each olive. Slice the carrot into eighteen 1/4 inch thick rounds; cut a small notch out of each carrot slice to form feet. Save the cut out piece and press into center of small olive to form the beak. If necessary cut a small slit into each olive before inserting the beak.",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}],
       date: '11/8/16',
@@ -469,16 +440,7 @@ var recipes = [
     "id": 5,
     "name": "Veal Piccata",
     "url": "http://www.health.com/health/recipe/0,,10000000522028,00.html",
-		"ingredients": [
-				{
-					"name": "1 tablespoon sauce",
-					"id": 9
-				},
-				{
-					"name": "5 carrots",
-					"id": 10
-				}
-			],
+		"ingredients": ["water", "1 tablespoon sauce", "5 carrots"],
     "more": "In a shallow bowl or plate combine the flour, 1 1/2 teaspoons of the salt and pepper and stir to combine thoroughly. Quickly dredge the veal scallops in the seasoned flour mixture, shaking to remove any excess flour",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}],
       date: '12/2/15',
@@ -487,7 +449,7 @@ var recipes = [
     "id": 6,
     "name": "Fake Cake",
     "url": "http://allrecipes.com/recipe/231379/crazy-delicious-turkey-meatloaf/?internalSource=rotd&referringContentType=home%20page&clickId=cardslot%201",
-		"ingredients": [],
+		"ingredients": ["1 tsp. beer"],
     "more": "",
     "tags": [],
     date: '12/9/15',
@@ -505,3 +467,4 @@ https://www.npmjs.com/package/unitz
 .25x, .5x, 1x, 2x, 4x
 
 */
+
