@@ -69,49 +69,60 @@ var allowedFractions = ['1', '1/2', '1/4', '1/8', '2/3', '1/16', '1/3', '1/5', '
 
 // The lowest possible conversion is 1/8 teaspoon - nothing lower than that
 
+
+var arr = [];
+
 $('.ingredient').each(function() {
-	// Initialize object
-	var obj = { unitType: null, unitValue: null, ingredient: $(this).find('input').val().match(/[a-zA-z].*/)[0] };
+
+	var ingredientRegEx = /[a-zA-z].*/;
+	var wholeNumberWithFractionRegEx = /^\d+[-\s]?\d\/\d/;
+	var singleDigitOrFractionRegEx = /^\s*([\.\/\d-]+)\s*\w/;
+
+	var obj = { unitType: null, unitValue: null, ingredient: null };
+
+	if (ingredientRegEx.test($(this).find('input').val())) {
+		obj.ingredient = $(this).find('input').val().match(ingredientRegEx)[0];
+	}
 
 	var str = $(this).find('input').val().toLowerCase();
 	obj.unitType = getUnitType(str);
 
-	// First detect if there is a whole number with a fraction, like "1 1/2"
-	var digit = detectWholeWithFraction(str);
 
-	// If a whole number with a fraction was not detected then search normally
-	if (!digit) {
-		var digits = str.match(/^\s*([\.\/\d-]+) \w/);
-		// If there's no digit to convert just return
-		if (digits === null) {
-			console.log('No digit to convert - returning');
-			obj.unitValue = convertedValue;
-		} else {
-			var digit = eval(digits[1]);
-		}
-		
-	}
-
-	var convertedValue = (digit / 2).toFixed(2);
-
-	var f = new Fraction(convertedValue);
-	if (f.numerator > f.denominator) {
-		var decimalPortion = convertedValue.match(/\.\d+/)[0];
-		var decimalNowAsAFraction = makeFraction(decimalPortion);
-		var wholeNumber = convertedValue.match(/\d+/)[0];
-		convertedValue = wholeNumber + ' ' + decimalNowAsAFraction;
+	if (wholeNumberWithFractionRegEx.test(str)) {
+		var matches = str.match(wholeNumberWithFractionRegEx);
+		var wholeNumber = matches[0].match(/\d+/)[0];
+		var fraction = matches[0].match(/\d\/\d/)[0];
+		var decimal = eval(fraction);
+		obj.unitValue = (+wholeNumber + +decimal);
+	} else if (singleDigitOrFractionRegEx.test(str)) {
+		obj.unitValue = eval(str.match(singleDigitOrFractionRegEx)[1]);
 	} else {
-		convertedValue = (f.numerator + '/' + f.denominator);
-		cleanFractions((f.numerator + '/' + f.denominator));
+		obj.unitValue = null;
 	}
 
-	obj.unitValue = convertedValue;
+	if (obj.unitValue !== null) {
+		obj.unitValue = (obj.unitValue / 2).toFixed(2);
 
-	console.log('Converted ' + $(this).find('input').val() + ' to: ' + convertedValue);
-	console.log(obj);
+		var f = new Fraction(obj.unitValue);
+		if (f.denominator === 1) {
+			obj.unitValue = parseFloat(obj.unitValue).toFixed(0);
+		} else if (f.numerator > f.denominator) {
+			var decimalPortion = obj.unitValue.match(/\.\d+/)[0];
+			var decimalNowAsAFraction = makeFraction(decimalPortion);
+			var wholeNumber = obj.unitValue.match(/\d+/)[0];
+			obj.unitValue = wholeNumber + ' ' + cleanFractions(decimalNowAsAFraction);
+		} else {
+			//console.log((f.numerator + '/' + f.denominator));
+			obj.unitValue = cleanFractions((f.numerator + '/' + f.denominator));
+		}
 
+	}
+
+	console.log('Converted ' + $(this).find('input').val() + ' to: ' + obj.unitValue + ' ' + obj.unitType);
+	arr.push(obj);
 
 });
+
 
 function cleanFractions(str) {
 	var num = str;
@@ -137,7 +148,7 @@ function cleanFractions(str) {
 			num = '5/8';
 		} else if (num >= .5) {
 			num = '1/2';
-		} else if (num >= .3333) {
+		} else if (num >= .3) {
 			num = '1/3';
 		} else if (num >= .25) {
 			num = '1/4';
@@ -147,17 +158,16 @@ function cleanFractions(str) {
 			num = '1/8';
 		} else if (num >= .1) {
 			num = '1/10';
-		} else if (num >= .0625) {
+		} else if (num >= .0) {
 			num = '1/16';	
 		}
-		console.warn(num);
 	}
 	return num;
 }
 
 function getUnitType(str) {
 	var userUnit;
-	var userUnitArray = str.match(/^[\.\/\d-]+\s*([a-z'""]+)/);
+	var userUnitArray = str.match(/^[\.\/\d-]+(?:\s*-*\d\/\d)?\s*([a-z'""]+)/);
 	if (userUnitArray === null) {
 		console.log('No user unit array - returning');
 		userUnit = null;
@@ -174,17 +184,6 @@ function getUnitType(str) {
 		}
 	}
 	return unitType;
-}
-
-function detectWholeWithFraction(str) {
-	var matches = str.match(/^\d+[-\s]?\d\/\d/);
-	if (matches === null) {
-		return false;
-	} 
-	var wholeNumber = matches[0].match(/\d+/)[0];
-	var fraction = matches[0].match(/\d\/\d/)[0];
-	var decimal = eval(fraction);
-	return +wholeNumber + +decimal;
 }
 
 function makeFraction(val) {
