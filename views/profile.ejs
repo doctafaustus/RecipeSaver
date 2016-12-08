@@ -541,8 +541,30 @@
 		.edit-recipe .ingredient {
 			margin-bottom: 0;
 		}
-
-
+		#detail-top-container {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 10px;
+		}
+		#detail-top-container-icons {
+			margin-top: 14px;
+		}
+		#detail-top-container-icons li {
+			display: inline-block;
+		}
+		#detail-top-container-icons span {
+			margin-right: 5px;
+			font-size: 13px;
+			position: relative;
+			top: -7px;
+		}
+		#detail-top-container-icons .icons {
+			width: 23px;
+			margin-right: 11px;
+		}
+		#detail-top-container-icons li:last-child .icons {
+			margin-right: 0;
+		}
 
 		.box {
 			background-color: white;
@@ -676,8 +698,18 @@
 			</div>
 
 			<div id="detail-lower">
-				<!-- Recipe Name -->
-				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
+
+				<div id="detail-top-container">
+					<!-- Recipe Name -->
+					<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
+					<div id="detail-top-container-icons">
+						<ul>
+							<li><span>Servings</span><img class="icons" src="images/pie-chart.png"></li>
+							<li><span>Time</span><img class="icons" src="images/clock.png"></li>
+							<li><span>Calories</span><img class="icons" src="images/graph.png"></li>
+						</ul>
+					</div>
+				</div>
 
 				<!-- Recipe Ingredients -->
 				<ul id="detail-ingredients" class="init-hide">
