@@ -97,6 +97,7 @@
 		.detail-recipe {
 			width: 60%;
 			max-width: 700px;
+			min-width: 305px;
 			margin-right: auto;
 			padding: 10px;
 		}
@@ -191,6 +192,7 @@
 			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
 		}
 		#detail-lower {
+			clear: both;
 			padding: 0 20px;
 		}
 		#detail-ingredients {
@@ -216,8 +218,6 @@
 		}
 		#detail-tags {
 			display: flex;
-			border-bottom: solid 1px #dadada;
-			padding-bottom: 8px;
 			position: relative;
 		}
 		#detail-tag-list {
@@ -311,6 +311,7 @@
 			width: 29px;
 			height: 24px;
 			cursor: pointer;
+			float: left;
 		}
 		#detail-options:hover {
 			background: url(images/plus-sprite.jpg) 0 0px;
@@ -411,9 +412,10 @@
 		#detail-options-dropdown {
 			position: absolute;
 			display: none;
-			right: 13px;
+			left: 21px;
 			width: 141px;
-			top: 25px;
+			top: 35px;
+			z-index: 2;
 		}
 		#detail-options-dropdown li#spacer {
 			border-bottom: solid 1px #dadada;
@@ -541,30 +543,28 @@
 		.edit-recipe .ingredient {
 			margin-bottom: 0;
 		}
-		#detail-top-container {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 10px;
+		#detail-top {
+			border-bottom: solid 1px #dadada;
+			overflow: auto;
 		}
-		#detail-top-container-icons {
-			margin-top: 14px;
+		#detail-icons {
+			float: right;
+			margin-bottom: 4px;
 		}
-		#detail-top-container-icons li {
+		#detail-icons li {
 			display: inline-block;
+			margin-right: 10px;
 		}
-		#detail-top-container-icons span {
+		#detail-icons li .icons {
+			width: 23px;
+		}
+		#detail-icons span {
 			margin-right: 5px;
-			font-size: 13px;
+			font-size: 14px;
 			position: relative;
 			top: -7px;
 		}
-		#detail-top-container-icons .icons {
-			width: 23px;
-			margin-right: 11px;
-		}
-		#detail-top-container-icons li:last-child .icons {
-			margin-right: 0;
-		}
+
 
 		.box {
 			background-color: white;
@@ -674,18 +674,8 @@
 		<!-- Recipe Detail Panel -->
 		<div class="detail-recipe">
 
-			<!-- Recipe Tags -->
-			<div id="detail-tags">
-				<!-- Tag Icon -->
-				<div id="detail-add-tag-button"></div>
-				<!-- Tag List -->
-				<ul id="detail-tag-list">
 
-					<!-- Recipe Tags will be prepended here -->
-
-					<!-- New Tag Input -->
-					<li id="detail-new-tag-input" contenteditable="false"></li>
-				</ul>
+			<div id="detail-top">
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
@@ -695,21 +685,19 @@
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
+
+				<!-- Info Icons -->
+				<ul id="detail-icons">
+					<li><span>4 Servings</span><img class="icons" src="images/pie-chart.png"></li>
+					<li><span>1h 23m</span><img class="icons" src="images/clock.png"></li>
+					<li><span>550cals</span><img class="icons" src="images/graph.png"></li>
+				</ul>
+
 			</div>
 
 			<div id="detail-lower">
-
-				<div id="detail-top-container">
-					<!-- Recipe Name -->
-					<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
-					<div id="detail-top-container-icons">
-						<ul>
-							<li><span>Servings</span><img class="icons" src="images/pie-chart.png"></li>
-							<li><span>Time</span><img class="icons" src="images/clock.png"></li>
-							<li><span>Calories</span><img class="icons" src="images/graph.png"></li>
-						</ul>
-					</div>
-				</div>
+				<!-- Recipe Name -->
+				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
 
 				<!-- Recipe Ingredients -->
 				<ul id="detail-ingredients" class="init-hide">
@@ -726,6 +714,20 @@
 				<div id="detail-link-container" class="init-hide">
 					<a id="detail-link" href="#" target="_blank">{{ test }}</a>
 					<input type="test" id="detail-link-editable" placeholder="URL">
+				</div>
+
+				<!-- Recipe Tags -->
+				<div id="detail-tags">
+					<!-- Tag Icon -->
+					<div id="detail-add-tag-button"></div>
+					<!-- Tag List -->
+					<ul id="detail-tag-list">
+
+						<!-- Recipe Tags will be prepended here -->
+
+						<!-- New Tag Input -->
+						<li id="detail-new-tag-input" contenteditable="false"></li>
+					</ul>
 				</div>
 
 				<!-- Recipe ID -->
