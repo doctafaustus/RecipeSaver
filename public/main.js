@@ -1,5 +1,4 @@
 window.stage = 'initial';
-
 function populatePanel(id) {
 	$.ajax({
 		type: 'POST',
@@ -56,9 +55,10 @@ function populatePanel(id) {
 			} else {
 				$('#detail-link-container').hide();
 			}
-			urlSizeFix();
 
 			showPopulatedInputs(data);
+
+			urlSizeFix();
 	  },
 	});
 }
@@ -70,6 +70,7 @@ function showPopulatedInputs(data) {
 	if (data.more.length) {
 		$('#detail-description').removeClass('init-hide');
 	}
+	console.log(data.url.length)
 	if (data.url.length) {
 		$('#detail-link-container').removeClass('init-hide');
 	}
@@ -597,9 +598,11 @@ $(window).resize(urlSizeFix);
 
 function urlSizeFix() {
 	console.log('URL size fix');
-	$('#detail-link-container').hide();
+	var $linkContainer = $('#detail-link-container');
+	var showStyle = $linkContainer.attr('style') && $linkContainer.attr('style').indexOf('display: block') > -1 ? ' display: block;' : '';
+	$linkContainer.hide();
 	var newWidth = $('.detail-recipe').width() - 42;
-	$('#detail-link-container').attr('style',' max-width: ' + newWidth + 'px;');
+	$linkContainer.attr('style',' max-width: ' + newWidth + 'px;' + showStyle);
 }
 
 urlSizeFix();
@@ -679,4 +682,35 @@ $('#search-form').submit(function(e) {
 $('#search-suggestions').click('.suggestion', function() {
 	$('#search-form-input').val('');
 });
+
+
+
+
+/* --- Icons --- */
+$('#profile').on('click', '.icons', function() {
+	var $el = $(this);
+	$el.addClass('active');
+
+	var $dropdown;
+
+	switch($el.attr('id')) {
+		case 'cal-icon': 
+		  $dropdown = $('#cal-dropdown');
+		  break;
+	}
+
+	$dropdown.slideDown('fast', function() {
+		$('body').on('click.id', function(e) {
+			var container = $dropdown;
+  		if (!container.is(e.target) && container.has(e.target).length === 0) {
+      	container.hide();
+      	$('body').unbind('click.id');
+      	$el.removeClass('active');
+  		}
+		});
+	});
+
+});
+
+
 
