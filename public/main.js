@@ -697,7 +697,14 @@ $('#profile').on('click', '.icons', function() {
 		case 'cal-icon': 
 		  $dropdown = $('#cal-dropdown');
 		  break;
+		case 'clock-icon':
+			$dropdown = $('#clock-dropdown');
+			break;
+		case 'portion-icon':
+			$dropdown = $('#portion-dropdown');
+			break;
 	}
+
 
 	$dropdown.slideDown('fast', function() {
 		$('body').on('click.id', function(e) {

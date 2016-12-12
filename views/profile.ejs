@@ -568,12 +568,6 @@
 			position: relative;
 			top: -7px;
 		}
-		#cook-time {
-			position: relative;
-			top: -7px;
-			width: 38px;
-			border: solid 1px #1aafd2;
-		}
 		#cal-icon {
 			cursor: pointer;
 			background: url(images/graph-sprite.png) 0 0;
@@ -581,20 +575,48 @@
 		#cal-icon:hover, #cal-icon.active {
 			background: url(images/graph-sprite.png) 0 -23px;
 		}
-		#cal-dropdown {
+		#cal-dropdown, #clock-dropdown, #portion-dropdown {
 			display: none;
 			padding: 10px 10px;
 			position: absolute;
-			right: 30px;
 			top: 36px;
 		}
-		#cal-dropdown p {
+		#cal-dropdown {
+			right: 30px;
+		}
+		#clock-dropdown {
+			right: 119px;
+		}
+		#portion-dropdown {
+			right: 206px;
+		}
+		#cal-dropdown p, #clock-dropdown p, #portion-dropdown p {
 			margin: 0 0 5px 0;
 		}
-		#cal-dropdown input {
+		#portion-dropdown p {
+			font-size: 14px;
+			font-style: italic;
+			margin-bottom: 15px;
+		}
+		#cal-dropdown input, #clock-dropdown input, #portion-dropdown input {
 			width: 90px;
 			border: solid 1px #1aafd2;
 			height: 20px;
+			padding-left: 4px;
+		}
+		#clock-icon {
+			cursor: pointer;
+			background: url(images/clock-sprite.png) 0 0;
+		}
+		#clock-icon:hover, #clock-icon.active {
+			background: url(images/clock-sprite.png) 0 -23px;
+		}
+		#portion-icon {
+			cursor: pointer;
+			background: url(images/portion-sprite.png) 0 0;
+		}
+		#portion-icon:hover, #portion-icon.active {
+			background: url(images/portion-sprite.png) 0 -23px;
 		}
 
 
@@ -722,18 +744,27 @@
 				<ul id="detail-icons">
 					<li>
 						<span>4 Servings</span>
-						<img class="icons" src="images/pie-chart.png">
+						<div class="icons" id="portion-icon"></div>
+						<div id="portion-dropdown" class="box">
+							<p>Original Recipe yields <span id="original-yield"></span>servings</p>
+							<input type="number" val=""  min="1" max="8">
+							<button id="ajust-portions">Adjust Portions</button>
+						</div>
 					</li>
 					<li>
 						<span>1h 23m</span>
-						<img class="icons" src="images/clock.png">
+						<div class="icons" id="clock-icon"></div>
+						<div id="clock-dropdown" class="box">
+							<p>Ready In:</p>
+							<input type="number" val="" placeholder="Minutes">
+						</div>
 					</li>
 					<li>
 						<span>550cals</span>
 						<div class="icons" id="cal-icon"></div>
 						<div id="cal-dropdown" class="box">
 							<p>Calories:</p>
-							<input type="text" val="">
+							<input type="number" val="">
 						</div>
 					</li>
 				</ul>
