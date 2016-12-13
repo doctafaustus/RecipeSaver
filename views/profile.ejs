@@ -562,11 +562,12 @@
 			display: inline-block;
 			background-size: 23px;
 		}
-		#detail-icons span {
+		#detail-icons span.icon-label {
 			margin-right: 5px;
 			font-size: 14px;
 			position: relative;
 			top: -7px;
+			color: #888888;
 		}
 		#cal-icon {
 			cursor: pointer;
@@ -593,7 +594,7 @@
 		#cal-dropdown p, #clock-dropdown p, #portion-dropdown p {
 			margin: 0 0 5px 0;
 		}
-		#portion-dropdown p {
+		#portion-dropdown p#yield {
 			font-size: 14px;
 			font-style: italic;
 			margin-bottom: 15px;
@@ -603,6 +604,19 @@
 			border: solid 1px #1aafd2;
 			height: 20px;
 			padding-left: 4px;
+		}
+		#portion-dropdown input {
+			width: 40px;
+			margin-right: 5px;
+		}
+		#adjust-portions {
+			border: 0;
+			background-color: #bbbbbb;
+			color: white;
+			padding: 5px;
+		}
+		#adjust-portions:hover {
+			background-color: #1aafd2;
 		}
 		#clock-icon {
 			cursor: pointer;
@@ -743,16 +757,17 @@
 				<!-- Info Icons -->
 				<ul id="detail-icons">
 					<li>
-						<span>4 Servings</span>
+						<span class="icon-label">4 Servings</span>
 						<div class="icons" id="portion-icon"></div>
 						<div id="portion-dropdown" class="box">
-							<p>Original Recipe yields <span id="original-yield"></span>servings</p>
-							<input type="number" val=""  min="1" max="8">
-							<button id="ajust-portions">Adjust Portions</button>
+							<p id="yield">Original recipe yields <span id="original-yield">4</span> servings</p>
+							<p>Change portion amount to:</p>
+							<input type="number" val="" id="portion-num" min="1" max="8">
+							<button id="adjust-portions">Adjust Portions</button>
 						</div>
 					</li>
 					<li>
-						<span>1h 23m</span>
+						<span class="icon-label">1h 23m</span>
 						<div class="icons" id="clock-icon"></div>
 						<div id="clock-dropdown" class="box">
 							<p>Ready In:</p>
@@ -760,7 +775,7 @@
 						</div>
 					</li>
 					<li>
-						<span>550cals</span>
+						<span class="icon-label">550cals</span>
 						<div class="icons" id="cal-icon"></div>
 						<div id="cal-dropdown" class="box">
 							<p>Calories:</p>

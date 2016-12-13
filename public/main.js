@@ -711,6 +711,7 @@ $('#profile').on('click', '.icons', function() {
 			var container = $dropdown;
   		if (!container.is(e.target) && container.has(e.target).length === 0) {
       	container.hide();
+      	$('#portion-num').val('');
       	$('body').unbind('click.id');
       	$el.removeClass('active');
   		}
