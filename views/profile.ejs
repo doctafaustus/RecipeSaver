@@ -41,6 +41,7 @@
 			background-color: white;
 			position: relative;
 			margin-top: 15px;
+			overflow-y: scroll;
 		}
 		#list-panel:before {
 	    content: "";
@@ -100,6 +101,9 @@
 			min-width: 305px;
 			margin-right: auto;
 			padding: 10px;
+		}
+		.edit-recipe .detail-recipe {
+			border: solid 3px #1aafd2;
 		}
 		#detail-name {
 			margin-top: 10px;
@@ -212,7 +216,7 @@
 		#detail-description {
 	    box-sizing: border-box;
 	    padding: 10px;
-			margin-top: 30px;
+			margin-top: 20px;
 			border: solid 1px #dadada;
 			min-height: 100px;
 		}
@@ -294,7 +298,7 @@
 			margin-top: 7px;
 			cursor: pointer;
 			width: 25px;
-			height: 22px;
+			height: 21px;
 			background: url(images/tag-sprite.png) 0 0;
 			background-repeat: no-repeat;
 			padding-right: 5px;
@@ -556,7 +560,7 @@
 			display: inline-block;
 			margin-right: 10px;
 		}
-		#detail-icons li .icons {
+		#detail-icons li div.icons {
 			width: 23px;
 			height: 23px;
 			display: inline-block;
@@ -570,13 +574,15 @@
 			color: #888888;
 		}
 		#cal-icon {
-			cursor: pointer;
 			background: url(images/graph-sprite.png) 0 0;
 		}
-		#cal-icon:hover, #cal-icon.active {
-			background: url(images/graph-sprite.png) 0 -23px;
+		#cal-icon.editable:hover, #cal-icon.active.editable {
+			background: url(images/graph-sprite.png) 0 -23px/23px;
 		}
-		#cal-dropdown, #clock-dropdown, #portion-dropdown {
+		#cal-icon.editable, #clock-icon.editable {
+			cursor: pointer;
+		}
+		#cal-dropdown, #clock-dropdown, #portion-dropdown-1, #portion-dropdown-2 {
 			display: none;
 			padding: 10px 10px;
 			position: absolute;
@@ -588,24 +594,24 @@
 		#clock-dropdown {
 			right: 119px;
 		}
-		#portion-dropdown {
+		#portion-dropdown-1 {
 			right: 206px;
 		}
-		#cal-dropdown p, #clock-dropdown p, #portion-dropdown p {
+		#cal-dropdown p, #clock-dropdown p, #portion-dropdown-1 p, #portion-dropdown-2 p {
 			margin: 0 0 5px 0;
 		}
-		#portion-dropdown p#yield {
+		#portion-dropdown-1 p#yield {
 			font-size: 14px;
 			font-style: italic;
 			margin-bottom: 15px;
 		}
-		#cal-dropdown input, #clock-dropdown input, #portion-dropdown input {
+		#cal-dropdown input, #clock-dropdown input, #portion-dropdown-1 input, #portion-dropdown-2 input {
 			width: 90px;
 			border: solid 1px #1aafd2;
 			height: 20px;
 			padding-left: 4px;
 		}
-		#portion-dropdown input {
+		#portion-dropdown-1 input {
 			width: 40px;
 			margin-right: 5px;
 		}
@@ -619,18 +625,17 @@
 			background-color: #1aafd2;
 		}
 		#clock-icon {
-			cursor: pointer;
 			background: url(images/clock-sprite.png) 0 0;
 		}
-		#clock-icon:hover, #clock-icon.active {
-			background: url(images/clock-sprite.png) 0 -23px;
+		#clock-icon.editable:hover, #clock-icon.active.editable {
+			background: url(images/clock-sprite.png) 0 -23px/23px;
 		}
 		#portion-icon {
 			cursor: pointer;
 			background: url(images/portion-sprite.png) 0 0;
 		}
 		#portion-icon:hover, #portion-icon.active {
-			background: url(images/portion-sprite.png) 0 -23px;
+			background: url(images/portion-sprite.png) 0 -23px/23px;
 		}
 
 
@@ -640,6 +645,7 @@
     	border-radius: 3px 3px 3px 3px;
 	    border: 1px solid #B9BCC0;
 	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+	    z-index: 1;
 		}
 		.box li:not(.tag-color-selection)  {
 			padding: 3px 15px;
@@ -680,7 +686,6 @@
 		<ul id="menu">
 			<li id='get-all-recipes'>All Recipes</li>
 			<li id="get-recipes-by-tags">Tags</li>
-			<li>Most Recent</li>
 			<li>Favorites</li>
 			<li>Uncategorized</li>
 		</ul>
@@ -748,8 +753,8 @@
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
 					<li>Favorite</li>
-					<li id="edit-url">Edit URL</li>
-					<li id="convert">Adjust Servings</li>
+					<li>Share</li>
+					<li>Print</li>
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
@@ -757,29 +762,33 @@
 				<!-- Info Icons -->
 				<ul id="detail-icons">
 					<li>
-						<span class="icon-label">4 Servings</span>
+						<span id="servings" class="icon-label">4 Servings</span>
 						<div class="icons" id="portion-icon"></div>
-						<div id="portion-dropdown" class="box">
+						<div id="portion-dropdown-1" class="box">
 							<p id="yield">Original recipe yields <span id="original-yield">4</span> servings</p>
 							<p>Change portion amount to:</p>
 							<input type="number" val="" id="portion-num" min="1" max="8">
 							<button id="adjust-portions">Adjust Portions</button>
 						</div>
-					</li>
-					<li>
-						<span class="icon-label">1h 23m</span>
-						<div class="icons" id="clock-icon"></div>
-						<div id="clock-dropdown" class="box">
-							<p>Ready In:</p>
-							<input type="number" val="" placeholder="Minutes">
+						<div id="portion-dropdown-2" class="box">
+							<p>Servings:</p>
+							<input type="number" val="" id="serving-input" min="1" max="8">
 						</div>
 					</li>
 					<li>
-						<span class="icon-label">550cals</span>
+						<span class="icon-label" id="mins">1h 23m</span>
+						<div class="icons" id="clock-icon"></div>
+						<div id="clock-dropdown" class="box">
+							<p>Ready In:</p>
+							<input type="number" id="mins-input" val="" placeholder="Minutes">
+						</div>
+					</li>
+					<li>
+						<span id="cals" class="icon-label">550cals</span>
 						<div class="icons" id="cal-icon"></div>
 						<div id="cal-dropdown" class="box">
 							<p>Calories:</p>
-							<input type="number" val="">
+							<input type="number" id="cals-input" val="">
 						</div>
 					</li>
 				</ul>
@@ -788,7 +797,7 @@
 
 			<div id="detail-lower">
 				<!-- Recipe Name -->
-				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name">{{ recipeName }}</h2>
+				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name"></h2>
 
 				<!-- Recipe Ingredients -->
 				<ul id="detail-ingredients" class="init-hide">
@@ -799,11 +808,10 @@
 
 				<!-- Recipe Description -->
 				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description">
-					{{ recipeMore }}
 				</div>
 
 				<div id="detail-link-container" class="init-hide">
-					<a id="detail-link" href="#" target="_blank">{{ test }}</a>
+					<a id="detail-link" href="#" target="_blank"></a>
 					<input type="test" id="detail-link-editable" placeholder="URL">
 				</div>
 

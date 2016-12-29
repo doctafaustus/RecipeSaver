@@ -4,9 +4,9 @@ var Strategy = require('passport-twitter').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var Unitz = require('unitz');
+//var Unitz = require('unitz');
 
-console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
+//console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
 
 passport.use(new Strategy({
     consumerKey: 'sujQmls5lvQVViAog5HTmNr6Z',
@@ -181,8 +181,6 @@ app.post('/recipe-update', function(req, res) {
     	ingredient[0].name = req.body.ingredientText;
     }
 
-
-
     console.log(ingredient)
   }
 
@@ -191,7 +189,6 @@ app.post('/recipe-update', function(req, res) {
   	var randomId = Math.random() * 1000;
   	recipeToUpdate.ingredients.push({"name": req.body.newIngredientText, id: randomId});
   }
-
 
   // Add new tag
   if (req.body.tagName) {
@@ -211,8 +208,6 @@ app.post('/recipe-update', function(req, res) {
     recipeToUpdate.tags.push({'id': Math.random() * 1000, 'name': req.body.tagName, 'color': color});
   }
 
-
-
   // Update recipe description
   if (req.body.recipeDescription) {
     recipeToUpdate.more = req.body.recipeDescription;
@@ -228,6 +223,21 @@ app.post('/recipe-update', function(req, res) {
   // Update URL
   if (req.body.newURL === '' || req.body.newURL) {
   	recipeToUpdate.url = req.body.newURL;
+  }
+
+  // Update servings
+  if (req.body.servings) {
+    recipeToUpdate.servings = req.body.servings;
+  }
+
+  // Update ready time
+  if (req.body.readyIn) {
+    recipeToUpdate.readyIn = req.body.readyIn;
+  }
+
+  // Update calories
+  if (req.body.cals) {
+    recipeToUpdate.cals = req.body.cals;
   }
 
   res.json(recipeToUpdate);
@@ -408,6 +418,9 @@ var recipes = [
 		"more": "Boil potatoes about 12 to 15 minutes. Drain, slice them up. Slice or chop a medium onion. Heat about 1/4\" of oil in frying pan. When hot, add potatoes and spread them out. Allow them to start to brown before flipping/turning. From this point on, keep turning once in a while until they look like you want them. Keep enough oil in the pan. Also, add the onion after that first turn. If you add sooner, the onions will start to burn. Sometimes I sprinkle with a little paprika, but always with black pepper (to taste). Also add salt to taste. If you have to, drain them on paper towels on newspaper, but if you do it right you shouldn't have to do that.",
 			"tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}],
 			date: '6/6/15',
+      readyIn: 335,
+      cals: '2000',
+      servings: 1,
 	},
 	{
 		"id": 2,
@@ -417,6 +430,9 @@ var recipes = [
 		"more": "Chicken coated in panko bread crumbs and hot wing sauce, deep fried, and glazed over with swiss cheese or season with spices",
 		"tags": [{"id": 1, "name": "breakfast", "color": "#22da00"}, {"id": 2, "name": "to try", "color": "#ff0000"}],
 		date: '11/7/16',
+    readyIn: 60,
+    cals: '1500',
+    servings: 4,
 	},
   {
     "id": 3,
@@ -426,6 +442,9 @@ var recipes = [
     "more": "Mix Parmesan cheese, melted butter, mayonnaise, green onions, and 2 tablespoons lemon juice in a bowl; spoon over the fillets.",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "lunch", "color": "#ff0000"}],
       date: '1/13/14',
+      readyIn: 45,
+      cals: '70',
+      servings: 8,
   },
   {
     "id": 4,
@@ -435,6 +454,9 @@ var recipes = [
     "more": "Cut a slit from top to bottom, lengthwise, into the side of each jumbo olive. Carefully insert about 1 teaspoon of cream cheese into each olive. Slice the carrot into eighteen 1/4 inch thick rounds; cut a small notch out of each carrot slice to form feet. Save the cut out piece and press into center of small olive to form the beak. If necessary cut a small slit into each olive before inserting the beak.",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}],
       date: '11/8/16',
+      readyIn: 175,
+      cals: '140',
+      servings: 6,
   },
   {
     "id": 5,
@@ -444,6 +466,9 @@ var recipes = [
     "more": "In a shallow bowl or plate combine the flour, 1 1/2 teaspoons of the salt and pepper and stir to combine thoroughly. Quickly dredge the veal scallops in the seasoned flour mixture, shaking to remove any excess flour",
       "tags": [{"id": 1, "name": "dinner", "color": "#2c77ff"}, {"id": 2, "name": "brunch", "color": "#ffa500"}],
       date: '12/2/15',
+      readyIn: 75,
+      cals: '575',
+      servings: 2,
   },
   {
     "id": 6,
@@ -453,6 +478,9 @@ var recipes = [
     "more": "",
     "tags": [],
     date: '12/9/15',
+    readyIn: 23,
+    cals: '',
+    servings: 1,
   },
 ];
 

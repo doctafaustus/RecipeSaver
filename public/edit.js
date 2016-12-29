@@ -1,6 +1,6 @@
 /* --- NEW EDIT --- */
 
-function test() {
+function createIngredientInputs() {
 	$('.ingredient').each(function() {
 		$(this).html('<input type="text" value="' + $(this).html() + '">');
 	});
@@ -16,6 +16,9 @@ $('#profile').on('click', '#edit-recipe', function(e) {
 	}
 
 	changeStage('Edit recipe');
+
+	// Add class to top icons so that they can be editable
+	$('.icons').addClass('editable');
 	
 	// Show save button
 	$('#save-recipe').show();
@@ -35,7 +38,7 @@ $('#profile').on('click', '#edit-recipe', function(e) {
 	// Hide url link
 	$('#detail-link').hide();
 
-	test();
+	createIngredientInputs();
 
 	// Make ingredients list sortable
 	sortableIngredients();
@@ -107,6 +110,9 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		ingredients.push($(this).find('input').val().trim());
 	});
 	var newRecipeDescription = $('#detail-description').html();
+	var servings = $('#serving-input').val();
+	var readyIn = $('#mins-input').val();
+	var cals = $('#cals-input').val();
 
 	// If there is any text in the new ingredient input then add it to the ingredients array
 	var ingInputText = $('#detail-new-ingredient-input').text().trim();
@@ -119,13 +125,13 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		type: 'POST',
 	  url: '/recipe-update',
 	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  data: { id: id, recipeDescription: newRecipeDescription, recipeName: newRecipeName, ingredients: ingredients },
+	  data: { id: id, recipeDescription: newRecipeDescription, recipeName: newRecipeName, ingredients: ingredients, servings: servings, readyIn: readyIn, cals: cals },
 
 	  success: function() {
 	  	console.log('Updated recipe description!');
 	  	populatePanel(id);
 	  	resetRecipeState();
-
+	  	$('.editable').removeClass('editable');
 	  	changeStage('null');
 	  }
 

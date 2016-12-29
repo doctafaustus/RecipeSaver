@@ -11,6 +11,17 @@ function populatePanel(id) {
 			// Rehide everything first
 			$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
 
+			// Servings
+			$('#servings').html('Serves ' + data.servings);
+			$('#original-yield').html(data.servings);
+
+			// Ready In
+			$('#mins').html(convertMinsToHours(data.readyIn));
+			$('#portion-num').val('');
+
+			// Calories
+			$('#cals').html(data.cals + ' cals');
+			$('#cals-input').val('');
 
 			// Tags
 			$('.tag').remove();
@@ -607,6 +618,16 @@ function urlSizeFix() {
 
 urlSizeFix();
 
+// Convert minutes to h + m
+function convertMinsToHours(m) {
+	var minutes = m % 60;
+	var hours = (m - minutes) / 60;
+
+	minutes = (m % 60 === 0 ? '' : minutes + 'm');
+	hours = (m >= 60 ? hours + 'h ' : '');
+	return hours + minutes;
+}
+
 /* --- Recipe Search --- */
 
 
@@ -689,21 +710,40 @@ $('#search-suggestions').click('.suggestion', function() {
 /* --- Icons --- */
 $('#profile').on('click', '.icons', function() {
 	var $el = $(this);
-	$el.addClass('active');
-
 	var $dropdown;
+	var servingsInputChanged = false;
+	var timeInputChanged = false;
+	var calInputChanged = false;
 
 	switch($el.attr('id')) {
-		case 'cal-icon': 
-		  $dropdown = $('#cal-dropdown');
-		  break;
+		case 'portion-icon':
+			$dropdown = $el.hasClass('editable') ? $('#portion-dropdown-2') : $('#portion-dropdown-1');
+			break;
 		case 'clock-icon':
+			if (!$el.hasClass('editable')) {
+				return;
+			}
 			$dropdown = $('#clock-dropdown');
 			break;
-		case 'portion-icon':
-			$dropdown = $('#portion-dropdown');
-			break;
+		case 'cal-icon':
+			if (!$el.hasClass('editable')) {
+				return;
+			}
+		  $dropdown = $('#cal-dropdown');
+		  break;
 	}
+
+	$el.addClass('active');
+
+	$('#serving-input').one('keyup change', function() {
+		servingsInputChanged = true;
+	});
+	$('#mins-input').one('keyup change', function() {
+		timeInputChanged = true; 
+	});
+	$('#cals-input').one('keyup change', function() {
+		calInputChanged = true; 
+	});
 
 
 	$dropdown.slideDown('fast', function() {
@@ -714,11 +754,25 @@ $('#profile').on('click', '.icons', function() {
       	$('#portion-num').val('');
       	$('body').unbind('click.id');
       	$el.removeClass('active');
+
+      	if (servingsInputChanged) {
+      		var value = $('#serving-input').val().length ? $('#serving-input').val() : $('#servings').html().match(/\d/)[0];
+      		$('#servings').html('Serves ' + value);
+      	}
+      	if (timeInputChanged) {
+      		var value = $('#mins-input').val().length ? $('#mins-input').val() : 0;
+      		$('#mins').html(convertMinsToHours(value));
+      	}
+      	if (calInputChanged) {
+      		var value = $('#cals-input').val().length ? $('#cals-input').val() : 0;
+      		$('#cals').html(value + ' cals');
+      	}
   		}
 		});
 	});
 
 });
+
 
 
 
