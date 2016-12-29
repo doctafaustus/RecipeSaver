@@ -41,7 +41,7 @@
 			background-color: white;
 			position: relative;
 			margin-top: 15px;
-			overflow-y: scroll;
+			overflow-y: auto;
 		}
 		#list-panel:before {
 	    content: "";
@@ -451,10 +451,10 @@
 		}
 		#nav {
 			border-bottom: 1px solid #B9BCC0;
-			height: 50px;
+			height: 35px;
 		}
 		#nav li {
-			line-height: 50px;
+			line-height: 35px;
 			display: inline-block;
 			margin-left: 15px;
 		}
@@ -577,9 +577,12 @@
 			background: url(images/graph-sprite.png) 0 0;
 		}
 		#cal-icon.editable:hover, #cal-icon.active.editable {
-			background: url(images/graph-sprite.png) 0 -23px/23px;
+			background: url(images/graph-sprite.png) 0 0px/23px;
 		}
-		#cal-icon.editable, #clock-icon.editable {
+		#cal-icon.editable {
+			background: url(images/graph-sprite.png) 0 23px/23px;
+		}
+		#cal-icon.editable, #clock-icon.editable, #portion-icon.editable {
 			cursor: pointer;
 		}
 		#cal-dropdown, #clock-dropdown, #portion-dropdown-1, #portion-dropdown-2 {
@@ -592,10 +595,14 @@
 			right: 30px;
 		}
 		#clock-dropdown {
-			right: 119px;
+			right: 127px;
 		}
 		#portion-dropdown-1 {
-			right: 206px;
+			left: 164px;
+			top: 72px;
+		}
+		#portion-dropdown-2 {
+			right: 187px;
 		}
 		#cal-dropdown p, #clock-dropdown p, #portion-dropdown-1 p, #portion-dropdown-2 p {
 			margin: 0 0 5px 0;
@@ -627,15 +634,20 @@
 		#clock-icon {
 			background: url(images/clock-sprite.png) 0 0;
 		}
+		#clock-icon.editable {
+			background: url(images/clock-sprite.png) 0 23px/23px;
+		}
 		#clock-icon.editable:hover, #clock-icon.active.editable {
-			background: url(images/clock-sprite.png) 0 -23px/23px;
+			background: url(images/clock-sprite.png) 0 0/23px;
 		}
 		#portion-icon {
-			cursor: pointer;
 			background: url(images/portion-sprite.png) 0 0;
 		}
-		#portion-icon:hover, #portion-icon.active {
-			background: url(images/portion-sprite.png) 0 -23px/23px;
+		#portion-icon.editable {
+			background: url(images/portion-sprite.png) 0 23px/23px;
+		}
+		#portion-icon.editable:hover, #portion-icon.editable.active {
+			background: url(images/portion-sprite.png) 0 0/23px;
 		}
 
 
@@ -651,7 +663,7 @@
 			padding: 3px 15px;
 			cursor: pointer;
 		}
-		.box li:hover  {
+		.box li:hover, #portion.main-active {
 			background-color: #008dff;
     	color: white;
 		}
@@ -752,24 +764,25 @@
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
+					<li id="portion">Adjust Portions</li>
 					<li>Favorite</li>
 					<li>Share</li>
 					<li>Print</li>
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
+				<div id="portion-dropdown-1" class="box">
+					<p id="yield">Original recipe yields <span id="original-yield">4</span> servings</p>
+					<p>Change portion amount to:</p>
+					<input type="number" val="" id="portion-num" min="1" max="8">
+					<button id="adjust-portions">Adjust Portions</button>
+				</div>
 
 				<!-- Info Icons -->
 				<ul id="detail-icons">
 					<li>
 						<span id="servings" class="icon-label">4 Servings</span>
 						<div class="icons" id="portion-icon"></div>
-						<div id="portion-dropdown-1" class="box">
-							<p id="yield">Original recipe yields <span id="original-yield">4</span> servings</p>
-							<p>Change portion amount to:</p>
-							<input type="number" val="" id="portion-num" min="1" max="8">
-							<button id="adjust-portions">Adjust Portions</button>
-						</div>
 						<div id="portion-dropdown-2" class="box">
 							<p>Servings:</p>
 							<input type="number" val="" id="serving-input" min="1" max="8">

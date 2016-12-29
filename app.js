@@ -421,6 +421,7 @@ var recipes = [
       readyIn: 335,
       cals: '2000',
       servings: 1,
+      favorite: true,
 	},
 	{
 		"id": 2,
@@ -433,6 +434,7 @@ var recipes = [
     readyIn: 60,
     cals: '1500',
     servings: 4,
+    favorite: false,
 	},
   {
     "id": 3,
@@ -445,6 +447,7 @@ var recipes = [
       readyIn: 45,
       cals: '70',
       servings: 8,
+      favorite: false,
   },
   {
     "id": 4,
@@ -457,6 +460,7 @@ var recipes = [
       readyIn: 175,
       cals: '140',
       servings: 6,
+      favorite: false,
   },
   {
     "id": 5,
@@ -469,6 +473,7 @@ var recipes = [
       readyIn: 75,
       cals: '575',
       servings: 2,
+      favorite: true,
   },
   {
     "id": 6,
@@ -481,6 +486,7 @@ var recipes = [
     readyIn: 23,
     cals: '',
     servings: 1,
+    favorite: true,
   },
 ];
 

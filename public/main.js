@@ -339,8 +339,6 @@ $('body').on('click', '.tag-color-picker', function(e) {
 	$('#tag-colors').attr('style', 'display: block; position: absolute; top: ' + (position.top + 10) +'px; left: ' + (position.left + 20) + 'px;');
 
 
-	console.log(1);
-
 	// Update tag color
 	$('body').on('click.tagColor', function(e) {
 		console.info(e.target.className);
@@ -475,11 +473,15 @@ $('#profile').on('click', '#detail-options', function(e) {
 	$el.addClass('active');
 	$('#detail-options-dropdown').slideDown('fast', function() {
 		$('body').on('click.dd', function(e) {
+			var $portionDropdown = $('#portion-dropdown-1');
+
 			var container = $('#detail-options-dropdown');
-  		if (!container.is(e.target) && container.has(e.target).length === 0) {
+  		if ((!container.is(e.target) && container.has(e.target).length === 0) && !Boolean($portionDropdown.is(e.target) || $(e.target).parents('#portion-dropdown-1').length)) {
       	$('#detail-options-dropdown').slideUp('fast');
+      	$portionDropdown.hide();
       	$('body').unbind('click.dd');
       	$el.removeClass('active');
+      	$('.main-active').removeClass('main-active');
   		}
 		});
 	});
@@ -715,20 +717,18 @@ $('#profile').on('click', '.icons', function() {
 	var timeInputChanged = false;
 	var calInputChanged = false;
 
+	if (!$el.hasClass('editable')) {
+		return;
+	}
+
 	switch($el.attr('id')) {
 		case 'portion-icon':
-			$dropdown = $el.hasClass('editable') ? $('#portion-dropdown-2') : $('#portion-dropdown-1');
+			$dropdown = $('#portion-dropdown-2');
 			break;
 		case 'clock-icon':
-			if (!$el.hasClass('editable')) {
-				return;
-			}
 			$dropdown = $('#clock-dropdown');
 			break;
 		case 'cal-icon':
-			if (!$el.hasClass('editable')) {
-				return;
-			}
 		  $dropdown = $('#cal-dropdown');
 		  break;
 	}
@@ -772,6 +772,17 @@ $('#profile').on('click', '.icons', function() {
 	});
 
 });
+
+
+/* --- Adjust Portions -- */
+$('#profile').on('click', '#portion', function() {
+	$(this).addClass('main-active');
+	$('#portion-dropdown-1').show();
+})
+.on('click', '#adjust-portions', function() {
+
+});
+
 
 
 

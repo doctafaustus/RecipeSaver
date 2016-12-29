@@ -80,11 +80,11 @@ $('.ingredient').each(function() {
 
 	var obj = { unitType: null, unitValue: null, ingredient: null };
 
-	if (ingredientRegEx.test($(this).find('input').val())) {
-		obj.ingredient = $(this).find('input').val().match(ingredientRegEx)[0];
+	if (ingredientRegEx.test($(this).text())) {
+		obj.ingredient = $(this).text().match(ingredientRegEx)[0];
 	}
 
-	var str = $(this).find('input').val().toLowerCase();
+	var str = $(this).text().toLowerCase();
 	obj.unitType = getUnitType(str);
 
 
@@ -118,7 +118,7 @@ $('.ingredient').each(function() {
 
 	}
 
-	console.log('Converted ' + $(this).find('input').val() + ' to: ' + obj.unitValue + ' ' + obj.unitType);
+	console.log('Converted ' + $(this).text() + ' to: ' + obj.unitValue + ' ' + obj.unitType);
 	arr.push(obj);
 
 });
