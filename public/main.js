@@ -11,8 +11,11 @@ function populatePanel(id) {
 			// Rehide everything first
 			$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
 
+			// Remove and converted value divs and conversion message
+			$('.converted, #converted-message').remove();
+
 			// Servings
-			$('#servings').html('Serves ' + data.servings);
+			$('#servings').html(data.servings);
 			$('#original-yield').html(data.servings);
 
 			// Ready In
@@ -81,7 +84,6 @@ function showPopulatedInputs(data) {
 	if (data.more.length) {
 		$('#detail-description').removeClass('init-hide');
 	}
-	console.log(data.url.length)
 	if (data.url.length) {
 		$('#detail-link-container').removeClass('init-hide');
 	}
@@ -476,7 +478,7 @@ $('#profile').on('click', '#detail-options', function(e) {
 			var $portionDropdown = $('#portion-dropdown-1');
 
 			var container = $('#detail-options-dropdown');
-  		if ((!container.is(e.target) && container.has(e.target).length === 0) && !Boolean($portionDropdown.is(e.target) || $(e.target).parents('#portion-dropdown-1').length)) {
+  		if ((!container.is(e.target) && container.has(e.target).length === 0) && !Boolean($portionDropdown.is(e.target) || $(e.target).parents('#portion-dropdown-1').length) || ($('#adjust-portions').is(e.target) && +$('#portion-num').val() >=1 && +$('#portion-num').val() < 9 )) {
       	$('#detail-options-dropdown').slideUp('fast');
       	$portionDropdown.hide();
       	$('body').unbind('click.dd');
@@ -610,7 +612,6 @@ function changeStage(state) {
 $(window).resize(urlSizeFix);
 
 function urlSizeFix() {
-	console.log('URL size fix');
 	var $linkContainer = $('#detail-link-container');
 	var showStyle = $linkContainer.attr('style') && $linkContainer.attr('style').indexOf('display: block') > -1 ? ' display: block;' : '';
 	$linkContainer.hide();
@@ -778,12 +779,35 @@ $('#profile').on('click', '.icons', function() {
 $('#profile').on('click', '#portion', function() {
 	$(this).addClass('main-active');
 	$('#portion-dropdown-1').show();
+	$('#portion-validation').hide();
 })
 .on('click', '#adjust-portions', function() {
+	// Remove any existing converted value divs or conversion message
+	$('.converted, #converted-message').remove();
 
+	var multiplier = +$('#portion-num').val();
+	var currentSize = +$('#servings').html();
+	var originalMultiplier = multiplier;
+
+	// Validation
+	if (multiplier < 1 || multiplier > 8) {
+		console.log('YES');
+		$('#portion-validation').slideDown();
+		return;
+	}
+
+	// If the multiplier was the same as the current serving size then do nothing
+	if (multiplier === currentSize) {
+		return;
+	}
+
+	// If no multiplier was entered then do nothing
+	if (!multiplier) {
+		return;
+	}
+
+	multiplier = multiplier / currentSize;
+	
+	window.convert(multiplier, originalMultiplier);
 });
-
-
-
-
 
