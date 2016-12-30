@@ -136,78 +136,63 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	$('#detail-new-tag-input').attr('style', 'display: inline-block;');
 
   // Put focus in contenteditable div
-  showFocus('detail-new-tag-input');
 
   // Submit new tag if enter key pressed
-  $(document).on('keypress', function(e) {
-  	if (window.stage === 'Edit recipe') {
+  $('#new-tag').on('keypress', function(e) {
 	    if (e.which == 13) {
-	      $(document).off('keypress');
+	      //$(document).off('keypress');
 	    	console.log('Submitting new tag...');
 
-
-	    	var tagName = $('#detail-new-tag-input').text().trim();
-	    	$('#detail-new-tag-input').text('').hide();
+	    	var tagName = $('#new-tag').val().trim();
 	    	var id = $('#detail-id').text();
-
 
 	    	// Check to see if this tag exists on the recipe already
 				var tagUnique = checkUniqueTag(tagName);
 
-
 				if (tagUnique) {
-					$.ajax({
-						type: 'POST',
-					  url: '/recipe-update',
-					  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-					  data: { id: id, tagName: tagName },
-					  success: function() {
-					  	console.log('Added new tag!');
-					  	populatePanel(id);
-					  }
-					});
+					$('#detail-new-tag-input').before('<li class="tag"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>');
+					$('#new-tag').val('');
 				} else {
 					alert('Tag already being used');
 				}
 
 	    }
-  	}
 
-  	if (window.stage === 'Add recipe') {
-	    if (e.which == 13) {
-	      $(document).off('keypress');
+  	// if (window.stage === 'Add recipe') {
+	  //   if (e.which == 13) {
+	  //     $(document).off('keypress');
 
-	    	var tagName = $('#detail-new-tag-input').text().trim().toLowerCase();
+	  //   	var tagName = $('#detail-new-tag-input').text().trim().toLowerCase();
 
-	    	console.log('Adding temporary tag: ' + tagName);
+	  //   	console.log('Adding temporary tag: ' + tagName);
 
-	    	// If tagName is empty return
-	    	if (tagName === '') {
-	    		$('#detail-new-tag-input').text('').hide();
-	    		return;
-	    	}
-
-
-	    	// Check to see if this tag exists on the recipe already
-	    	var tagUnique = checkUniqueTag(tagName);
-	    	if (!tagUnique) {
-	    		alert('Tag already being used');
-	    		// Clear tag input
-	    		$('#detail-new-tag-input').text('').hide();
-	    		return;
-	    	}
+	  //   	// If tagName is empty return
+	  //   	if (tagName === '') {
+	  //   		$('#detail-new-tag-input').text('').hide();
+	  //   		return;
+	  //   	}
 
 
-	    	// Transform tag text into a temporary tag
-	    	$('#detail-tag-list').append(['<li class="tag" data-tag-id="2" data-tag-color="#808080" style="background-color: #808080;"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>', $('#detail-new-tag-input')]);
+	  //   	// Check to see if this tag exists on the recipe already
+	  //   	var tagUnique = checkUniqueTag(tagName);
+	  //   	if (!tagUnique) {
+	  //   		alert('Tag already being used');
+	  //   		// Clear tag input
+	  //   		$('#detail-new-tag-input').text('').hide();
+	  //   		return;
+	  //   	}
 
-	    	// Clear tag input
-	    	$('#detail-new-tag-input').text('');
+
+	  //   	// Transform tag text into a temporary tag
+	  //   	$('#detail-tag-list').append(['<li class="tag" data-tag-id="2" data-tag-color="#808080" style="background-color: #808080;"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>', $('#detail-new-tag-input')]);
+
+	  //   	// Clear tag input
+	  //   	$('#detail-new-tag-input').text('');
 
 
 
-	    }
-  	}
+	  //   }
+  	// }
   });
   
 });
@@ -221,11 +206,6 @@ function checkUniqueTag(tagName) {
 	});
 	return tagUnique;
 }
-
-// Hide new tag input on blur
-$('#profile').on('blur', '#detail-new-tag-input', function(e) {
-	$(this).text('').hide();
-});
 
 
 // Remove tag
@@ -758,7 +738,7 @@ $('#profile').on('click', '.icons', function() {
 
       	if (servingsInputChanged) {
       		var value = $('#serving-input').val().length ? $('#serving-input').val() : $('#servings').html().match(/\d/)[0];
-      		$('#servings').html('Serves ' + value);
+      		$('#servings').html(value);
       	}
       	if (timeInputChanged) {
       		var value = $('#mins-input').val().length ? $('#mins-input').val() : 0;
@@ -776,12 +756,16 @@ $('#profile').on('click', '.icons', function() {
 
 
 /* --- Adjust Portions -- */
-$('#profile').on('click', '#portion', function() {
+$('#profile')
+.on('click', '#portion', function() {
 	$(this).addClass('main-active');
 	$('#portion-dropdown-1').show();
 	$('#portion-validation').hide();
 })
 .on('click', '#adjust-portions', function() {
+	// Reshow original ingredient entries
+	$('.ingredient').show();
+
 	// Remove any existing converted value divs or conversion message
 	$('.converted, #converted-message').remove();
 
@@ -809,5 +793,15 @@ $('#profile').on('click', '#portion', function() {
 	multiplier = multiplier / currentSize;
 	
 	window.convert(multiplier, originalMultiplier);
+})
+// Reset portion adjustment
+.on('click', '#converted-message-close', function() {
+	resetPortionAdjustment();
 });
 
+
+window.resetPortionAdjustment = function() {
+	$('#converted-message').hide();
+	$('.converted').remove();
+	$('.ingredient').show();
+}

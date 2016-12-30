@@ -133,7 +133,11 @@ window.convert = function(multiplier, originalMultiplier) {
 	});
 
 	// Insert "Ingredient amounts adjusted" message before ingredient list
-	$('#detail-ingredients').before('<div id="converted-message">Ingredients adjusted for <span id="converted-message-num">' + originalMultiplier + '</span> serving(s)</div>');
+	$('#detail-ingredients').before('<div id="converted-message"><div id="converted-message-text">Ingredients adjusted for <span id="converted-message-num">' + originalMultiplier + '</span> serving(s)</div><img id="converted-message-close" src="/images/x-larger.png"></div>');
+
+	// Hide original ingredient entries
+	$('.ingredient').hide();
+
 
 
 	function cleanFractions(str) {

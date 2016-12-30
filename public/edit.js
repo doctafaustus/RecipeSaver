@@ -17,6 +17,9 @@ $('#profile').on('click', '#edit-recipe', function(e) {
 
 	changeStage('Edit recipe');
 
+	// Reset any portions adjustments
+	window.resetPortionAdjustment();
+
 	// Add class to top icons so that they can be editable
 	$('.icons').addClass('editable');
 	
