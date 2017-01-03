@@ -96,7 +96,7 @@
 			cursor: pointer;
 		}
 		.detail-recipe {
-			width: 60%;
+			width: 40%;
 			max-width: 700px;
 			min-width: 305px;
 			margin-right: auto;
@@ -123,6 +123,7 @@
 			width: 100%;
 			margin-right: 20px;
 			box-sizing: border-box;
+			font-size: 11px;
 		}
 		#detail-link {
 			text-decoration: none;
@@ -142,7 +143,7 @@
 			display: block;
 			margin: 10px 28px;
 		}
-		#add-recipe, #submit-recipe, #save-recipe {
+		#add-recipe, #save-recipe {
 			width: 167px;
 			text-align: center;
 			border-radius: 4px;
@@ -159,7 +160,7 @@
 	    color: #fff;
 	    text-shadow: 0 1px 0 rgba(0,0,0,0.3);
 		}
-		#add-recipe:hover, #submit-recipe:hover, #save-recipe:hover {
+		#add-recipe:hover, #save-recipe:hover {
 	    background: #016bdc;
 	    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#008aea),to(#024dcf));
 	    background: -webkit-linear-gradient(0% 0%,0% 100%,from(#008aea),to(#024dcf));
@@ -170,7 +171,7 @@
 		#add-recipe {
 			margin: 75px auto 40px auto;
 		}
-		#submit-recipe, #save-recipe {
+		#save-recipe {
 			margin-top: 25px;
 		}
 		#save-recipe {
@@ -212,6 +213,7 @@
 		}
 		.ingredient {
 			margin-bottom: 4px;
+			font-size: 14px;
 		}
 		#detail-description {
 	    box-sizing: border-box;
@@ -219,6 +221,7 @@
 			margin-top: 20px;
 			border: solid 1px #dadada;
 			min-height: 100px;
+			font-size: 13px;
 		}
 		#detail-tags {
 			margin-top: 20px;
@@ -245,12 +248,12 @@
 		.tag {
 	    height: 26px;
 	    line-height: 26px;
-	    padding: 0px 6px 0px 9px;
+	    padding: 0px 9px 0px 9px;
 	    font-size: 12px;
 	    margin-right: 5px;
 	    max-width: 120px;
 	    color: white;
-	    background-color: #AA62E3;
+	    background-color: #808080;
 	    box-sizing: border-box;
 	    cursor: pointer;
 	    display: inline-block;
@@ -262,6 +265,9 @@
 		}
 		.tag-name {
 			float: left;
+		}
+		.view-recipe .tag-close, .recipes-by-tag .tag-close, .all-tags .tag-close {
+			display: none;
 		}
 		.tag-close {
 			background-image: url(/images/x.png);
@@ -293,19 +299,22 @@
 		.tag-color-picker:hover {
 	    background-image: url(/images/color-picker-hover.png);
 		}
+		.edit-recipe #detail-add-tag-button {
+			display: block;
+		}
 		#detail-add-tag-button {
-			margin-right: 8px;
+			display: none;
 			margin-top: 7px;
-			cursor: pointer;
 			width: 25px;
 			height: 21px;
 			background: url(images/tag-sprite.png) 0 0;
 			background-repeat: no-repeat;
 			padding-right: 5px;
 		}
-		#detail-add-tag-button:hover {
+		.edit-recipe #detail-add-tag-button:hover {
 			background: url(images/tag-sprite.png) 0 -22px;
 			background-repeat: no-repeat;
+			cursor: pointer;
 		}
 		#detail-add-tag-button img {
 			width: 21px;
@@ -333,13 +342,15 @@
 			display: none;
 	    height: 26px;
 	    line-height: 26px;
-	    padding: 0px 9px;
 	    font-size: 12px;
 	    box-sizing: border-box;
 	    font-weight: 300;
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
+		}
+		#new-tag {
+			width: 60px;
 		}
 		.tag-category {
 	    height: 26px;
@@ -395,24 +406,28 @@
 		  padding-left: 3px;
 		  font-size: 15px;
 		}
+		#detail-name, #detail-name[contenteditable=true]:empty:before{
+			height: 34px;
+			line-height: 34px;
+		}
+		#detail-name[contenteditable=true]:empty:before{
+			border: solid 1px #e6e6e6;
+		}
 		#list-panel.singular {
 			max-width: 900px;
 			width: 75%;
 			margin: 15px auto 0 auto;
 		}
+		#list-panel.singular + .detail-recipe.singular {
+			display: block;
+		}
 		#list-panel.singular + .detail-recipe {
 			display: none;
 		}
 		.detail-recipe.singular {
-			max-width: 900px;
+			max-width: 700px;
 			width: 100%;
 			margin: 15px auto 0 auto;
-		}
-		#submit-recipe {
-			display: none;
-		}
-		.add-recipe #submit-recipe {
-			display: block;
 		}
 		#detail-options-dropdown {
 			position: absolute;
@@ -511,7 +526,7 @@
 	    z-index: 5;
 	    left: 225px; /* this is the width of the left nav bar */
 	    right: 0;
-	    top: 97px;
+	    top: 81px;
 		}
 		.suggestion {
 			cursor: pointer;
@@ -542,7 +557,7 @@
 	    margin-left: 5px;
 	    height: 22px;
 	    width: calc(100% - 29px);
-	    font-size: 16px;
+	    font-size: 14px;
 	    font-family: 'Source Sans Pro', sans-serif;
 		}
 		.edit-recipe .ingredient {
@@ -562,7 +577,7 @@
 		}
 		#detail-icons li div.icons {
 			width: 23px;
-			height: 23px;
+			height: 23.5px;
 			display: inline-block;
 			background-size: 23px;
 		}
@@ -632,6 +647,13 @@
 		#adjust-portions:hover {
 			background-color: #1aafd2;
 		}
+		.edit-recipe #detail-options-dropdown {
+			display: none !important;
+		}
+		.edit-recipe #detail-options {
+			background: url(images/plus-sprite.png) 0 0px;
+			background-repeat: no-repeat;
+		}
 		#clock-icon {
 			background: url(images/clock-sprite.png) 0 0;
 		}
@@ -674,6 +696,15 @@
 			color: red;
 			font-size: 14px;
 		}
+		#converted-message-text {
+			display: inline-block;
+		}
+		#converted-message-close {
+			float: right;
+			margin-top: 3px;
+			cursor: pointer;
+		}
+
 
 
 		.box {
@@ -688,7 +719,7 @@
 			padding: 3px 15px;
 			cursor: pointer;
 		}
-		.box li:hover, #portion.main-active {
+		.box li:not(.tag-colors-title):hover, #portion.main-active {
 			background-color: #008dff;
     	color: white;
 		}
@@ -864,15 +895,16 @@
 						<!-- Recipe Tags will be prepended here -->
 
 						<!-- New Tag Input -->
-						<li id="detail-new-tag-input" contenteditable="false"></li>
+						<li id="detail-new-tag-input">
+							<input type="text" id="new-tag" autofocus>
+						</li>
 					</ul>
 				</div>
 
 				<!-- Recipe ID -->
 				<p id="detail-id" style="color: blue; display: none;">{{ recipeID }}</p>
 
-				<!-- Recipe Submit Button -->
-				<div id="submit-recipe">Submit</div>
+				<!-- Recipe Save Button -->
 				<div id="save-recipe">Save</div>
 			</div>
 		</div>

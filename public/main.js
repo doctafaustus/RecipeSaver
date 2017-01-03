@@ -32,7 +32,7 @@ function populatePanel(id) {
 				var tags = data.tags;
 				var tagList = '';
 				for (var i = 0; i < tags.length; i++) {
-					tagList += '<li class="tag" data-tag-id="' + tags[i].id + '" data-tag-color="' + tags[i].color + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-close"></div></li>';
+					tagList += '<li class="tag" data-tag-color="' + tags[i].color + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-close"></div></li>';
 				}
 
 				$('#detail-tag-list').prepend(tagList);
@@ -128,111 +128,6 @@ $('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion'
 
 
 
-// Show new tag input
-$('#profile').on('click', '#detail-add-tag-button', function(e) {
-	e.preventDefault();
-
-	// Show new tag input
-	$('#detail-new-tag-input').attr('style', 'display: inline-block;');
-
-  // Put focus in contenteditable div
-
-  // Submit new tag if enter key pressed
-  $('#new-tag').on('keypress', function(e) {
-	    if (e.which == 13) {
-	      //$(document).off('keypress');
-	    	console.log('Submitting new tag...');
-
-	    	var tagName = $('#new-tag').val().trim();
-	    	var id = $('#detail-id').text();
-
-	    	// Check to see if this tag exists on the recipe already
-				var tagUnique = checkUniqueTag(tagName);
-
-				if (tagUnique) {
-					$('#detail-new-tag-input').before('<li class="tag"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>');
-					$('#new-tag').val('');
-				} else {
-					alert('Tag already being used');
-				}
-
-	    }
-
-  	// if (window.stage === 'Add recipe') {
-	  //   if (e.which == 13) {
-	  //     $(document).off('keypress');
-
-	  //   	var tagName = $('#detail-new-tag-input').text().trim().toLowerCase();
-
-	  //   	console.log('Adding temporary tag: ' + tagName);
-
-	  //   	// If tagName is empty return
-	  //   	if (tagName === '') {
-	  //   		$('#detail-new-tag-input').text('').hide();
-	  //   		return;
-	  //   	}
-
-
-	  //   	// Check to see if this tag exists on the recipe already
-	  //   	var tagUnique = checkUniqueTag(tagName);
-	  //   	if (!tagUnique) {
-	  //   		alert('Tag already being used');
-	  //   		// Clear tag input
-	  //   		$('#detail-new-tag-input').text('').hide();
-	  //   		return;
-	  //   	}
-
-
-	  //   	// Transform tag text into a temporary tag
-	  //   	$('#detail-tag-list').append(['<li class="tag" data-tag-id="2" data-tag-color="#808080" style="background-color: #808080;"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>', $('#detail-new-tag-input')]);
-
-	  //   	// Clear tag input
-	  //   	$('#detail-new-tag-input').text('');
-
-
-
-	  //   }
-  	// }
-  });
-  
-});
-
-function checkUniqueTag(tagName) {
-	var tagUnique = true;
-	$('.detail-recipe .tag-name').each(function() {
-		if ($(this).text().trim() === tagName) {
-			tagUnique = false;
-		}
-	});
-	return tagUnique;
-}
-
-
-// Remove tag
-$('#profile').on('click', '.tag-close', function(e) {
-	if (window.stage === 'Edit recipe') {
-		var recipeID = $('#detail-id').text();
-		var $tag = $(this).closest('.tag');
-		var tagID = $tag.data('tag-id');
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe-update',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: { id: recipeID, tagToRemove: tagID },
-		  success: function() {
-		  	console.log('Removed recipe tag!');
-
-		  	// Artifically hide removed tag
-		  	$tag.hide();
-		  }
-		});
-	} else if (window.stage === 'Add recipe') {
-		// Simply remove the visible tag
-		$(this).closest('.tag').remove();
-	}
-});
-
-
 // Get all tags
 $('body').on('click', '#get-recipes-by-tags', function(e) {
 
@@ -248,7 +143,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 
 		  	var tagList = '<ul id="tag-list">';
 		  	for (var i = 0; i < tags.length; i++) {
-		  		tagList += '<li class="tag-list-name" data-tag-color="' + tags[i].color + '" data-tag-list-id="' + tags[i].id + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-color-picker"></div></li>';
+		  		tagList += '<li class="tag-list-name" data-tag-color="' + tags[i].color + '" style="background-color: ' + tags[i].color + ';"><div class="tag-name">' + tags[i].name + '</div><div class="tag-color-picker"></div></li>';
 		  	}
 
 		  	tagList += '</ul>';
@@ -380,30 +275,9 @@ $('body').on('click', '#get-all-recipes', function(e) {
 // Add Recipe Stage
 $('#add-recipe').click(function() {
 	changeStage('Add recipe');
-
 	adjustPanels();
 
 	console.log('Adding new recipe');
-	// Clear id
-	$('#detail-id').html('');
-
-	// Clear tags
-	$('.tag').remove();
-
-	// Clear url
-	$('#detail-link-editable').val('');
-
-	// Clear name
-	$('#detail-name').html('');
-
-	// Clear ingredients
-	$('.ingredient').remove();
-	// Show new ingredient input and clear it
-	$('#detail-new-ingredient-input').show().text('');
-
-	// Clear description
-	$('#detail-description').html('');
-
 });
 
 // Submit Recipe
@@ -440,7 +314,6 @@ $('#profile').on('click', '#submit-recipe', function(e) {
 	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 	  data: data,
 	  success: function(data) {
-	  	console.log('Submitted tag color!');
 
 	  	$('#get-all-recipes').trigger('click');
 	  	$('#success-box').animate({width:'toggle'}, 425);
@@ -548,23 +421,27 @@ function showFocus(id) {
 // Adjust view of panels
 function adjustPanels() {
 	console.log(window.stage);
+	var $listPanel = $('#list-panel');
+	var $detailPanel = $('.detail-recipe');
+
 	switch(window.stage) {
 		case 'Add recipe':
-			if ($('#list-panel').is(':visible')) {
-				$('#list-panel').animate({width: 'hide'}, 190);
+			if ($listPanel.is(':visible')) {
+				//$listPanel.animate({width: 'hide'}, 190);
+				$listPanel.hide();
+				$detailPanel.addClass('singular');
 			}
-			$('.detail-recipe').addClass('singular');
 			break;
 		case 'View recipe':
-			if (!$('.detail-recipe').is(':visible')) {
-				$('#list-panel').removeClass('singular');
+			if (!$detailPanel.is(':visible')) {
+				$listPanel.removeClass('singular');
 			}
 			break;
 		default:
 			console.log('default');
 			// First remove existing special classes
-			$('.detail-recipe').removeClass('singular');
-			$('#list-panel').animate({width: 'show'}, 190);
+			$detailPanel.removeClass('singular');
+			$listPanel.animate({width: 'show'}, 190);
 	}
 }
 
@@ -587,11 +464,17 @@ function changeStage(state) {
 		$('#detail-link-editable').show();
 		$('#detail-link').hide();
 	}
+
+	// Hide any new tag input information
+	if (state !== 'Edit recipe') {
+		$('#detail-new-tag-input').attr('style', 'display: none');
+		$('#new-tag').val('');
+		resetEdit();
+	}
 }
 
-$(window).resize(urlSizeFix);
 
-function urlSizeFix() {
+window.urlSizeFix = function() {
 	var $linkContainer = $('#detail-link-container');
 	var showStyle = $linkContainer.attr('style') && $linkContainer.attr('style').indexOf('display: block') > -1 ? ' display: block;' : '';
 	$linkContainer.hide();
@@ -599,7 +482,9 @@ function urlSizeFix() {
 	$linkContainer.attr('style',' max-width: ' + newWidth + 'px;' + showStyle);
 }
 
-urlSizeFix();
+$(window).resize(urlSizeFix);
+
+window.urlSizeFix();
 
 // Convert minutes to h + m
 function convertMinsToHours(m) {
@@ -609,6 +494,18 @@ function convertMinsToHours(m) {
 	minutes = (m % 60 === 0 ? '' : minutes + 'm');
 	hours = (m >= 60 ? hours + 'h ' : '');
 	return hours + minutes;
+}
+
+// Reset changes made by clicking "Edit Recipe"
+function resetEdit() {
+	$('.icons').removeClass('editable');
+	$('#save-recipe').hide();
+	$('#detail-description, #detail-name').attr('contenteditable', false);
+	$('#detail-new-ingredient-input').hide();
+	if ($('.ui-sortable').length) {
+		$('#detail-ingredients').sortable('destroy');
+	}
+	
 }
 
 /* --- Recipe Search --- */
