@@ -343,28 +343,6 @@ $('#profile').on('click', '#detail-options', function(e) {
 });
 
 
-$('#detail-link-editable').focusout(function() {
-	if (window.stage === 'Edit recipe') {
-		var id = $('#detail-id').text();
-
-
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe-update',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: {id: id, newURL: $('#detail-link-editable').val()},
-		  success: function(data) {
-		  	console.log('Recipe url updated!');
-		  }
-		});
-	}
-});
-
-
-
-
-
-
 // Delete recipe
 $('#profile').on('click', '#delete-recipe', function(e) {
 	$('#detail-options').trigger('click');

@@ -152,6 +152,28 @@ app.post('/recipe', function(req, res) {
 });
 
 app.post('/recipe-update', function(req, res) {
+  if (req.body.isNew) {
+
+    var newRecipe = {
+      name: req.body.recipeName,
+      ingredients: req.body.ingredients,
+      more: req.body.recipeDescription,
+      url: req.body.url,
+      servings: req.body.servings,
+      readyIn: req.body.readyIn,
+      cals: req.body.cals,
+      tags: []
+    };
+
+    handleTags(req.body.tags, newRecipe);
+
+    recipes.push(newRecipe);
+
+    res.json(newRecipe);
+    return;
+  }
+
+
   var recipeToUpdate = getRecipe(req.body.id);
 
   // Update recipe name
@@ -159,35 +181,11 @@ app.post('/recipe-update', function(req, res) {
     recipeToUpdate.name = req.body.recipeName;
   }
 
-  // Edit ingredient
+  // Update ingredients
   if (req.body.ingredients) {
   	console.log('Updating recipe ingredients');
   	console.log(req.body.ingredients);
   	recipeToUpdate.ingredients = req.body.ingredients
-  }
-
-  // Edit ingredient
-  if (req.body.ingredientFlag) {
-  	var ingredient = recipeToUpdate.ingredients.filter(function(e) {
-      return e.id == req.body.ingredientID;
-    });
-
-    // If text is equal to nothing then delete that ingredient
-    if (req.body.ingredientText === '') {
-	    recipeToUpdate.ingredients = recipeToUpdate.ingredients.filter(function(e) {
-	      return e.id != req.body.ingredientID;
-	    });
-    } else {
-    	ingredient[0].name = req.body.ingredientText;
-    }
-
-    console.log(ingredient)
-  }
-
-  // Add ingredient
-  if (req.body.newIngredientText) {
-  	var randomId = Math.random() * 1000;
-  	recipeToUpdate.ingredients.push({"name": req.body.newIngredientText, id: randomId});
   }
 
   // Update recipe description
@@ -197,44 +195,18 @@ app.post('/recipe-update', function(req, res) {
 
   // Update tags
   if (req.body.tags) {
+
     var submittedTags = req.body.tags;
 
     // Clear existing tags
     recipeToUpdate.tags = [];
 
-    // Set default new color
-    var color = '#808080';
-
-    submittedTags.forEach(function(el, pos) {
-      for (var i = 0; i < recipes.length; i++) {
-        for (var j = 0; j < recipes[i].tags.length; j++) {
-          if (submittedTags[pos].name === recipes[i].tags[j].name) {
-            color = recipes[i].tags[j].color;
-            break;
-          } else if (submittedTags[pos].color) {
-            color = submittedTags[pos].color;
-          }
-        }
-      }
-
-      recipeToUpdate.tags.push({'name': submittedTags[pos].name, 'color': color});
-
-      // Reset color
-      color = '#808080';
-    });
-  }
-
-
-  // Remove tag
-  if (req.body.tagToRemove) {
-    recipeToUpdate.tags = recipeToUpdate.tags.filter(function(e) {
-      return e.id != req.body.tagToRemove;
-    });
+    handleTags(submittedTags, recipeToUpdate);
   }
 
   // Update URL
-  if (req.body.newURL === '' || req.body.newURL) {
-  	recipeToUpdate.url = req.body.newURL;
+  if (req.body.url === '' || req.body.url) {
+  	recipeToUpdate.url = req.body.url;
   }
 
   // Update servings
@@ -254,6 +226,31 @@ app.post('/recipe-update', function(req, res) {
 
   res.json(recipeToUpdate);
 });
+
+
+function handleTags(arr, recipe) {
+  // Set default new color
+  var color = '#808080';
+
+  arr.forEach(function(el, pos) {
+    for (var i = 0; i < recipes.length; i++) {
+      for (var j = 0; j < recipes[i].tags.length; j++) {
+        if (arr[pos].name === recipes[i].tags[j].name) {
+          color = recipes[i].tags[j].color;
+          break;
+        } else if (arr[pos].color) {
+          color = arr[pos].color;
+        }
+      }
+    }
+
+    recipe.tags.push({'name': arr[pos].name, 'color': color});
+
+    // Reset color
+    color = '#808080';
+  });
+}
+
 
 // Get all tags
 app.get('/get-all-tags', function(req, res) {

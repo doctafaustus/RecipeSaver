@@ -133,6 +133,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	$('.ingredient').each(function() {
 		ingredients.push($(this).find('input').val().trim());
 	});
+	var url = $('#detail-link-editable').val();
 	var newRecipeDescription = $('#detail-description').html();
 	var servings = $('#serving-input').val();
 	var readyIn = $('#mins-input').val();
@@ -159,24 +160,51 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		tags.push({name: tagInputText, color: null});
 	}
 	
-	$.ajax({
+	var data = { id: id, recipeDescription: newRecipeDescription, recipeName: newRecipeName, ingredients: ingredients, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
 
-		type: 'POST',
-	  url: '/recipe-update',
-	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  data: { id: id, recipeDescription: newRecipeDescription, recipeName: newRecipeName, ingredients: ingredients, tags: tags, servings: servings, readyIn: readyIn, cals: cals },
+	if (window.stage === 'Edit recipe') {
+		$.ajax({
 
-	  success: function() {
-	  	console.log('Updated recipe description!');
-	  	populatePanel(id);
-	  	resetRecipeState();
-	  	$('.editable').removeClass('editable');
-	  	changeStage('View recipe');
-	  	$('#detail-options-dropdown').hide();
-	  	$('#detail-new-ingredient-input').html('');
-	  }
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: data,
 
-	});
+		  success: function() {
+		  	console.log('Updated recipe description!');
+		  	populatePanel(id);
+		  	resetRecipeState();
+		  	$('.editable').removeClass('editable');
+		  	changeStage('View recipe');
+		  	$('#detail-options-dropdown').hide();
+		  	$('#detail-new-ingredient-input').html('');
+		  }
+
+		});
+	} else {
+		data.isNew = true;
+
+		$.ajax({
+
+			type: 'POST',
+		  url: '/recipe-update',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: data,
+
+		  success: function() {
+		  	console.log('Updated recipe description!');
+		  	populatePanel(id);
+		  	resetRecipeState();
+		  	$('.editable').removeClass('editable');
+		  	changeStage('View recipe');
+		  	$('#detail-options-dropdown').hide();
+		  	$('#detail-new-ingredient-input').html('');
+		  }
+
+		});
+	}
+
+
 });
 
 
@@ -198,7 +226,7 @@ function sortableIngredients() {
 $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	e.preventDefault();
 
-	if (!$('html').hasClass('edit-recipe')) {
+	if (!$('html').hasClass('edit-recipe') && !$('html').hasClass('add-recipe')) {
 		return;
 	}
 
@@ -301,24 +329,5 @@ function checkUniqueTag(tagName) {
 
 // Remove tag
 $('#profile').on('click', '.tag-close', function(e) {
-	if (window.stage === 'Edit recipe') {
-		var recipeID = $('#detail-id').text();
-		var $tag = $(this).closest('.tag');
-		var tagID = $tag.data('tag-id');
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe-update',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: { id: recipeID, tagToRemove: tagID },
-		  success: function() {
-		  	console.log('Removed recipe tag!');
-
-		  	// Artifically hide removed tag
-		  	$tag.hide();
-		  }
-		});
-	} else if (window.stage === 'Add recipe') {
-		// Simply remove the visible tag
-		$(this).closest('.tag').remove();
-	}
+	$(this).closest('.tag').remove();
 });
