@@ -630,6 +630,12 @@ $('#profile').on('click', '.icons', function() {
 });
 
 
+/* --- Sorting -- */
+$('#profile').on('click', '#sort', function() {
+	$('#sort-options').toggle();
+});
+
+
 /* --- Adjust Portions -- */
 $('#profile')
 .on('click', '#portion', function() {

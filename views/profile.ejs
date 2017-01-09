@@ -59,6 +59,31 @@
 			margin: 0;
 			font-size: 28px;
 			margin-bottom: 20px;
+			display: inline-block;
+			float: left;
+		}
+		#sort {
+			margin-top: 10px;
+			display: inline-block;
+			float: right;
+	    background-image: linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%);
+	    background-position: bottom;
+	    background-size: 3px 1px;
+	    background-repeat: repeat-x;
+			cursor: pointer;
+		}
+		#sort-selection {
+			color: #1AAFD0;
+		}
+		#sort img {
+			margin-bottom: 1px;
+		}
+		#sort-options {
+			display: none;
+			z-index: 2;
+			position: absolute;
+	    right: 24px;
+	    top: 65px;
 		}
 		.recipe-list-entry {
 			clear: both;
@@ -794,7 +819,22 @@
 		<!-- List Panel -->
 		<div id="list-panel" class="singular">
 
-			<h1 id="list-panel-heading">All Recipes</h1>
+			<div id="heading-and-sort">
+				<h1 id="list-panel-heading">All Recipes</h1>
+				<div id="sort">
+					Sort by: <span id="sort-selection">Date Added</span>
+					<img src="images/down-arrow.png">
+				</div>
+
+				<div class="box" id="sort-options">
+					<ul>
+						<li id="sort-newest">Newest</li>
+						<li id="sort-oldest">Oldest</li>
+						<li id="sort-a-z">A - Z</li>
+						<li id="sort-z-a">Z - A</li>
+					</ul>
+				</div>
+			</div>
 
 			<div id="list-panel-inner">
 				<ul class="recipe-list">
