@@ -828,10 +828,10 @@
 
 				<div class="box" id="sort-options">
 					<ul>
-						<li id="sort-newest">Newest</li>
-						<li id="sort-oldest">Oldest</li>
-						<li id="sort-a-z">A - Z</li>
-						<li id="sort-z-a">Z - A</li>
+						<li class="sort-option" id="sort-newest">Newest</li>
+						<li class="sort-option" id="sort-oldest">Oldest</li>
+						<li class="sort-option" id="sort-a-z">A - Z</li>
+						<li class="sort-option" id="sort-z-a">Z - A</li>
 					</ul>
 				</div>
 			</div>
@@ -976,6 +976,7 @@
 	<script src="convert.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<script src="fraction.js"></script>
+	<script src="moment.js"></script>
 	<script>
 		// Save global reference to recipes so we can find retrieve them wit search
 		window.recipes = <%- JSON.stringify(recipes) %>;

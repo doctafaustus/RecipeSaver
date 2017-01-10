@@ -487,8 +487,6 @@ function resetEdit() {
 }
 
 /* --- Recipe Search --- */
-
-
 // Autopopulate search suggestions
 $('#search-form-input').keyup(function() {
 	var $suggestionDiv = $('#search-suggestions');
@@ -634,6 +632,44 @@ $('#profile').on('click', '.icons', function() {
 $('#profile').on('click', '#sort', function() {
 	$('#sort-options').toggle();
 });
+$('#profile').on('click', '.sort-option', function() {
+	// Hide dropdown box
+	$('#sort-options').hide();
+
+	// Populate "Sort by:" with selected sort option
+	$('#sort-selection').text($(this).text());
+
+	var $listPanelList = $('#list-panel-inner ul');
+	// Sort list according to chosen id from dropdown list
+	switch($(this).attr('id')) {
+		case 'sort-newest':
+			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+				return moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+			});
+			$listPanelList.append(sortedList);
+			break;
+		case 'sort-oldest':
+			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+				return moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+			});
+			$listPanelList.append(sortedList);
+			break;
+		case 'sort-a-z':
+			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+				return $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+			});
+			$listPanelList.append(sortedList);
+			break;
+		case 'sort-z-a':
+			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+				return $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+			});
+			$listPanelList.append(sortedList);
+	}
+});
+
+
+
 
 
 /* --- Adjust Portions -- */

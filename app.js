@@ -154,7 +154,12 @@ app.post('/recipe', function(req, res) {
 app.post('/recipe-update', function(req, res) {
   if (req.body.isNew) {
 
+    var recipeIDs = recipes.map(function(i) {
+      return i.id;
+    });
+
     var newRecipe = {
+      id: Math.max.apply(null, recipeIDs) + 1,
       name: req.body.recipeName,
       ingredients: req.body.ingredients,
       more: req.body.recipeDescription,
@@ -165,7 +170,9 @@ app.post('/recipe-update', function(req, res) {
       tags: []
     };
 
-    handleTags(req.body.tags, newRecipe);
+    if (req.body.tags) {
+      handleTags(req.body.tags, newRecipe);
+    }
 
     recipes.push(newRecipe);
 
