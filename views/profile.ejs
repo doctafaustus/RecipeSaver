@@ -57,7 +57,7 @@
 		}
 		#list-panel-heading {
 			margin: 0;
-			font-size: 28px;
+			font-size: 24px;
 			margin-bottom: 20px;
 			display: inline-block;
 			float: left;
@@ -84,6 +84,9 @@
 			position: absolute;
 	    right: 24px;
 	    top: 65px;
+		}
+		.all-tags #sort-newest, .all-tags #sort-oldest {
+			display: none;
 		}
 		.recipe-list-entry {
 			clear: both;
@@ -382,7 +385,6 @@
 	    line-height: 26px;
 	    padding: 0px 9px 0px 9px;
 	    font-size: 12px;
-	    margin-bottom: 10px;
 	    color: white;
 	    background-color: #AA62E3;
 	    box-sizing: border-box;
@@ -392,6 +394,13 @@
 	    overflow: hidden;
 	    white-space: nowrap;
 	    border-radius: 15px;
+	    margin-top: 4px;
+	    margin-left: 8px;
+		}
+		#tag-list {
+			clear: both;
+			border-top: solid 1px #dadada;;
+			padding-top: 12px;
 		}
 		.tag-list-name, .tag-color-selection {
 	    height: 26px;
@@ -415,9 +424,10 @@
 			margin: 0;
 	    padding: 15px;
 		}
-		.tag-colors-title {
+		#tag-colors.box li.tag-colors-title {
 			font-weight: bold;
 			margin-bottom: 15px;
+			padding-left: 0;
 		}
 		#tag-colors .tag-color-selection {
 			display: inline-block;
@@ -832,6 +842,7 @@
 						<li class="sort-option" id="sort-oldest">Oldest</li>
 						<li class="sort-option" id="sort-a-z">A - Z</li>
 						<li class="sort-option" id="sort-z-a">Z - A</li>
+						<li class="sort-option" id="sort-color">Color</li>
 					</ul>
 				</div>
 			</div>

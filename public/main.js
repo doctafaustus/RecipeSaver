@@ -443,6 +443,11 @@ function changeStage(state) {
 		$('#detail-link').hide();
 	}
 
+	// Remove unneeded sort options for All tags stage
+	if (state = 'All tags') {
+		$('#sort-a-z').click();
+	}
+
 	// Hide any new tag input information
 	if (state !== 'Edit recipe') {
 		$('#detail-new-tag-input').attr('style', 'display: none');
@@ -641,31 +646,62 @@ $('#profile').on('click', '.sort-option', function() {
 
 	var $listPanelList = $('#list-panel-inner ul');
 	// Sort list according to chosen id from dropdown list
-	switch($(this).attr('id')) {
-		case 'sort-newest':
-			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-				return moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
-			});
-			$listPanelList.append(sortedList);
-			break;
-		case 'sort-oldest':
-			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-				return moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
-			});
-			$listPanelList.append(sortedList);
-			break;
-		case 'sort-a-z':
-			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-				return $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0];
-			});
-			$listPanelList.append(sortedList);
-			break;
-		case 'sort-z-a':
-			var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-				return $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0];
-			});
-			$listPanelList.append(sortedList);
+
+	if (window.stage === 'All recipes' || window.stage === 'Recipes by tag"') {
+		switch($(this).attr('id')) {
+			case 'sort-newest':
+				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+					return moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+				});
+				$listPanelList.append(sortedList);
+				break;
+			case 'sort-oldest':
+				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+					return moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+				});
+				$listPanelList.append(sortedList);
+				break;
+			case 'sort-a-z':
+				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+					return $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+				});
+				$listPanelList.append(sortedList);
+				break;
+			case 'sort-z-a':
+				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
+					return $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+				});
+				$listPanelList.append(sortedList);
+		}
+	} else if (window.stage === 'All tags') {
+		switch($(this).attr('id')) {
+			case 'sort-a-z':
+				var sortedList = $('#list-panel .tag-list-name').sort(function(a, b) {
+			    if ($(a).find('.tag-name').text().toLowerCase() < $(b).find('.tag-name').text().toLowerCase()) return -1;
+			    if ($(a).find('.tag-name').text().toLowerCase() > $(b).find('.tag-name').text().toLowerCase()) return 1;
+			    return 0;
+				});
+				$listPanelList.append(sortedList);
+				break;
+			case 'sort-z-a':
+				var sortedList = $('#list-panel .tag-list-name').sort(function(a, b) {
+			    if ($(b).find('.tag-name').text().toLowerCase() < $(a).find('.tag-name').text().toLowerCase()) return -1;
+			    if ($(b).find('.tag-name').text().toLowerCase() > $(a).find('.tag-name').text().toLowerCase()) return 1;
+			    return 0;
+				});
+				$listPanelList.append(sortedList);
+				break;
+			case 'sort-color':
+				var sortedList = $('#list-panel .tag-list-name').sort(function(a, b) {
+			    if ($(a).attr('data-tag-color') < $(b).attr('data-tag-color')) return -1;
+			    if ($(a).attr('data-tag-color') > $(b).attr('data-tag-color')) return 1;
+			    return 0;
+				});
+				$listPanelList.append(sortedList);
+				break;
+		}
 	}
+
 });
 
 
