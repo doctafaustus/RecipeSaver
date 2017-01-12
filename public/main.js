@@ -47,7 +47,7 @@ function populatePanel(id) {
 			// Recipe Ingredients
 			console.info(data.ingredients);
 			$('.ingredient').remove();
-			if (data.ingredients.length) {
+			if (data.ingredients && data.ingredients.length) {
 				var ingredients = data.ingredients;
 				var ingredientsList = '';
 				for (var i = 0; i < ingredients.length; i++) {
@@ -78,7 +78,7 @@ function populatePanel(id) {
 }
 
 function showPopulatedInputs(data) {
-	if (data.ingredients.length) {
+	if (data.ingredients && data.ingredients.length) {
 		$('#detail-ingredients').removeClass('init-hide');
 	}
 	if (data.more.length) {
@@ -370,6 +370,12 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 
 
 
+// Sorting reset
+$('#menu li').click(function() {
+  $('#sort-selection').text('');
+});
+
+
 /* HELPER FUNCTIONS */
 
 // Show focus on contenteditable div
@@ -443,16 +449,16 @@ function changeStage(state) {
 		$('#detail-link').hide();
 	}
 
-	// Remove unneeded sort options for All tags stage
-	if (state = 'All tags') {
-		$('#sort-a-z').click();
-	}
-
 	// Hide any new tag input information
 	if (state !== 'Edit recipe') {
 		$('#detail-new-tag-input').attr('style', 'display: none');
 		$('#new-tag').val('');
 		resetEdit();
+	}
+
+	// Remove unneeded sort options for All tags stage
+	if (state === 'All tags') {
+		$('#sort-a-z').click();
 	}
 }
 
@@ -647,7 +653,7 @@ $('#profile').on('click', '.sort-option', function() {
 	var $listPanelList = $('#list-panel-inner ul');
 	// Sort list according to chosen id from dropdown list
 
-	if (window.stage === 'All recipes' || window.stage === 'Recipes by tag"') {
+	if (['initial', 'All recipes', 'Recipes by tag', 'View recipe'].indexOf(window.stage) > -1) {
 		switch($(this).attr('id')) {
 			case 'sort-newest':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
@@ -663,13 +669,15 @@ $('#profile').on('click', '.sort-option', function() {
 				break;
 			case 'sort-a-z':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-					return $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+					var val = $(a).find('.recipe-list-entry-left a').text().toLowerCase() < $(b).find('.recipe-list-entry-left a').text().toLowerCase() ? -1 : 1;
+					return val;
 				});
 				$listPanelList.append(sortedList);
 				break;
 			case 'sort-z-a':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-					return $(b).find('.recipe-list-entry-left a').text().toLowerCase()[0] > $(a).find('.recipe-list-entry-left a').text().toLowerCase()[0];
+					var val = $(a).find('.recipe-list-entry-left a').text().toLowerCase() > $(b).find('.recipe-list-entry-left a').text().toLowerCase() ? -1 : 1;
+					return val;
 				});
 				$listPanelList.append(sortedList);
 		}

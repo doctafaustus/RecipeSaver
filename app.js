@@ -167,7 +167,8 @@ app.post('/recipe-update', function(req, res) {
       servings: req.body.servings,
       readyIn: req.body.readyIn,
       cals: req.body.cals,
-      tags: []
+      tags: [],
+      date: '1/11/17'
     };
 
     if (req.body.tags) {
@@ -175,7 +176,6 @@ app.post('/recipe-update', function(req, res) {
     }
 
     recipes.push(newRecipe);
-
     res.json(newRecipe);
     return;
   }
