@@ -376,6 +376,11 @@ $('#menu li').click(function() {
 });
 
 
+// Favorite recipe
+$('#profile').on('click', '#favorite', function() {
+	$(this).addClass('favorited').find('span').first().text('Favorited');
+});
+
 /* HELPER FUNCTIONS */
 
 // Show focus on contenteditable div

@@ -486,7 +486,25 @@
 		#detail-options-dropdown li#spacer:hover {
 			background-color: white;
 		}
-		#delete-recipe {
+		#favorite span#favorite-icon {
+	    background: url(images/favorite-icon.png) 0 0px;
+	    background-repeat: no-repeat;
+	    display: inline-block;
+	    width: 18px;
+	    height: 16px;
+	    vertical-align: middle;
+	    position: absolute;
+	    right: 6px;
+	    margin-top: 2px;
+		}
+		#favorite.favorited span#favorite-icon {
+	    background: url(images/favorite-icon.png) 0 -16px;
+	    background-repeat: no-repeat;
+		}
+		#favorite.favorited:hover span#favorite-icon {
+	    background: url(images/favorite-icon.png) 0 0px;
+	    background-repeat: no-repeat;
+		}		#delete-recipe {
 			margin-top: 9px;
 		}
 		#detail-message-overlay {
@@ -838,7 +856,7 @@
 			<div id="heading-and-sort">
 				<h1 id="list-panel-heading">All Recipes</h1>
 				<div id="sort">
-					Sort by: <span id="sort-selection">Date Added</span>
+					Sort by: <span id="sort-selection"></span>
 					<img src="images/down-arrow.png">
 				</div>
 
@@ -879,7 +897,7 @@
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
 					<li id="portion">Adjust Portions</li>
-					<li>Favorite</li>
+					<li id="favorite"><span>Favorite</span><span id="favorite-icon"></span></li>
 					<li>Share</li>
 					<li>Print</li>
 					<li id="spacer"></li>
