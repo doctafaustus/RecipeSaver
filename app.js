@@ -152,6 +152,16 @@ app.post('/recipe', function(req, res) {
 });
 
 app.post('/recipe-update', function(req, res) {
+  if (req.body.favoriteType) {
+
+    var favoriteValue = req.body.favoriteType === 'add' ? true : false;
+    var recipeToUpdate = getRecipe(req.body.id);
+    recipeToUpdate.favorite = favoriteValue;
+    res.json({});
+    return;
+  }
+
+
   if (req.body.isNew) {
 
     var recipeIDs = recipes.map(function(i) {
@@ -301,6 +311,17 @@ app.get('/get-all-recipes', function(req, res) {
   res.json(recipes);
 });
 
+// Get favorite recipes
+app.get('/get-favorite-recipes', function(req, res) {
+  console.log('/get-favorite-recipes');
+  var favoriteRecipes = recipes.filter(function(i) {
+    if (i.favorite === true) {
+      return i;
+    }
+  });
+  res.json(favoriteRecipes);
+});
+
 // Update tag color
 app.post('/update-tag-color', function(req, res) {
 	var tagColorToChange = req.body.tagColorToChange;
@@ -321,73 +342,7 @@ app.post('/update-tag-color', function(req, res) {
 });
 
 
-app.post('/new-recipe', function(req, res) {
-	console.log(req.body.tags);
 
-	// Assign this new recipe an id (CHANGE THIS)
-	var id = Math.random();
-
-	console.log(req.body.url);
-
-	var newRecipe = {
-		id: id,
-		url: req.body.url,
-		name: req.body.recipeName,
-		more: req.body.recipeDetails,
-	};
-
-	// Assign each ingredient an id
-	if (req.body.ingredients) {
-		var ingredients = req.body.ingredients;
-		var newIngredients = [];
-		console.log('Assignining indredient ids');
-		for (var i = 0; i < ingredients.length; i++) {
-			var obj = {};
-			obj.name = ingredients[i];
-			obj.id = i + 1;
-			newIngredients.push(obj);
-		}
-		newRecipe.ingredients = newIngredients;
-	} else {
-		newRecipe.ingredients = [];
-	}
-
-	// Assign each tag an id
-	if (req.body.tags) {
-		var tags = req.body.tags;
-		var newTags = [];
-		console.log('Assignining tag ids');
-		for (var k = 0; k < tags.length; k++) {
-			var obj = {};
-			obj.name = tags[k].toLowerCase().trim();
-			obj.id = k + 1;
-			newTags.push(obj);
-
-			// Loop through all tags and see if a color is already used for that tag, if so then use it
-		  for (var i = 0; i < recipes.length; i++) {
-		    for (var j = 0; j < recipes[i].tags.length; j++) {
-		      if (obj.name === recipes[i].tags[j].name.toLowerCase().trim()) {
-		      	obj.color = recipes[i].tags[j].color;
-		      }
-		    }
-		  }
-
-		}
-		newRecipe.tags = newTags;
-	} else {
-		newRecipe.tags = [];
-	}
-
-
-
-
-	recipes.push(newRecipe);
-
-	console.log(newRecipe);
-
-	res.sendStatus(201);
-
-});
 
 // Delete recipe
 app.post('/delete-recipe', function(req, res) {

@@ -199,6 +199,8 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	changeStage('View recipe');
 		  	$('#detail-options-dropdown').hide();
 		  	$('#detail-new-ingredient-input').html('');
+		  	
+		  	$('#success-box').animate({width:'toggle'}, 425);
 		  }
 
 		});
