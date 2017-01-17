@@ -395,29 +395,55 @@ $('#profile').on('click', '#favorite', function() {
 // Show all favorited recipes
 $('#get-favorite-recipes').click(function() {
 	changeStage('Favorite recipes');
-		$.ajax({
-			type: 'GET',
-		  url: '/get-favorite-recipes',
-		  success: function(data) {
-		  	console.log('Got all favorite recipes!');
+	$.ajax({
+		type: 'GET',
+	  url: '/get-favorite-recipes',
+	  success: function(data) {
+	  	console.log('Got all favorite recipes!');
 
-				var recipes = data;
-				var recipeList = '<ul id="recipe-list">';
-				for (var i = 0; i < recipes.length; i++) {
-					recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
-				}
-				recipeList += '</ul>';
-				$('#list-panel-inner').html(recipeList);
+			var recipes = data;
+			var recipeList = '<ul id="recipe-list">';
+			for (var i = 0; i < recipes.length; i++) {
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
+			}
+			recipeList += '</ul>';
+			$('#list-panel-inner').html(recipeList);
 
-				// Change panel title
-				$('#list-panel-heading').text('Favorite Recipes');
+			// Change panel title
+			$('#list-panel-heading').text('Favorite Recipes');
 
-				// Add class to List Panel Heading
-				$('#list-panel-heading').addClass('favorites-active');
-		  }
-		});
+			// Add class to List Panel Heading
+			$('#list-panel-heading').addClass('favorites-active');
+	  }
+	});
 });
 
+
+// Show all uncategorized recipes
+$('#get-uncategorized-recipes').click(function() {
+	changeStage('Uncategorized recipes');
+	$.ajax({
+		type: 'GET',
+	  url: '/get-uncategorized-recipes',
+	  success: function(data) {
+	  	console.log('Got all uncategorized recipes!');
+
+			var recipes = data;
+			var recipeList = '<ul id="recipe-list">';
+			for (var i = 0; i < recipes.length; i++) {
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
+			}
+			recipeList += '</ul>';
+			$('#list-panel-inner').html(recipeList);
+
+			// Change panel title
+			$('#list-panel-heading').text('Uncategorized Recipes');
+
+			// Add class to List Panel Heading
+			$('#list-panel-heading').addClass('uncategorized-active');
+	  }
+	});
+});
 
 
 
@@ -577,7 +603,7 @@ $('#profile').on('click', '.sort-option', function() {
 	var $listPanelList = $('#list-panel-inner ul');
 	// Sort list according to chosen id from dropdown list
 
-	if (['initial', 'All recipes', 'Recipes by tag', 'View recipe', 'Favorite recipes'].indexOf(window.stage) > -1) {
+	if (['initial', 'All recipes', 'Recipes by tag', 'View recipe', 'Favorite recipes', 'Uncategorized recipes'].indexOf(window.stage) > -1) {
 		switch($(this).attr('id')) {
 			case 'sort-newest':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
@@ -685,6 +711,12 @@ $('#profile')
 });
 
 
+// Print recipe
+$('#profile').on('click', '#print', function() {
+	// To slide menu up:
+	$('#detail-options').click();
+	window.print();
+});
 
 /* HELPER FUNCTIONS */
 window.resetPortionAdjustment = function() {

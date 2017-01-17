@@ -6,6 +6,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+	<link href="/css/print.css" rel="stylesheet">
 	<style>
 		html, body {
 			height: 100%;
@@ -353,6 +354,9 @@
 		}
 		#detail-add-tag-button img {
 			width: 21px;
+		}
+		#print-logo-text {
+			display: none;
 		}
 		#detail-options {
 			background: url(images/plus-sprite.png) 0 -24px;
@@ -816,7 +820,7 @@
 			<li id='get-all-recipes'>All Recipes</li>
 			<li id="get-recipes-by-tags">Tags</li>
 			<li id="get-favorite-recipes">Favorites</li>
-			<li>Uncategorized</li>
+			<li id="get-uncategorized-recipes">Uncategorized</li>
 		</ul>
 	</div>
 
@@ -894,13 +898,14 @@
 
 
 			<div id="detail-top">
+				<div id="print-logo-text">RecipeSaver</div>
 				<div id="detail-options"></div>
 				<ul id="detail-options-dropdown" class="box">
 					<li id="edit-recipe">Edit Recipe</li>
 					<li id="portion">Adjust Portions</li>
 					<li id="favorite"><span>Favorite</span><span id="favorite-icon"></span></li>
 					<li>Share</li>
-					<li>Print</li>
+					<li id="print">Print</li>
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
