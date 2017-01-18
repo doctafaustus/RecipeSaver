@@ -291,7 +291,7 @@ $('#add-recipe').click(function() {
 
 
 
-// Submenu dropdown
+// Recipe Submenu Dropdown
 $('#profile').on('click', '#detail-options', function(e) {
 	var $el = $(this);
 	$el.addClass('active');
@@ -332,6 +332,19 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	  	$('#detail-message-overlay').fadeIn('slow');
 	  	// Refresh recipe list to reflect delete
 	  	refreshRecipeList();
+
+	  	// Show success box
+	  	var $successBox = $('#success-box');
+
+	  	$successBox.find('#success-message-recipe').text($('#detail-name').text());
+	  	$successBox.find('#sucess-message-text').text('has been deleted');
+	  	$successBox.addClass('temp-height');
+	  	$successBox.animate({width:'toggle'}, 425, function() {
+	  		setTimeout(function() {
+	  			$successBox.fadeOut(3000);
+	  			$successBox.removeClass('temp-height');
+	  		}, 4000);
+	  	});
 	  }
 	});
 
@@ -590,8 +603,18 @@ $('#profile').on('click', '.icons', function() {
 
 
 /* --- Sorting -- */
+// Clicking off to close
 $('#profile').on('click', '#sort', function() {
-	$('#sort-options').toggle();
+	$('#sort-options').slideDown('fast', function() {
+		$('body').on('click.sort', function(e) {
+			var container = $('#sort-options');
+  		if (!container.is(e.target) && container.has(e.target).length === 0) {
+  			console.log('auto up')
+      	$('#sort-options').slideUp('fast');
+  		}
+  		$('body').unbind('click.sort');
+		});
+	});
 });
 $('#profile').on('click', '.sort-option', function() {
 	// Hide dropdown box

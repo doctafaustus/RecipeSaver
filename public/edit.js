@@ -200,15 +200,29 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	$('#detail-options-dropdown').hide();
 		  	$('#detail-new-ingredient-input').html('');
 		  	
-		  	$('#success-box').animate({width:'toggle'}, 425);
+		  	var $successBox = $('#success-box');
+
+		  	$successBox.find('#success-message-recipe').text($('#detail-name').text());
+		  	$successBox.find('#sucess-message-text').text('has been added to your collection');
+		  	$successBox.addClass('temp-height');
+		  	$successBox.animate({width:'toggle'}, 425, function() {
+		  		setTimeout(function() {
+		  			$successBox.fadeOut(3000);
+		  			$successBox.removeClass('temp-height');
+		  		}, 4000);
+		  	});
+
 		  }
 
 		});
 	}
-
-
 });
 
+
+// Success box close
+$('#success-box .close').click(function() {
+	$('#success-box').hide().removeClass('temp-height');
+});
 
 function resetRecipeState() {
 	$('#detail-description, #detail-name').attr('contenteditable', false);

@@ -80,7 +80,7 @@ app.get('/login/twitter', passport.authenticate('twitter'));
 
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('User has been authenticated!');
-	res.redirect('/#profile');
+	res.redirect('/#recipes');
 });
 
 app.get('/checklogin', /*loggedIn,*/ function(req, res) {
@@ -90,50 +90,10 @@ app.get('/checklogin', /*loggedIn,*/ function(req, res) {
 
 
 
-app.get('/recipes', function(req, res) {
-	console.log('/recipes');
-	res.json(recipes);
-});
-
-// app.post('/update', function(req, res) {
-//   var recipeToUpdate = recipes.filter(function(v) {
-// 	  return v.id == req.body.id;
-// 	})[0];
-
-//   if (req.body.category === 'recipeMore') {
-//     console.log('updating recipeMore')
-//     recipeToUpdate.more = req.body.recipeMore;
-//   } else if (req.body.category === 'recipeName') {
-//     console.log('updating recipeName')
-//     recipeToUpdate.name = req.body.recipeName;
-//   } else if (req.body.category === 'tag') {
-//   	console.log('adding tag');
-
-//   	// Set default new color
-//   	var color = '#808080';
-
-// 	  // First get all user-defined tags
-// 	  var uniqueTags = [];
-// 	  for (var i = 0; i < recipes.length; i++) {
-// 	    for (var j = 0; j < recipes[i].tags.length; j++) {
-// 	      if (req.body.tag.toLowerCase().trim() === recipes[i].tags[j].name.toLowerCase.trim()) {
-// 	      	console.log("FOUND!");
-// 	      }
-// 	    }
-// 	  }
-
-
-
-//   	recipeToUpdate.tags.push({"id": Math.random() * 1000, 'name': req.body.tag, 'color': color});
-//   } 
-
-  
-
-
-//   res.sendStatus(200);
+// app.get('/recipes', function(req, res) {
+// 	console.log('/recipes');
+// 	res.json(recipes);
 // });
-
-
 
 
 
@@ -142,8 +102,8 @@ app.get('/', function(req, res) {
 });
 
 
-app.get('/profile', function(req, res) {
-  res.render('profile.ejs', {recipes: recipes});
+app.get('/recipes', function(req, res) {
+  res.render('recipes.ejs', {recipes: recipes});
 });
 
 app.post('/recipe', function(req, res) {
