@@ -101,6 +101,9 @@ app.get('/', function(req, res) {
 	res.render('index.ejs', {regMessage: 'none'});
 });
 
+app.get('/account', function(req, res) {
+	res.render('account.ejs', {recipes: recipes});
+});
 
 app.get('/recipes', function(req, res) {
   res.render('recipes.ejs', {recipes: recipes});

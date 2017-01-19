@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Account</title>
+	<script src="js/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
+	<style>
+		html, body {
+			height: 100%;
+		}
+		body {
+			font-family: 'Montserrat', sans-serif;
+			font-family: 'Source Sans Pro', sans-serif;
+			margin: 0;
+			background: url(images/old-bg.jpg) no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		textarea, input { outline: none; }
+		a:hover {
+			color: #0093ff;
+		}
+		ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+		}
+		#top-bar {
+			overflow: hidden;
+			background-color: white;
+			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
+		}
+		#nav {
+			border-bottom: 1px solid #B9BCC0;
+			height: 49px;
+		}
+		#nav li {
+			line-height: 49px;
+			display: inline-block;
+			margin-left: 15px;
+		}
+		#nav li a {
+			text-transform: uppercase;
+			color: #898e95;
+			text-decoration: none;
+			font-size: 14px;
+		}
+		#nav li a:hover {
+			color: #1AAFD0;
+		}
+		#logout, #feedback {
+			float: right;
+    	margin-right: 15px;
+		}
+		#nav li#logout {
+			margin-left: 0;
+			margin-right: 50px;
+		}
+		#nav li#recipes {
+			margin-left: 50px;
+		}
+		#nav li a.active-menu {
+			color: black;
+		}
+		#main {
+			box-sizing: border-box;
+			padding: 20px;
+			background-color: white;
+			width: 980px;
+			height: calc(100% - 50px);
+			margin: 15px auto 0 auto;
+			border-radius: 3px;
+	    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
+	    position: relative;
+	    margin-top: 15px;
+		}
+
+		#left-rail {
+			border-right: solid 1px #dadada;
+			width: 258px;
+			height: calc(100% - 9px);
+			margin-left: 20px;
+		}
+		#account-image {
+			display: block;
+			float: left;
+			margin-right: 15px;
+		}
+		#account-info {
+			float: left;
+			margin-top: 21px;
+		}
+		#current-account-type {
+			color: #1AAFD0;
+		}
+	</style>
+</head>
+<body>
+	<div id="top-bar">
+		<ul id="nav">
+			<li id="recipes"><a href="/recipes">My Recipes</a></li>
+			<li><a href="/account" class="active-menu">Account</a></li>
+			<li><a href="#">Chrome Extension</a></li>
+			<li><a href="#">Blog</a></li>
+			<li><a href="#">About</a></li>
+			<li id="logout"><a href="#">Logout</a></li>
+			<li id="feedback"><a href="#">Feedback</a></li>
+		</ul>
+	</div>
+	<div id="main">
+		<div id="left-rail">
+			<img id="account-image" src="images/account-image.png">
+			<div id="account-info">
+				<div id="user-name">
+					Bill Coloe
+				</div>
+				<div id="current-account-type">
+					Basic Subscription
+				</div>
+				</div>
+		</div>
+	</div>
+
+	<script src="account.js"></script>
+</body>
+</html>
