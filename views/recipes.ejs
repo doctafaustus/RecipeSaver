@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My Recipes</title>
+	<title>My Recipes | Recipe Saver</title>
 	<script src="js/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -546,7 +546,7 @@
 			height: 49px;
 		}
 		#nav li {
-			line-height: 49px;
+			line-height: 46px;
 			display: inline-block;
 			margin-left: 15px;
 		}
@@ -559,12 +559,18 @@
 		#nav li a:hover {
 			color: #1AAFD0;
 		}
-		#logout, #feedback {
+		#logout, #account {
 			float: right;
     	margin-right: 15px;
 		}
 		#nav li#logout {
 			margin-left: 0;
+		}
+		#nav li.active-menu {
+			border-bottom: solid 3px #23d82f;
+		}
+		#nav li.active-menu a {
+			color: black;
 		}
 		#search-icon {
 			content: url(images/search-icon.png);
@@ -872,13 +878,14 @@
 	<div id="top-bar">
 
 		<ul id="nav">
-			<li><a href="/recipes" style="color: black;">My Recipes</a></li>
-			<li><a href="/account">Account</a></li>
+			<li class="active-menu"><a href="/recipes">My Recipes</a></li>
 			<li><a href="#">Chrome Extension</a></li>
-			<li><a href="#">Blog</a></li>
+			<li><a href="/blog">Blog</a></li>
 			<li><a href="#">About</a></li>
-			<li id="logout"><a href="#">Logout</a></li>
 			<li id="feedback"><a href="#">Feedback</a></li>
+
+			<li id="logout"><a href="#">Logout</a></li>
+			<li id="account"><a href="/account">Account</a></li>
 		</ul>
 
 		<div id="search-row">

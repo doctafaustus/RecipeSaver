@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Account</title>
+	<title>Account | Recipe Saver</title>
 	<script src="js/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -40,7 +40,7 @@
 			height: 49px;
 		}
 		#nav li {
-			line-height: 49px;
+			line-height: 46px;
 			display: inline-block;
 			margin-left: 15px;
 		}
@@ -53,7 +53,7 @@
 		#nav li a:hover {
 			color: #1AAFD0;
 		}
-		#logout, #feedback {
+		#logout, #account {
 			float: right;
     	margin-right: 15px;
 		}
@@ -64,7 +64,10 @@
 		#nav li#recipes {
 			margin-left: 50px;
 		}
-		#nav li a.active-menu {
+		#nav li.active-menu {
+			border-bottom: solid 3px #23d82f;
+		}
+		#nav li.active-menu a {
 			color: black;
 		}
 		#main {
@@ -72,19 +75,20 @@
 			padding: 20px;
 			background-color: white;
 			width: 980px;
-			height: calc(100% - 50px);
+			height: 475px;
 			margin: 15px auto 0 auto;
 			border-radius: 3px;
 	    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
 	    position: relative;
-	    margin-top: 15px;
+	    margin-top: 50px;
 		}
-
 		#left-rail {
 			border-right: solid 1px #dadada;
 			width: 258px;
-			height: calc(100% - 9px);
+			height: calc(100% - 23px);
 			margin-left: 20px;
+			margin-top: 15px;
+			float: left;
 		}
 		#account-image {
 			display: block;
@@ -93,10 +97,34 @@
 		}
 		#account-info {
 			float: left;
-			margin-top: 21px;
 		}
 		#current-account-type {
 			color: #1AAFD0;
+		}
+		#right-rail {
+			float: left;
+			padding-left: 50px;
+			height: 100%;
+			position: relative;
+		}
+		#right-rail h2 {
+			margin-top: 11px;
+		}
+		.info-row {
+			margin-bottom: 5px;
+		}
+		.info-row-left {
+			width: 140px;
+			display: inline-block;
+		}
+		#delete-row {
+			font-size: 14px;
+		}
+		#delete-row a {
+			color: #898e95;
+		}
+		#delete-row a:hover {
+			color: black;
 		}
 	</style>
 </head>
@@ -104,12 +132,13 @@
 	<div id="top-bar">
 		<ul id="nav">
 			<li id="recipes"><a href="/recipes">My Recipes</a></li>
-			<li><a href="/account" class="active-menu">Account</a></li>
 			<li><a href="#">Chrome Extension</a></li>
-			<li><a href="#">Blog</a></li>
+			<li><a href="/blog">Blog</a></li>
 			<li><a href="#">About</a></li>
-			<li id="logout"><a href="#">Logout</a></li>
 			<li id="feedback"><a href="#">Feedback</a></li>
+
+			<li id="logout"><a href="#">Logout</a></li>
+			<li id="account" class="active-menu"><a href="/account">Account</a></li>
 		</ul>
 	</div>
 	<div id="main">
@@ -120,10 +149,29 @@
 					Bill Coloe
 				</div>
 				<div id="current-account-type">
-					Basic Subscription
+					Micro Subscription
 				</div>
+				<div id="delete-row">
+					<a href="#">Delete Account</a>
 				</div>
+			</div>
 		</div>
+		<div id="right-rail">
+			<h2>Account Information</h2>
+			<div class="info-row">
+				<span class="info-row-left">Email Address:</span>
+				<span class="info-row-right">wcoloe@gmail.com</span>
+			</div>
+			<div class="info-row">
+				<span class="info-row-left">Member Since:</span>
+				<span class="info-row-right">2/25/14</span>
+			</div>
+			<div class="info-row">
+				<span class="info-row-left">Account Type:</span>
+				<span class="info-row-right">Micro Subscription</span>
+			</div>
+		</div>
+
 	</div>
 
 	<script src="account.js"></script>
