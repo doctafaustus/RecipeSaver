@@ -1,1 +1,181 @@
-test
+<!DOCTYPE html>
+<html>
+<head>
+	<title>It's Here! Recipe Saver 2.0 Debuts | Recipe Saver</title>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
+	<style>
+		html, body {
+			height: 100%;
+		}
+		body {
+			font-family: 'Source Sans Pro', sans-serif;
+			margin: 0;
+		}
+		textarea, input { outline: none; }
+		a:hover {
+			color: #0093ff;
+		}
+		ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+		}
+		#top-bar {
+			overflow: hidden;
+			background-color: white;
+			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
+		}
+		#nav {
+			border-bottom: 1px solid #B9BCC0;
+			height: 49px;
+		}
+		#nav li {
+			line-height: 46px;
+			display: inline-block;
+			margin-left: 15px;
+		}
+		#nav li a {
+			text-transform: uppercase;
+			color: #898e95;
+			text-decoration: none;
+			font-size: 14px;
+		}
+		#nav li a:hover {
+			color: #1AAFD0;
+		}
+		#logout, #account {
+			float: right;
+    	margin-right: 15px;
+		}
+		#nav li#logout {
+			margin-left: 0;
+			margin-right: 50px;
+		}
+		#nav li#recipes {
+			margin-left: 50px;
+		}
+		#nav li.active-menu {
+			border-bottom: solid 3px #23d82f;
+		}
+		#nav li.active-menu a {
+			color: black;
+		}
+		article {
+			box-sizing: border-box;
+			background-color: white;
+			margin: 0 auto 0 auto;
+	    position: relative;
+	    overflow: auto;
+		}
+		#article-top {
+			background-color: #089de3;
+			color: white;
+			padding-top: 50px;
+			padding-bottom: 150px;
+		}
+		#article-top-inner, #article-main {
+			width: 800px;
+			margin: 0 auto;
+		}
+		.date {
+			color: white;
+			font-size: 20px;
+		}
+		.title {
+			font-size: 36px;
+			margin: 20px 0;
+		}
+		#categories-and-share {
+			display: flex;
+			justify-content: space-between;
+		}
+		li.static {
+			margin-right: 20px;
+		}
+		.categories li, .share li {
+			display: inline-block;
+		}
+		.categories li:not(.static), .share li:not(.static) {
+			margin-right: 15px;
+		}
+		.categories li:not(.static):hover a, .share li:not(.static):hover a {
+			background-color: #23d82f;
+		}
+		.categories li a, .share li a {
+			display: inline-block;
+			text-decoration: none;
+			background-color: #066b9a;
+			padding: 5px 10px;
+			color: white;
+		}
+		.share li.static {
+			vertical-align: super;
+		}
+		.share li:not(.static) a {
+			background-color: #066b9a;
+    	padding: 6px 7px 1px 7px;
+		}
+		.share li:not(.static) path {
+			fill: white;
+		}
+
+		.image {
+			width: 100%;
+		}
+		#article-main {
+			margin-top: -115px;
+		}
+	</style>
+</head>
+<body>
+	<div id="top-bar">
+		<ul id="nav">
+			<li id="recipes"><a href="/recipes">My Recipes</a></li>
+			<li><a href="#">Chrome Extension</a></li>
+			<li class="active-menu"><a href="/blog">Blog</a></li>
+			<li><a href="#">About</a></li>
+			<li id="feedback"><a href="#">Feedback</a></li>
+
+			<li id="logout"><a href="#">Logout</a></li>
+			<li id="account"><a href="/account">Account</a></li>
+		</ul>
+	</div>
+	<article>
+		<div id="article-top">
+			<div id="article-top-inner">
+				<div class="date">February 25, 2017</div>
+				<h1 class="title">It's Here! Recipe Saver 2.0 Debuts</h1>
+				<div id="categories-and-share">
+					<ul class="categories">
+						<li class="static">categories</li>
+						<li><a href="#">annoucements</a></li>
+						<li><a href="#">featured</a></li>
+					</ul>
+					<ul class="share">
+						<li class="static">share</li>
+						<li id="facebook">
+							<a href="" target="_blank">
+								<svg width="20" height="20" viewBox="0 0 32 32">
+									<path d="M8 12 L13 12 L13 8 C13 2 17 1 24 2 L24 7 C20 7 19 7 19 10 L19 12 L24 12 L23 18 L19 18 L19 30 L13 30 L13 18 L8 18 z "></path>
+								</svg>
+							</a>
+						</li>
+						<li id="twitter">
+							<a href="" target="_blank">
+								<svg width="20" height="20" viewBox="0 0 32 32">
+									<path d="M2 4 C6 8 10 12 15 11 A6 6 0 0 1 22 4 A6 6 0 0 1 26 6 A8 8 0 0 0 31 4 A8 8 0 0 1 28 8 A8 8 0 0 0 32 7 A8 8 0 0 1 28 11 A18 18 0 0 1 10 30 A18 18 0 0 1 0 27 A12 12 0 0 0 8 24 A8 8 0 0 1 3 20 A8 8 0 0 0 6 19.5 A8 8 0 0 1 0 12 A8 8 0 0 0 3 13 A8 8 0 0 1 2 4 "></path>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="article-main">
+			<img class="image" src="/images/blog/recipe-saver-2-has-arrived.jpg">
+		</div>
+	</article>
+</body>
+</html>
