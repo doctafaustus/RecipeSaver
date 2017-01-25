@@ -129,7 +129,7 @@
 		}
 		#article-main-inner {
 			width: 610px;
-			margin: 40px auto 150px auto;
+			margin: 40px auto 110px auto;
 		}
 		#author-information {
 			border-top: solid 1px #dadada;
@@ -171,6 +171,73 @@
 	    font-weight: bold;
 	    font-size: 26px;
 	    font-family: 'Source Sans Pro';
+		}
+		#disqus_thread {
+			width: 610px;
+			margin: 0 auto;
+		}
+
+		#copyright {
+			background-color: #23d82f;
+			color: white;
+			font-size: 14px;
+		}
+		#copyright-inner {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 30px;
+			width: 610px;
+			margin: 0 auto;
+		}
+		footer {
+			margin-top: 55px;
+			background-color: #089de3;
+	    color: white;
+		}
+		#footer-inner {
+			width: 610px;
+			margin: 0 auto;
+			padding: 30px 0;
+			overflow: auto;
+		}
+		.logo {
+	    font-family: 'Cabin', sans-serif;
+		}
+		.logo img {
+			display: block;
+			float: left;
+		}
+		.logo-text {
+	    float: left;
+	    margin-top: 6px;
+	    margin-left: 8px;
+	    font-size: 25px;
+	    letter-spacing: 1px;
+	    display: inline-block;
+		}
+		.tagline {
+	    display: inline-block;
+	    float: left;
+	    clear: both;
+	    margin-top: 11px;
+	    font-weight: inherit
+		}
+		#footer-links {
+			clear: both;
+			margin-top: 25px;
+			float: left;
+		}
+		#footer-links li {
+			margin-bottom: 4px;
+		}
+		#footer-links li a {
+			color: #095a80;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		#footer-links li a:hover {
+			text-decoration: underline;
 		}
 	</style>
 </head>
@@ -258,7 +325,59 @@
 					Bill Coloe<br></p>
 				</div>
 			</div>
+
+<!-- 			<div id="disqus">
+				<div id="disqus_thread"></div>
+				<script>
+					/**
+					*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+					*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+					/*
+					var disqus_config = function () {
+					this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+					this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+					};
+					*/
+					(function() { // DON'T EDIT BELOW THIS LINE
+					var d = document, s = d.createElement('script');
+					s.src = '//recipesaver.disqus.com/embed.js';
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+					})();
+				</script>                      
+			</div> -->
 		</div>
 	</article>
+
+	<footer>
+
+		<div id="footer-inner">
+
+			<div class="logo">
+				<img src="../images/logo-white-circle.png">
+				<span class="logo-text">Recipe Saver</span>
+				<div class="tagline">Any recipe, anywhere</div>
+			</div>
+
+			<ul id="footer-links">
+				<li><a href="/recipes">My Recipes</a></li>
+				<li><a href="#">Chrome Extension</a></li>
+				<li><a href="/blog">Blog</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Feedback</a></li>
+				<li><a href="#">Logout</a></li>
+				<li><a href="/account">Account</a></li>
+			</ul>
+		</div>
+
+
+
+	</footer>
+	<div id="copyright">
+		<div id="copyright-inner">
+			<div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
+			<div id="recipesaver">&copy; 2017 Recipe Saver</div>
+		</div>
+	</div>
 </body>
 </html>
