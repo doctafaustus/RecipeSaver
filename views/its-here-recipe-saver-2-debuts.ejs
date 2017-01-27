@@ -452,12 +452,14 @@
 	<script>
 		document.getElementById('facebook-link').addEventListener('click', function(e) {
 			e.preventDefault();
-			FB.ui({
-			  method: 'share',
-			  href: 'https://recipesavertest.herokuapp.com' + window.location.pathname,
-			  quote: document.title,
-			}, function(response){});
-		});
+		FB.ui({
+		  method: 'share_open_graph',
+		  action_type: 'og.likes',
+		  action_properties: JSON.stringify({
+			  object: 'https://recipesavertest.herokuapp.com' + window.location.pathname,
+		  })
+		}, function(response){});
+
 		document.getElementById('twitter-link').setAttribute('href', 'http://twitter.com/intent/tweet?status=' + encodeURIComponent(document.title) + '+' + 'http://www.cnn.com');
 	</script>
 </body>
