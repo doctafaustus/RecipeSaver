@@ -1,7 +1,9 @@
 $(document).ready(function() {
 
+	console.log('Support form script active');
+
 	// Open support modal
-	$('#support a').click(function(e) {
+	$('#support a, #support-footer a').click(function(e) {
 		e.preventDefault();
 		if (!$('#support-modal').is('visible')) {
 			$('#support-modal, #support-overlay').show();

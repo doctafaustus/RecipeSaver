@@ -1,0 +1,72 @@
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Google Captcha Script -->
+<script src='https://www.google.com/recaptcha/api.js' async></script>
+
+<!-- Navigation -->
+<div id="top-bar">
+	<ul id="nav">
+		<li id="recipes"><a href="/recipes">My Recipes</a></li>
+		<li id="chrome-extension"><a href="#">Chrome Extension</a></li>
+		<li id="blog"><a href="/blog">Blog</a></li>
+		<li id="about"><a href="#">About</a></li>
+		<li id="support"><a href="#">Support</a></li>
+
+		<li id="logout"><a href="#">Logout</a></li>
+		<li id="account"><a href="/account">Account</a></li>
+	</ul>
+
+	<!-- Search Bar (only visible on homepage) -->
+	<div id="search-row">
+		<form id="search-form">
+			<span id="search-icon"></span>
+			<input type="text" placeholder="Search Recipes" id="search-form-input" autocomplete="off">
+		</form>
+	</div>
+	<div id="search-suggestions" class="box">
+		<ul></ul>
+	</div>
+
+</div>
+
+<!-- Support Contact Form -->
+<div id="support-modal">
+	<svg class="close" viewBox="0 0 32 32" style="float: right;">
+		<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+	</svg>
+	<div id="support-init">
+		<h3 class="support-modal-title">
+			Ask us a question
+		</h3>
+		<div class="support-modal-info">
+			Questions? Comments? Complaints? Let us know how we can help you. Please allow approximately 24 - 48 hours for a response.
+		</div>
+		<form id="support-form" action='/support' method="post">
+			<label>NAME *</label>
+			<input type="text" name="name" id="support-name" placeholder="e.g., Jane Smith">
+			<label>EMAIL *</label>
+			<input type="email" name="email" id="support-email" placeholder="name@email.com">
+			<label>SUBJECT *</label>
+			<input type="text" name="subject" id="support-subject" placeholder="Brief description of your question">
+			<label>DETAILS *</label>
+			<textarea id="support-message" placeholder="What can we help you with?"></textarea>
+			<input type="submit" id="support-submit" class="button" value="Submit">
+			<div id="support-recaptcha" class="g-recaptcha" data-sitekey="6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc"></div>
+			<div id="support-recaptcha-error"></div>
+		</form>
+	</div>
+	<div id="support-sucess">
+		<h3 class="support-modal-title">
+			Success!
+		</h3>
+		<div class="support-modal-info">
+			Your message has been sent. Please allow approximately 24 - 48 hours for a response.
+		</div>
+	</div>
+</div>
+<div id="support-overlay"></div>
+
+
+<!-- Feedback Form Script -->
+<script src="/support.js" async></script>

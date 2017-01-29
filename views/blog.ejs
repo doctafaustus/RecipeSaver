@@ -2,9 +2,14 @@
 <html>
 <head>
 	<title>Blog | Recipe Saver</title>
-	<script src="js/jquery.min.js"></script>
+
+	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	
 	<style>
 		html, body {
 			height: 100%;
@@ -17,51 +22,7 @@
 		a:hover {
 			color: #0093ff;
 		}
-		ul {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-		}
-		#top-bar {
-			overflow: hidden;
-			background-color: white;
-			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
-		}
-		#nav {
-			border-bottom: 1px solid #B9BCC0;
-			height: 49px;
-		}
-		#nav li {
-			line-height: 46px;
-			display: inline-block;
-			margin-left: 15px;
-		}
-		#nav li a {
-			text-transform: uppercase;
-			color: #898e95;
-			text-decoration: none;
-			font-size: 14px;
-		}
-		#nav li a:hover {
-			color: #1AAFD0;
-		}
-		#logout, #account {
-			float: right;
-    	margin-right: 15px;
-		}
-		#nav li#logout {
-			margin-left: 0;
-			margin-right: 50px;
-		}
-		#nav li#recipes {
-			margin-left: 50px;
-		}
-		#nav li.active-menu {
-			border-bottom: solid 3px #23d82f;
-		}
-		#nav li.active-menu a {
-			color: black;
-		}
+
 		#main {
 			box-sizing: border-box;
 			background-color: white;
@@ -79,6 +40,7 @@
 			overflow: auto;
 			border-bottom: solid 1px #dadada;
 			padding-bottom: 20px;
+			line-height: 22px;
 		}
 		.blog-image {
 			width: 575px;
@@ -154,209 +116,54 @@
 	    padding: 5px 10px;
 	    color: white;
 		}
-
-		#copyright {
-			background-color: #23d82f;
-			color: white;
-			font-size: 14px;
-		}
-		#copyright-inner {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
-			width: 800px;
-			margin: 0 auto;
-		}
-		footer {
-			margin-top: 55px;
-			background-color: #066b9a;
-	    color: white;
-		}
-		#footer-inner {
-			width: 800px;
-			margin: 0 auto;
-			padding: 30px 0;
-			overflow: auto;
-		}
-		#footer-inner-left {
-			width: 50%;
-			float: left;
-		}
-		#footer-inner-right {
-			width: 50%;
-			float: right;
-		}
-		.logo {
-	    font-family: 'Cabin', sans-serif;
-		}
-		.logo img {
-			display: block;
-			float: left;
-		}
-		.logo-text {
-	    float: left;
-	    margin-top: 6px;
-	    margin-left: 8px;
-	    font-size: 25px;
-	    letter-spacing: 1px;
-	    display: inline-block;
-		}
-		.tagline {
-	    display: inline-block;
-	    float: left;
-	    clear: both;
-	    margin-top: 11px;
-	    font-weight: inherit
-		}
-		#footer-links {
-			clear: both;
-			margin-top: 25px;
-			float: left;
-		}
-		#footer-links li {
-			margin-bottom: 4px;
-		}
-		#footer-links li a {
-			color: #dedede;
-			font-weight: bold;
-			text-decoration: none;
-		}
-		#footer-links li a:hover {
-			text-decoration: underline;
-		}
-		.twitter-follow {
-			clear: both;
-			margin-top: 7px;
-		}
-		.follow-us, .like-us, .contact {
-			float: right;
-			text-align: right;
-			clear: both;
-		}
-		.follow-us, .like-us {
-	    font-size: 19px;
-	    margin-bottom: 6px;
-	    font-weight: bold;
-		}
-		#twitter-widget-0, .fb_iframe_widget {
-			float: right;
-			clear: both;
-			margin-bottom: 38px;
-		}
 	</style>
 </head>
 <body>
-	<script>
-	  window.fbAsyncInit = function() {
-	    FB.init({
-	      appId      : '264292990672562',
-	      xfbml      : true,
-	      version    : 'v2.8'
-	    });
-	    FB.AppEvents.logPageView();
-	  };
+	<!-- Header -->
+	<% include ./partials/header %>
 
-	  (function(d, s, id){
-	     var js, fjs = d.getElementsByTagName(s)[0];
-	     if (d.getElementById(id)) {return;}
-	     js = d.createElement(s); js.id = id;
-	     js.src = "//connect.facebook.net/en_US/sdk.js";
-	     fjs.parentNode.insertBefore(js, fjs);
-	   }(document, 'script', 'facebook-jssdk'));
-	</script>
-
-	<div id="top-bar">
-		<ul id="nav">
-			<li id="recipes"><a href="/recipes">My Recipes</a></li>
-			<li><a href="#">Chrome Extension</a></li>
-			<li class="active-menu"><a href="/blog">Blog</a></li>
-			<li><a href="#">About</a></li>
-			<li id="support"><a href="#">Support</a></li>
-
-			<li id="logout"><a href="#">Logout</a></li>
-			<li id="account"><a href="/account">Account</a></li>
-		</ul>
-	</div>
-	<section id="main">
-		<div id="left-rail">
-			<article class="blog-post">
-				<a href="/blog/its-here-recipe-saver-2-debuts"><img class="blog-image" src="images/blog/recipe-saver-2-has-arrived.jpg"></a>
-				<div class="blog-title">
-					<a href="/blog/its-here-recipe-saver-2-debuts">It's Here! Recipe Saver 2.0 Debuts</a>
-				</div>
-				<div class="blog-summary">
-					Dear Recipe Saver Friends, I'm extremely excited to introduce the latest version of Recipe Saver! It's been about 2 years since I first launched this website which at the time, was a simple side project that I created to make saving online recipes easier for myself. After offering it free to the public, I was blown away over how many people had signed up to use my silly little application to save their favorite recipes... <a class="read-more" href="/blog/its-here-recipe-saver-2-debuts">Read More</a>
-				</div>
-				<div class="author-date">
-					<img class="author-icon" src="/images/blog/author-bill-coloe.jpg">
-					<div class="author-date-text">
-						<span class="author">Bill Coloe</span>
-						<span class="date">2/25/17</span>
+	<div id="wrapper">
+		<section id="main">
+			<div id="left-rail">
+				<article class="blog-post">
+					<a href="/blog/its-here-recipe-saver-2-debuts"><img class="blog-image" src="images/blog/recipe-saver-2-has-arrived.jpg"></a>
+					<div class="blog-title">
+						<a href="/blog/its-here-recipe-saver-2-debuts">It's Here! Recipe Saver 2.0 Debuts</a>
 					</div>
-				</div>
-			</article>
-		</div>
-		<aside>
-			<div class="section-title">
-				Top Posts
+					<div class="blog-summary">
+						Dear Recipe Saver Friends, I'm extremely excited to introduce the latest version of Recipe Saver! It's been about 2 years since I first launched this website which at the time, was a simple side project that I created to make saving online recipes easier for myself. After offering it free to the public, I was blown away over how many people had signed up to use my silly little application to save their favorite recipes... <a class="read-more" href="/blog/its-here-recipe-saver-2-debuts">Read More</a>
+					</div>
+					<div class="author-date">
+						<img class="author-icon" src="/images/blog/author-bill-coloe.jpg">
+						<div class="author-date-text">
+							<span class="author">Bill Coloe</span>
+							<span class="date">2/25/17</span>
+						</div>
+					</div>
+				</article>
 			</div>
-			<ul id="posts-list">
-				<li><a href="/blog/its-here-recipe-saver-2-debuts">It's Here! Recipe Saver 2.0 Debuts</a></li>
-			</ul>
-			<div class="section-title">
-				Featured Categories
-			</div>
-			<ul id="categories-list">
-				<li><a href="/blog/announcements">announcements</a></li>
-			</ul>
-		</aside>
-	</section>
-
-	<footer>
-		<div id="footer-inner">
-			<div id="footer-inner-left">
-				<div class="logo">
-					<img src="../images/logo-white-circle.png">
-					<span class="logo-text">Recipe Saver</span>
-					<div class="tagline">Any recipe, anywhere</div>
+			<aside>
+				<div class="section-title">
+					Top Posts
 				</div>
-
-				<ul id="footer-links">
-					<li><a href="/recipes">My Recipes</a></li>
-					<li><a href="#">Chrome Extension</a></li>
-					<li><a href="/blog">Blog</a></li>
-					<li><a href="#">About</a></li>
-					<li><a href="#">Support</a></li>
-					<li><a href="#">Logout</a></li>
-					<li><a href="/account">Account</a></li>
+				<ul id="posts-list">
+					<li><a href="/blog/its-here-recipe-saver-2-debuts">It's Here! Recipe Saver 2.0 Debuts</a></li>
 				</ul>
-			</div>
-			<div id="footer-inner-right">
-
-				<div class="twitter-follow">
-					<div class="follow-us">Follow Us</div>
-					<a href="https://twitter.com/RecipeSaver" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @RecipeSaver</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+				<div class="section-title">
+					Featured Categories
 				</div>
-
-				<div class="facebook-like-share">
-					<div class="like-us">Like Us</div>
-					<div class="fb-like" data-href="https://www.facebook.com/Recipe-Saver-1832559400339822" data-layout="button" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
-				</div>
-
-				<div class="contact">
-					<div class="like-us">Contact Us</div>
-					<div class="email">info@recipesaver.net</div>
-				</div>
-			</div>
-		</div>
-
-	</footer>
-	<div id="copyright">
-		<div id="copyright-inner">
-			<div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
-			<div id="recipesaver">&copy; 2017 Recipe Saver</div>
-		</div>
+				<ul id="categories-list">
+					<li><a href="/blog/announcements">announcements</a></li>
+				</ul>
+			</aside>
+		</section>
 	</div>
+	<!-- Footer -->
+	<% include ./partials/footer %>
+
+	<script>
+		// Mark active header menu
+		document.getElementById('blog').className = 'active-menu';
+	</script>
 </body>
 </html>

@@ -2,10 +2,14 @@
 <html>
 <head>
 	<title>Account | Recipe Saver</title>
-	<script src="js/jquery.min.js"></script>
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+
 	<style>
 		html, body {
 			height: 100%;
@@ -23,57 +27,13 @@
 		a:hover {
 			color: #0093ff;
 		}
-		ul {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-		}
-		#top-bar {
-			overflow: hidden;
-			background-color: white;
-			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
-		}
-		#nav {
-			border-bottom: 1px solid #B9BCC0;
-			height: 49px;
-		}
-		#nav li {
-			line-height: 46px;
-			display: inline-block;
-			margin-left: 15px;
-		}
-		#nav li a {
-			text-transform: uppercase;
-			color: #898e95;
-			text-decoration: none;
-			font-size: 14px;
-		}
-		#nav li a:hover {
-			color: #1AAFD0;
-		}
-		#logout, #account {
-			float: right;
-    	margin-right: 15px;
-		}
-		#nav li#logout {
-			margin-left: 0;
-			margin-right: 50px;
-		}
-		#nav li#recipes {
-			margin-left: 50px;
-		}
-		#nav li.active-menu {
-			border-bottom: solid 3px #23d82f;
-		}
-		#nav li.active-menu a {
-			color: black;
-		}
 		#main {
+			overflow: auto;
 			box-sizing: border-box;
 			padding: 20px;
 			background-color: white;
 			width: 980px;
-			height: 475px;
+			min-height: 475px;
 			margin: 15px auto 0 auto;
 			border-radius: 3px;
 	    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
@@ -124,54 +84,55 @@
 		#delete-row a:hover {
 			color: black;
 		}
+
+
 	</style>
 </head>
 <body>
-	<div id="top-bar">
-		<ul id="nav">
-			<li id="recipes"><a href="/recipes">My Recipes</a></li>
-			<li><a href="#">Chrome Extension</a></li>
-			<li><a href="/blog">Blog</a></li>
-			<li><a href="#">About</a></li>
-			<li id="support"><a href="#">Support</a></li>
 
-			<li id="logout"><a href="#">Logout</a></li>
-			<li id="account" class="active-menu"><a href="/account">Account</a></li>
-		</ul>
-	</div>
-	<div id="main">
-		<div id="left-rail">
-			<img id="account-image" src="images/account-image.png">
-			<div id="account-info">
-				<div id="user-name">
-					Bill Coloe
+	<!-- Header -->
+	<% include ./partials/header %>
+
+	<div id="wrapper">
+		<div id="main">
+			<div id="left-rail">
+				<img id="account-image" src="images/account-image.png">
+				<div id="account-info">
+					<div id="user-name">
+						Bill Coloe
+					</div>
+					<div id="current-account-type">
+						Micro Subscription
+					</div>
+					<div id="delete-row">
+						<a href="#">Delete Account</a>
+					</div>
 				</div>
-				<div id="current-account-type">
-					Micro Subscription
+			</div>
+			<div id="right-rail">
+				<h2>Account Information</h2>
+				<div class="info-row">
+					<span class="info-row-left">Email Address:</span>
+					<span class="info-row-right">wcoloe@gmail.com</span>
 				</div>
-				<div id="delete-row">
-					<a href="#">Delete Account</a>
+				<div class="info-row">
+					<span class="info-row-left">Member Since:</span>
+					<span class="info-row-right">2/25/14</span>
+				</div>
+				<div class="info-row">
+					<span class="info-row-left">Account Type:</span>
+					<span class="info-row-right">Micro Subscription</span>
 				</div>
 			</div>
 		</div>
-		<div id="right-rail">
-			<h2>Account Information</h2>
-			<div class="info-row">
-				<span class="info-row-left">Email Address:</span>
-				<span class="info-row-right">wcoloe@gmail.com</span>
-			</div>
-			<div class="info-row">
-				<span class="info-row-left">Member Since:</span>
-				<span class="info-row-right">2/25/14</span>
-			</div>
-			<div class="info-row">
-				<span class="info-row-left">Account Type:</span>
-				<span class="info-row-right">Micro Subscription</span>
-			</div>
-		</div>
-
 	</div>
 
-	<script src="account.js"></script>
+	<!-- Footer -->
+	<% include ./partials/footer %>
+
+	<script>
+		// Mark active header menu
+		document.getElementById('account').className = 'active-menu';
+	</script>
 </body>
 </html>

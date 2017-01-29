@@ -2,454 +2,135 @@
 <html>
 <head>
 	<title>It's Here! Recipe Saver 2.0 Debuts</title>
+
+	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
-	<style>
-		html, body {
-			height: 100%;
-		}
-		body {
-			font-family: 'Source Sans Pro', sans-serif;
-			margin: 0;
-		}
-		textarea, input { outline: none; }
-		a:hover {
-			color: #0093ff;
-		}
-		ul {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-		}
-		#top-bar {
-			overflow: hidden;
-			background-color: white;
-			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
-		}
-		#nav {
-			border-bottom: 1px solid #B9BCC0;
-			height: 49px;
-		}
-		#nav li {
-			line-height: 46px;
-			display: inline-block;
-			margin-left: 15px;
-		}
-		#nav li a {
-			text-transform: uppercase;
-			color: #898e95;
-			text-decoration: none;
-			font-size: 14px;
-		}
-		#nav li a:hover {
-			color: #1AAFD0;
-		}
-		#logout, #account {
-			float: right;
-    	margin-right: 15px;
-		}
-		#nav li#logout {
-			margin-left: 0;
-			margin-right: 50px;
-		}
-		#nav li#recipes {
-			margin-left: 50px;
-		}
-		#nav li.active-menu {
-			border-bottom: solid 3px #23d82f;
-		}
-		#nav li.active-menu a {
-			color: black;
-		}
-		article {
-			box-sizing: border-box;
-			background-color: white;
-			margin: 0 auto 0 auto;
-	    position: relative;
-	    overflow: auto;
-		}
-		#article-top {
-			background-color: #089de3;
-			color: white;
-			padding-top: 50px;
-			padding-bottom: 150px;
-		}
-		#article-top-inner, #article-main {
-			width: 800px;
-			margin: 0 auto;
-		}
-		.date {
-			color: white;
-			font-size: 20px;
-		}
-		.title {
-			font-size: 36px;
-			margin: 20px 0;
-		}
-		#categories-and-share {
-			display: flex;
-			justify-content: space-between;
-		}
-		li.static {
-			margin-right: 20px;
-		}
-		.categories li, .share li {
-			display: inline-block;
-		}
-		.categories li:not(.static), .share li:not(.static) {
-			margin-right: 15px;
-		}
-		.categories li:not(.static):hover a, .share li:not(.static):hover a {
-			background-color: #23d82f;
-		}
-		.categories li a, .share li a {
-			display: inline-block;
-			text-decoration: none;
-			background-color: #066b9a;
-			padding: 5px 10px;
-			color: white;
-		}
-		.share li.static {
-			vertical-align: super;
-		}
-		.share li:not(.static) a {
-			background-color: #066b9a;
-    	padding: 6px 7px 1px 7px;
-		}
-		.share li:not(.static) path {
-			fill: white;
-		}
 
-		.image {
-			width: 100%;
-		}
-		#article-main {
-			margin-top: -115px;
-		}
-		#article-main-inner {
-			width: 610px;
-			margin: 40px auto 110px auto;
-		}
-		#author-information {
-			border-top: solid 1px #dadada;
-			border-bottom: solid 1px #dadada;
-			padding: 15px 0;
-			overflow: auto;
-		}
-		#author-icon {
-			float: left;
-			margin-right: 30px;
-		}
-		.author-title-text {
-			float: left;
-			margin-top: 14px;
-		}
-		.author {
-			color: #1aafd0;
-			font-weight: bold;
-			font-size: 20px;
-		}
-		.author, .date {
-			display: block;
-		}
-		#article-text {
-			margin-top: 40px;
-			clear: both;
-			font-family: 'Roboto Slab', serif;
-			line-height: 28px;
-			font-size: 28px;
-			font-size: 16px;
-		}
-		#article-text ul {
-			padding-left: 31px;
-			margin-bottom: 16px;
-			list-style-type: disc;
-		}
-		.emphasize {
-	    color: #066b9a;
-	    font-weight: bold;
-	    font-size: 26px;
-	    font-family: 'Source Sans Pro';
-		}
-		#disqus_thread {
-			width: 610px;
-			margin: 0 auto;
-		}
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	<link href="/css/blog.css" rel="stylesheet">
 
-		#copyright {
-			background-color: #23d82f;
-			color: white;
-			font-size: 14px;
-		}
-		#copyright-inner {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
-			width: 610px;
-			margin: 0 auto;
-		}
-		footer {
-			margin-top: 55px;
-			background-color: #066b9a;
-	    color: white;
-		}
-		#footer-inner {
-			width: 610px;
-			margin: 0 auto;
-			padding: 30px 0;
-			overflow: auto;
-		}
-		#footer-inner-left {
-			width: 50%;
-			float: left;
-		}
-		#footer-inner-right {
-			width: 50%;
-			float: right;
-		}
-		.logo {
-	    font-family: 'Cabin', sans-serif;
-		}
-		.logo img {
-			display: block;
-			float: left;
-		}
-		.logo-text {
-	    float: left;
-	    margin-top: 6px;
-	    margin-left: 8px;
-	    font-size: 25px;
-	    letter-spacing: 1px;
-	    display: inline-block;
-		}
-		.tagline {
-	    display: inline-block;
-	    float: left;
-	    clear: both;
-	    margin-top: 11px;
-	    font-weight: inherit
-		}
-		#footer-links {
-			clear: both;
-			margin-top: 25px;
-			float: left;
-		}
-		#footer-links li {
-			margin-bottom: 4px;
-		}
-		#footer-links li a {
-			color: #dedede;
-			font-weight: bold;
-			text-decoration: none;
-		}
-		#footer-links li a:hover {
-			text-decoration: underline;
-		}
-		.twitter-follow {
-			clear: both;
-			margin-top: 7px;
-		}
-		.follow-us, .like-us, .contact {
-			float: right;
-			text-align: right;
-			clear: both;
-		}
-		.follow-us, .like-us {
-	    font-size: 19px;
-	    margin-bottom: 6px;
-	    font-weight: bold;
-		}
-		#twitter-widget-0, .fb_iframe_widget {
-			float: right;
-			clear: both;
-			margin-bottom: 38px;
-		}
-	</style>
+	<!-- Meta information -->
 	<meta property="og:url" content="https://recipesavertest.herokuapp.com/blog/its-here-recipe-saver-2-debuts">
 	<meta property="og:type" content="article">
 	<meta property="og:title" content="It's Here! Recipe Saver 2.0 Debuts">
 	<meta property="og:description" content="Start using the redesigned application today">
 	<meta property="og:image" content="https://recipesavertest.herokuapp.com/images/blog/recipe-saver-2-has-arrived.jpg">
+
 </head>
 <body>
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '264292990672562',
-      xfbml      : true,
-      version    : 'v2.8'
-    });
-    FB.AppEvents.logPageView();
-  };
+	<!-- Header -->
+	<% include ./partials/header %>
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+	<div id="wrapper">
 
-
-	<div id="top-bar">
-		<ul id="nav">
-			<li id="recipes"><a href="/recipes">My Recipes</a></li>
-			<li><a href="#">Chrome Extension</a></li>
-			<li class="active-menu"><a href="/blog">Blog</a></li>
-			<li><a href="#">About</a></li>
-			<li id="support"><a href="#">Support</a></li>
-
-			<li id="logout"><a href="#">Logout</a></li>
-			<li id="account"><a href="/account">Account</a></li>
-		</ul>
-	</div>
-	<article>
-		<div id="article-top">
-			<div id="article-top-inner">
-				<div class="date">February 25, 2017</div>
-				<h1 class="title">It's Here! Recipe Saver 2.0 Debuts</h1>
-				<div id="categories-and-share">
-					<ul class="categories">
-						<li class="static">categories</li>
-						<li><a href="#">annoucements</a></li>
-						<li><a href="#">featured</a></li>
-					</ul>
-					<ul class="share">
-						<li class="static">share</li>
-						<li id="facebook">
-							<a id="facebook-link" href="#" target="_blank">
-								<svg width="20" height="20" viewBox="0 0 32 32">
-									<path d="M8 12 L13 12 L13 8 C13 2 17 1 24 2 L24 7 C20 7 19 7 19 10 L19 12 L24 12 L23 18 L19 18 L19 30 L13 30 L13 18 L8 18 z "></path>
-								</svg>
-							</a>
-						</li>
-						<li id="twitter">
-							<a id="twitter-link" href="" target="_blank">
-								<svg width="20" height="20" viewBox="0 0 32 32">
-									<path d="M2 4 C6 8 10 12 15 11 A6 6 0 0 1 22 4 A6 6 0 0 1 26 6 A8 8 0 0 0 31 4 A8 8 0 0 1 28 8 A8 8 0 0 0 32 7 A8 8 0 0 1 28 11 A18 18 0 0 1 10 30 A18 18 0 0 1 0 27 A12 12 0 0 0 8 24 A8 8 0 0 1 3 20 A8 8 0 0 0 6 19.5 A8 8 0 0 1 0 12 A8 8 0 0 0 3 13 A8 8 0 0 1 2 4 "></path>
-								</svg>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div id="article-main">
-			<img class="image" src="/images/blog/recipe-saver-2-has-arrived.jpg">
-			<div id="article-main-inner">
-				<div id="author-information">
-					<img id="author-icon" src="/images/blog/author-bill-coloe.jpg">
-					<div class="author-title-text">
-						<span class="author">Bill Coloe</span>
-						<span class="author-title">Founder</span>
+		<article>
+			<div id="article-top">
+				<div id="article-top-inner">
+					<div class="date">February 25, 2017</div>
+					<h1 class="title">It's Here! Recipe Saver 2.0 Debuts</h1>
+					<div id="categories-and-share">
+						<ul class="categories">
+							<li class="static">categories</li>
+							<li><a href="#">annoucements</a></li>
+							<li><a href="#">featured</a></li>
+						</ul>
+						<ul class="share">
+							<li class="static">share</li>
+							<li id="facebook">
+								<a id="facebook-link" href="#" target="_blank">
+									<svg width="20" height="20" viewBox="0 0 32 32">
+										<path d="M8 12 L13 12 L13 8 C13 2 17 1 24 2 L24 7 C20 7 19 7 19 10 L19 12 L24 12 L23 18 L19 18 L19 30 L13 30 L13 18 L8 18 z "></path>
+									</svg>
+								</a>
+							</li>
+							<li id="twitter">
+								<a id="twitter-link" href="" target="_blank">
+									<svg width="20" height="20" viewBox="0 0 32 32">
+										<path d="M2 4 C6 8 10 12 15 11 A6 6 0 0 1 22 4 A6 6 0 0 1 26 6 A8 8 0 0 0 31 4 A8 8 0 0 1 28 8 A8 8 0 0 0 32 7 A8 8 0 0 1 28 11 A18 18 0 0 1 10 30 A18 18 0 0 1 0 27 A12 12 0 0 0 8 24 A8 8 0 0 1 3 20 A8 8 0 0 0 6 19.5 A8 8 0 0 1 0 12 A8 8 0 0 0 3 13 A8 8 0 0 1 2 4 "></path>
+									</svg>
+								</a>
+							</li>
+						</ul>
 					</div>
 				</div>
-				<div id="article-text">
-					<p class="emphasize">Dear Recipe Saver Friends,</p>
+			</div>
+			<div id="article-main">
+				<img class="image" src="/images/blog/recipe-saver-2-has-arrived.jpg">
+				<div id="article-main-inner">
+					<div id="author-information">
+						<img id="author-icon" src="/images/blog/author-bill-coloe.jpg">
+						<div class="author-title-text">
+							<span class="author">Bill Coloe</span>
+							<span class="author-title">Founder</span>
+						</div>
+					</div>
+					<div id="article-text">
+						<p class="emphasize">Dear Recipe Saver Friends,</p>
 
-					<p>I'm extremely excited to introduce the latest version of Recipe Saver!</p>
+						<p>I'm extremely excited to introduce the latest version of Recipe Saver!</p>
 
-					<p>It's been about 2 years since I first launched this website which at the time, was a simple side project that I created to make saving online recipes easier for myself. After offering it free to the public, I was blown away over how many people had signed up to use my silly little application to save their favorite recipes as well. Since then, I knew I could offer more.</p>
+						<p>It's been about 2 years since I first launched this website which at the time, was a simple side project that I created to make saving online recipes easier for myself. After offering it free to the public, I was blown away over how many people had signed up to use my silly little application to save their favorite recipes as well. Since then, I knew I could offer more.</p>
 
-					<p class="emphasize">Rest assured, everything you know and love about Recipe Saver 1.0 is included and/or made even better in 2.0!</p>
+						<p class="emphasize">Rest assured, everything you know and love about Recipe Saver 1.0 is included and/or made even better in 2.0!</p>
 
-					<ul>
-						<li>Save any recipe (online or offline) to your personal recipe collection</li>
-						<li>Automatically post recipes to your account with our Chrome extension</li>
-						<li>Add tags to easily categorize your recipes</li>
-						<li>Quick search your collection with our new quick finder</li>
-						<li>Favorite the recipes that you love the most</li>
-						<li>Sort by name, date added, or tag</li>
-						<li>Include serving sizes, calories, and adjust portions</li>
-						<li>Print recipes with an ad-free page layout</li>
-					</ul>
+						<ul>
+							<li>Save any recipe (online or offline) to your personal recipe collection</li>
+							<li>Automatically post recipes to your account with our Chrome extension</li>
+							<li>Add tags to easily categorize your recipes</li>
+							<li>Quick search your collection with our new quick finder</li>
+							<li>Favorite the recipes that you love the most</li>
+							<li>Sort by name, date added, or tag</li>
+							<li>Include serving sizes, calories, and adjust portions</li>
+							<li>Print recipes with an ad-free page layout</li>
+						</ul>
 
-					[Old Version vs. New Version]
+						[Old Version vs. New Version]
 
-					<p>And for those of you who REALLY love Recipe Saver, I'd love to invite you to subscribe to our Full Plan so you can take advantage of our premium features such as a limitless amount of recipes, sharing, and more!</p>
+						<p>And for those of you who REALLY love Recipe Saver, I'd love to invite you to subscribe to our Full Plan so you can take advantage of our premium features such as a limitless amount of recipes, sharing, and more!</p>
 
-					<p>Lastly, we'd love to hear from you about our new design. Be sure to let us know if you have any special feature requests you'd like to see in the future.</p>
+						<p>Lastly, we'd love to hear from you about our new design. Be sure to let us know if you have any special feature requests you'd like to see in the future.</p>
 
-					<p>Sincerely,<br>
-					Bill Coloe<br></p>
+						<p>Sincerely,<br>
+						Bill Coloe<br></p>
+					</div>
+				</div>
+
+				<div id="disqus">
+					<div id="disqus_thread"></div>
+					<script>
+						/**
+						*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+						*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+						/*
+						var disqus_config = function () {
+						this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+						this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+						};
+						*/
+						(function() { // DON'T EDIT BELOW THIS LINE
+						var d = document, s = d.createElement('script');
+						s.src = '//recipesaver.disqus.com/embed.js';
+						s.setAttribute('data-timestamp', +new Date());
+						(d.head || d.body).appendChild(s);
+						})();
+					</script>                      
 				</div>
 			</div>
+		</article>
 
-			<div id="disqus">
-				<div id="disqus_thread"></div>
-				<script>
-					/**
-					*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-					*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-					/*
-					var disqus_config = function () {
-					this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-					this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-					};
-					*/
-					(function() { // DON'T EDIT BELOW THIS LINE
-					var d = document, s = d.createElement('script');
-					s.src = '//recipesaver.disqus.com/embed.js';
-					s.setAttribute('data-timestamp', +new Date());
-					(d.head || d.body).appendChild(s);
-					})();
-				</script>                      
-			</div>
-		</div>
-	</article>
-
-	<footer>
-
-		<div id="footer-inner">
-			<div id="footer-inner-left">
-				<div class="logo">
-					<img src="../images/logo-white-circle.png">
-					<span class="logo-text">Recipe Saver</span>
-					<div class="tagline">Any recipe, anywhere</div>
-				</div>
-
-				<ul id="footer-links">
-					<li><a href="/recipes">My Recipes</a></li>
-					<li><a href="#">Chrome Extension</a></li>
-					<li><a href="/blog">Blog</a></li>
-					<li><a href="#">About</a></li>
-					<li><a href="#">Support</a></li>
-					<li><a href="#">Logout</a></li>
-					<li><a href="/account">Account</a></li>
-				</ul>
-			</div>
-			<div id="footer-inner-right">
-
-				<div class="twitter-follow">
-					<div class="follow-us">Follow Us</div>
-					<a href="https://twitter.com/RecipeSaver" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @RecipeSaver</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-				</div>
-
-				<div class="facebook-like-share">
-					<div class="like-us">Like Us</div>
-					<div class="fb-like" data-href="https://www.facebook.com/Recipe-Saver-1832559400339822" data-layout="button" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
-				</div>
-
-				<div class="contact">
-					<div class="like-us">Contact Us</div>
-					<div class="email">info@recipesaver.net</div>
-				</div>
-			</div>
-		</div>
-
-	</footer>
-	<div id="copyright">
-		<div id="copyright-inner">
-			<div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
-			<div id="recipesaver">&copy; 2017 Recipe Saver</div>
-		</div>
 	</div>
 
-	<!-- Make Facebook and Twitter buttons link to the correct page -->
+	<!-- Footer -->
+	<% include ./partials/footer %>
+
 	<script>
+		// Mark active header menu
+		document.getElementById('blog').className = 'active-menu';
+
+		// Make Facebook and Twitter buttons link to the correct page
 		document.getElementById('facebook-link').addEventListener('click', function(e) {
 			e.preventDefault();
 			FB.ui({

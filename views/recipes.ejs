@@ -2,14 +2,12 @@
 <html>
 <head>
 	<title>My Recipes | Recipe Saver</title>
-	<script src="js/jquery.min.js"></script>
-	<script src="support.js" async></script>
+
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Cabin:600" rel="stylesheet">
 	<link href="/css/universal.css" rel="stylesheet">
 	<link href="/css/print.css" rel="stylesheet">
-	<script src='https://www.google.com/recaptcha/api.js' async></script>
 	<style>
 		html, body {
 			height: 100%;
@@ -197,7 +195,7 @@
 			border: solid 1px black;
 			width: 225px;
 			float: left;
-			background-color: rgba(22, 22, 22, 0.9);;
+			background-color: rgba(22, 22, 22, 0.95);;
 			height: 100vh;
 			box-sizing: border-box;
 		}
@@ -565,6 +563,7 @@
 			top: 4px;
 		}
 		#search-row {
+			display: block;
 			height: 44px;
 			position: relative;
 		}
@@ -852,37 +851,12 @@
 		</ul>
 	</div>
 
-	<div id="top-bar">
 
-		<ul id="nav">
-			<li class="active-menu"><a href="/recipes">My Recipes</a></li>
-			<li><a href="#">Chrome Extension</a></li>
-			<li><a href="/blog">Blog</a></li>
-			<li><a href="#">About</a></li>
-			<li id="support"><a href="#">Support</a></li>
+	<!-- Header -->
+	<% include ./partials/header %>
 
-			<li id="logout"><a href="#">Logout</a></li>
-			<li id="account"><a href="/account">Account</a></li>
-		</ul>
-
-		<div id="search-row">
-			<form id="search-form">
-				<span id="search-icon"></span>
-				<input type="text" placeholder="Search Recipes" id="search-form-input" autocomplete="off">
-			</form>
-		</div>
-		<div id="search-suggestions" class="box">
-			<ul>
-			</ul>
-		</div>
-
-
-	</div>
 
 	<div id="profile">
-
-
-
 
 		<!-- List Panel -->
 		<div id="list-panel" class="singular">
@@ -1053,43 +1027,6 @@
 		<li class="tag-color-selection" data-color="#000000" style="background-color: #000000;">black</li>
 	</ul>
 
-	<!-- Support Contact Form -->
-	<div id="support-modal">
-		<svg class="close" viewBox="0 0 32 32" style="float: right;">
-			<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
-		</svg>
-		<div id="support-init">
-			<h3 class="support-modal-title">
-				Ask us a question
-			</h3>
-			<div class="support-modal-info">
-				Questions? Comments? Complaints? Let us know how we can help you. Please allow approximately 24 - 48 hours for a response.
-			</div>
-			<form id="support-form" action='/support' method="post">
-				<label>NAME *</label>
-				<input type="text" name="name" id="support-name" placeholder="e.g., Jane Smith">
-				<label>EMAIL *</label>
-				<input type="email" name="email" id="support-email" placeholder="name@email.com">
-				<label>SUBJECT *</label>
-				<input type="text" name="subject" id="support-subject" placeholder="Brief description of your question">
-				<label>DETAILS *</label>
-				<textarea id="support-message" placeholder="What can we help you with?"></textarea>
-				<input type="submit" id="support-submit" class="button" value="Submit">
-				<div id="support-recaptcha" class="g-recaptcha" data-sitekey="6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc"></div>
-				<div id="support-recaptcha-error"></div>
-			</form>
-		</div>
-		<div id="support-sucess">
-			<h3 class="support-modal-title">
-				Success!
-			</h3>
-			<div class="support-modal-info">
-				Your message has been sent. Please allow approximately 24 - 48 hours for a response.
-			</div>
-		</div>
-	</div>
-	<div id="support-overlay"></div>
-
 
 	<script src="main.js"></script>
 	<script src="edit.js"></script>
@@ -1098,9 +1035,13 @@
 	<script src="fraction.js"></script>
 	<script src="moment.js"></script>
 	<script>
+		// Mark active header menu
+		document.getElementById('recipes').className = 'active-menu';
+
 		// Save global reference to recipes so we can find retrieve them wit search
 		window.recipes = <%- JSON.stringify(recipes) %>;
 	</script>
+
 </body>
 </html>
 
