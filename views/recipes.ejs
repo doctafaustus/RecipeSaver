@@ -651,10 +651,10 @@
 			margin-right: 10px;
 		}
 		#detail-icons li div.icons {
-			width: 23px;
-			height: 23px;
+			width: 26px;
+			height: 25px;
 			display: inline-block;
-			background-size: 23px;
+    	background-repeat: no-repeat;
 		}
 		#detail-icons span.icon-label, #servings {
 			margin-right: 5px;
@@ -664,15 +664,6 @@
 			color: #888888;
 		}
 
-		#cal-icon {
-			background: url(images/graph-sprite.png) 0 0;
-		}
-		#cal-icon.editable:hover, #cal-icon.active.editable {
-			background: url(images/graph-sprite.png) 0 0px/23px;
-		}
-		#cal-icon.editable {
-			background: url(images/graph-sprite.png) 0 23px/23px;
-		}
 		#cal-icon.editable, #clock-icon.editable, #portion-icon.editable {
 			cursor: pointer;
 		}
@@ -725,24 +716,26 @@
 		.edit-recipe #detail-options-dropdown {
 			display: none !important;
 		}
-		#clock-icon {
-			background: url(images/clock-sprite.png) 0 0;
-		}
-		#clock-icon.editable {
-			background: url(images/clock-sprite.png) 0 23px/23px;
-		}
-		#clock-icon.editable:hover, #clock-icon.active.editable {
-			background: url(images/clock-sprite.png) 0 0/23px;
-		}
+
 		#portion-icon {
-			background: url(images/portion-sprite.png) 0 0;
+			background: url(images/portion-sprite.png) 0 0 no-repeat;
 		}
-		#portion-icon.editable {
-			background: url(images/portion-sprite.png) 0 23px/23px;
+		#clock-icon {
+			background: url(images/clock-sprite.png) 0 0 no-repeat;
 		}
-		#portion-icon.editable:hover, #portion-icon.editable.active {
-			background: url(images/portion-sprite.png) 0 0/23px;
+		#cal-icon {
+			background: url(images/cal-sprite.png) 0 0 no-repeat;
+		} 
+		#detail-icons li div.icons#portion-icon.editable {
+			background: url(images/portion-sprite.png) 0 -24px no-repeat;
 		}
+		#detail-icons li div.icons#clock-icon.editable {
+			background: url(images/clock-sprite.png) 0 -24px no-repeat;
+		}
+		#detail-icons li div.icons#cal-icon.editable {
+			background: url(images/cal-sprite.png) 0 -24px no-repeat;
+		}
+		
 		.converted {
 			color: #1AAFD0;
 		}

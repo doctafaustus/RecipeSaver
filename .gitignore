@@ -5,7 +5,8 @@
 node_modules/
 npm-debug.log
 
-/graphics
+
+/public/images/graphics
 *.psd
 
 /private
