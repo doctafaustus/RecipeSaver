@@ -357,19 +357,23 @@
 			display: none;
 		}
 		#detail-options {
-			background: url(images/plus-sprite.png) 0 -23px;
+			background: url(images/plus-sprite.png) 0 -24px;
 			background-repeat: no-repeat;
-			width: 23px;
-			height: 24px;
+			width: 26px;
+			height: 25px;
 			cursor: pointer;
 			float: left;
 		}
 		#detail-options:hover {
-			background: url(images/plus-sprite.png) 0 0px;
+			background: url(images/plus-sprite.png) 0 1px;
 			background-repeat: no-repeat;
 		}
 		#detail-options.active {
-			background: url(images/plus-sprite.png) 0 0px;
+			background: url(images/plus-sprite.png) 0 1px;
+			background-repeat: no-repeat;
+		}
+		.edit-recipe #detail-options {
+			background: url(images/plus-sprite.png) 0 1px;
 			background-repeat: no-repeat;
 		}
 		.add-recipe #detail-options {
@@ -720,10 +724,6 @@
 		}
 		.edit-recipe #detail-options-dropdown {
 			display: none !important;
-		}
-		.edit-recipe #detail-options {
-			background: url(images/plus-sprite.png) 0 0px;
-			background-repeat: no-repeat;
 		}
 		#clock-icon {
 			background: url(images/clock-sprite.png) 0 0;
