@@ -4,9 +4,14 @@ var Strategy = require('passport-twitter').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-//var Unitz = require('unitz');
+var fs = require('fs');
 
+// CUSTOM MODULES
+var emailSupport = require('./mods/emailSupport.js');
+
+//var Unitz = require('unitz');
 //console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
+
 
 passport.use(new Strategy({
     consumerKey: 'sujQmls5lvQVViAog5HTmNr6Z',
@@ -51,20 +56,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-
-// Define routes.
-// app.get('/',
-//   function(req, res) {
-//     res.render('home', { user: req.user });
-//   });
-
-// app.get('/login',
-//   function(req, res){
-//     res.render('login');
-//   });
-
-
 function loggedIn(req, res, next) {
   if (req.user) {
     console.log('yes');
@@ -90,11 +81,6 @@ app.get('/checklogin', /*loggedIn,*/ function(req, res) {
 
 
 
-// app.get('/recipes', function(req, res) {
-// 	console.log('/recipes');
-// 	res.json(recipes);
-// });
-
 
 
 app.get('/', function(req, res) {
@@ -112,6 +98,11 @@ app.get('/blog', function(req, res) {
 app.get('/blog/its-here-recipe-saver-2-debuts', function(req, res) {
   res.render('its-here-recipe-saver-2-debuts.ejs');
 });
+
+
+// Email support form
+app.post('/support', emailSupport);
+
 
 
 app.get('/recipes', function(req, res) {

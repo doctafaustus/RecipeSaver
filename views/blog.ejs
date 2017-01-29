@@ -154,16 +154,125 @@
 	    padding: 5px 10px;
 	    color: white;
 		}
+
+		#copyright {
+			background-color: #23d82f;
+			color: white;
+			font-size: 14px;
+		}
+		#copyright-inner {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 30px;
+			width: 800px;
+			margin: 0 auto;
+		}
+		footer {
+			margin-top: 55px;
+			background-color: #066b9a;
+	    color: white;
+		}
+		#footer-inner {
+			width: 800px;
+			margin: 0 auto;
+			padding: 30px 0;
+			overflow: auto;
+		}
+		#footer-inner-left {
+			width: 50%;
+			float: left;
+		}
+		#footer-inner-right {
+			width: 50%;
+			float: right;
+		}
+		.logo {
+	    font-family: 'Cabin', sans-serif;
+		}
+		.logo img {
+			display: block;
+			float: left;
+		}
+		.logo-text {
+	    float: left;
+	    margin-top: 6px;
+	    margin-left: 8px;
+	    font-size: 25px;
+	    letter-spacing: 1px;
+	    display: inline-block;
+		}
+		.tagline {
+	    display: inline-block;
+	    float: left;
+	    clear: both;
+	    margin-top: 11px;
+	    font-weight: inherit
+		}
+		#footer-links {
+			clear: both;
+			margin-top: 25px;
+			float: left;
+		}
+		#footer-links li {
+			margin-bottom: 4px;
+		}
+		#footer-links li a {
+			color: #dedede;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		#footer-links li a:hover {
+			text-decoration: underline;
+		}
+		.twitter-follow {
+			clear: both;
+			margin-top: 7px;
+		}
+		.follow-us, .like-us, .contact {
+			float: right;
+			text-align: right;
+			clear: both;
+		}
+		.follow-us, .like-us {
+	    font-size: 19px;
+	    margin-bottom: 6px;
+	    font-weight: bold;
+		}
+		#twitter-widget-0, .fb_iframe_widget {
+			float: right;
+			clear: both;
+			margin-bottom: 38px;
+		}
 	</style>
 </head>
 <body>
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '264292990672562',
+	      xfbml      : true,
+	      version    : 'v2.8'
+	    });
+	    FB.AppEvents.logPageView();
+	  };
+
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/sdk.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	</script>
+
 	<div id="top-bar">
 		<ul id="nav">
 			<li id="recipes"><a href="/recipes">My Recipes</a></li>
 			<li><a href="#">Chrome Extension</a></li>
 			<li class="active-menu"><a href="/blog">Blog</a></li>
 			<li><a href="#">About</a></li>
-			<li id="feedback"><a href="#">Feedback</a></li>
+			<li id="support"><a href="#">Support</a></li>
 
 			<li id="logout"><a href="#">Logout</a></li>
 			<li id="account"><a href="/account">Account</a></li>
@@ -202,8 +311,52 @@
 				<li><a href="/blog/announcements">announcements</a></li>
 			</ul>
 		</aside>
-
-
 	</section>
+
+	<footer>
+		<div id="footer-inner">
+			<div id="footer-inner-left">
+				<div class="logo">
+					<img src="../images/logo-white-circle.png">
+					<span class="logo-text">Recipe Saver</span>
+					<div class="tagline">Any recipe, anywhere</div>
+				</div>
+
+				<ul id="footer-links">
+					<li><a href="/recipes">My Recipes</a></li>
+					<li><a href="#">Chrome Extension</a></li>
+					<li><a href="/blog">Blog</a></li>
+					<li><a href="#">About</a></li>
+					<li><a href="#">Support</a></li>
+					<li><a href="#">Logout</a></li>
+					<li><a href="/account">Account</a></li>
+				</ul>
+			</div>
+			<div id="footer-inner-right">
+
+				<div class="twitter-follow">
+					<div class="follow-us">Follow Us</div>
+					<a href="https://twitter.com/RecipeSaver" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @RecipeSaver</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+				</div>
+
+				<div class="facebook-like-share">
+					<div class="like-us">Like Us</div>
+					<div class="fb-like" data-href="https://www.facebook.com/Recipe-Saver-1832559400339822" data-layout="button" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+				</div>
+
+				<div class="contact">
+					<div class="like-us">Contact Us</div>
+					<div class="email">info@recipesaver.net</div>
+				</div>
+			</div>
+		</div>
+
+	</footer>
+	<div id="copyright">
+		<div id="copyright-inner">
+			<div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
+			<div id="recipesaver">&copy; 2017 Recipe Saver</div>
+		</div>
+	</div>
 </body>
 </html>

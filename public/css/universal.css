@@ -1,0 +1,111 @@
+/* --- Support Modal --- */
+#support-modal, #support-overlay, #support-sucess {
+	display: none;
+}
+#support-modal {
+  position: fixed;
+  width: 575px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 35px;
+  z-index: 6;
+  background-color: white;
+	border-radius: 3px 3px 3px 3px;
+  border: 1px solid #B9BCC0;
+  box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+#support-modal h3 {
+	font-size: 28px;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 25px;
+}
+.support-modal-info {
+	margin-bottom: 25px;
+}
+#support-form label {
+	display: block;
+	color: #898e95;
+	margin-bottom: 7px;
+}
+#support-form input[type="text"], #support-form input[type="email"], #support-form textarea {
+	width: 100%;
+	border: solid 1px #54d654;
+	font-size: 16px;
+	padding-left: 10px;
+	margin-bottom: 20px;
+	box-sizing: border-box;
+}
+#support-form input[type="text"]:hover, #support-form input[type="email"]:hover, #support-form textarea:hover {
+	border: solid 1px #089de3;
+}
+#support-form input[type="text"], #support-form input[type="email"] {
+	height: 34px;
+}
+#support-form textarea {
+	font-family: Arial;
+	padding-top: 10px;
+	min-height: 170px;
+}
+#support-recaptcha {
+  display: inline-block;
+  float: left;
+}
+#support-submit {
+	border: 0;
+	font-size: 17px;
+	float: right;
+}
+#support-recaptcha-error {
+	display: none;
+	color: red;
+	clear: both;
+	padding-top: 10px;
+}
+#support-overlay {
+  position: fixed;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+
+/* --- Close Button --- */
+.close {
+	width: 20px;
+	fill: #b9b8b8;
+	cursor: pointer;
+	margin-left: 12px;
+	align-self: flex-start;
+}
+.close:hover {
+	fill: #23d82f;
+}
+
+
+/* --- Buttons --- */
+.button {
+	width: 167px;
+	text-align: center;
+	border-radius: 4px;
+	height: 32px;
+	line-height: 32px;
+	font-size: 18px;
+	cursor: pointer;
+  background: #089de3;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+}
+.button:hover {
+  background: #23d82f;
+}
