@@ -200,18 +200,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	$('#detail-options-dropdown').hide();
 		  	$('#detail-new-ingredient-input').html('');
 		  	
-		  	var $successBox = $('#success-box');
-
-		  	$successBox.find('#success-message-recipe').text($('#detail-name').text());
-		  	$successBox.find('#sucess-message-text').text('has been added to your collection');
-		  	$successBox.addClass('temp-height');
-		  	$successBox.animate({width:'toggle'}, 425, function() {
-		  		setTimeout(function() {
-		  			$successBox.fadeOut(3000);
-		  			$successBox.removeClass('temp-height');
-		  		}, 4000);
-		  	});
-
+		  	window.showSuccessBox($('#detail-name').text(), 'has been added to your collection');
 		  }
 
 		});
@@ -219,10 +208,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 });
 
 
-// Success box close
-$('#success-box .close').click(function() {
-	$('#success-box').hide().removeClass('temp-height');
-});
 
 function resetRecipeState() {
 	$('#detail-description, #detail-name').attr('contenteditable', false);
@@ -249,21 +234,6 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
 	// Show new tag input
 	$('#detail-new-tag-input').attr('style', 'display: inline-block;');
 
-	$.fn.setCursorPosition = function (pos) {
-    this.each(function (index, elem) {
-        if (elem.setSelectionRange) {
-            elem.setSelectionRange(pos, pos);
-        } else if (elem.createTextRange) {
-            var range = elem.createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', pos);
-            range.moveStart('character', pos);
-            range.select();
-        }
-    });
-    return this;
-};
-	
 	var $newTag = $('#new-tag');
 	$newTag.focus();
 
@@ -310,4 +280,119 @@ function checkUniqueTag(tagName) {
 // Remove tag
 $('#profile').on('click', '.tag-close', function(e) {
 	$(this).closest('.tag').remove();
+});
+
+
+
+/* --- Artificially change values for Servings, Time, and Calories --- */
+$('#profile').on('click', '.icons', function() {
+	var $el = $(this);
+	var $dropdown;
+	var servingsInputChanged = false;
+	var timeInputChanged = false;
+	var calInputChanged = false;
+
+	if (!$el.hasClass('editable')) {
+		return;
+	}
+
+	switch($el.attr('id')) {
+		case 'portion-icon':
+			$dropdown = $('#portion-dropdown-2');
+			break;
+		case 'clock-icon':
+			$dropdown = $('#clock-dropdown');
+			break;
+		case 'cal-icon':
+		  $dropdown = $('#cal-dropdown');
+		  break;
+	}
+
+	$el.addClass('active');
+
+	$('#serving-input').one('keyup change', function() {
+		servingsInputChanged = true;
+	});
+	$('#mins-input').one('keyup change', function() {
+		timeInputChanged = true; 
+	});
+	$('#cals-input').one('keyup change', function() {
+		calInputChanged = true; 
+	});
+
+	$('#serving-input, #mins-input, #cals-input').on('keyup.temp', function(e) {
+	  if (e.which == 13) {
+	    $(this).off('keyup.temp');
+	    // Let the proceeding slideDown function take care of populating the values
+	    $('body').trigger('click');
+	    return false;
+		}
+	});
+
+
+	$dropdown.slideDown('fast', function() {
+		$('body').on('click.id', function(e) {
+			var container = $dropdown;
+  		if (!container.is(e.target) && container.has(e.target).length === 0) {
+      	container.hide();
+      	$('#portion-num').val('');
+      	$('body').unbind('click.id');
+      	$el.removeClass('active');
+
+      	if (servingsInputChanged) {
+					var value = $('#serving-input').val().length ? $('#serving-input').val() : $('#servings').html().match(/\d/)[0];
+					$('#servings').html(value);
+      	}
+      	if (timeInputChanged) {
+      		var value = $('#mins-input').val().length ? $('#mins-input').val() : 0;
+      		$('#mins').html(window.convertMinsToHours(value));
+      		// var value = $('#mins-input').val().length ? convertMinsToHours($('#mins-input').val()) : 0;
+      		// $('#mins').html(value);
+      	}
+      	if (calInputChanged) {
+      		var value = $('#cals-input').val().length ? $('#cals-input').val() : 0;
+      		$('#cals').html(value + ' cals');
+      	}
+  		}
+		});
+	});
+
+});
+
+
+
+// Delete recipe
+$('#profile').on('click', '#delete-recipe', function(e) {
+	$('#detail-options').trigger('click');
+	var id = $('#detail-id').text();
+
+	$.ajax({
+		type: 'POST',
+	  url: '/delete-recipe',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  data: {id: id},
+	  success: function(data) {
+	  	console.log('Recipe deleted!');
+
+	  	
+			$('#detail-description').append('<div id="detail-message-overlay"><div id="detail-message-overlay-inner">Recipe deleted</div></div>');
+
+	  	// Show "Recipe deleted" overlay
+	  	$('#detail-message-overlay').fadeIn('slow');
+	  	// Refresh recipe list to reflect delete
+	  	window.refreshRecipeList();
+
+	  	// Show success box
+	  	var $successBox = $('#success-box');
+	  	$successBox.find('#success-message-recipe').text($('#detail-name').text());
+	  	$successBox.find('#sucess-message-text').text('has been deleted');
+	  	$successBox.addClass('temp-height');
+	  	$successBox.animate({width:'toggle'}, 425, function() {
+	  		setTimeout(function() {
+	  			$successBox.fadeOut(3000);
+	  			$successBox.removeClass('temp-height');
+	  		}, 4000);
+	  	});
+	  }
+	});
 });
