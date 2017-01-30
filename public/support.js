@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-	console.log('Support form script active');
-
 	// Open support modal
 	$('#support a, #support-footer a').click(function(e) {
 		e.preventDefault();

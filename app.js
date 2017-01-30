@@ -154,6 +154,7 @@ app.post('/recipe-update', function(req, res) {
   }
 
 
+  console.log(req.body.id);
   var recipeToUpdate = getRecipe(req.body.id);
 
   // Update recipe name
@@ -460,16 +461,3 @@ var recipes = [
     favorite: true,
   },
 ];
-
-
-/* TO DO
-
-Disallow the same tag to be added twice on the same recipe
-
-Convert ingredients that can be converted
-https://www.npmjs.com/package/unitz
-
-.25x, .5x, 1x, 2x, 4x
-
-*/
-
