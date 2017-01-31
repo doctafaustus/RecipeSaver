@@ -461,3 +461,7 @@ var recipes = [
     favorite: true,
   },
 ];
+
+
+/* --- TO DO ---*/
+// Reset function for editing to revert data

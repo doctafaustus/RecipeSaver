@@ -202,11 +202,19 @@
 		#add-recipe {
 			margin: 60px auto 60px auto;
 		}
-		#save-recipe {
+		#save-recipe, #cancel-recipe {
+			display: none;
 			margin-top: 25px;
 		}
 		#save-recipe {
-			display: none;
+			float: left;
+		}
+		#cancel-recipe {
+			background-color: #bbbbbb;
+			float: right;
+		}
+		#cancel-recipe:hover {
+			background-color: #23d82f;
 		}
 		#menu {
 			margin: 0;
@@ -996,6 +1004,8 @@
 
 				<!-- Recipe Save Button -->
 				<div id="save-recipe" class="button">Save</div>
+				<!-- Recipe Cancel Button -->
+				<div id="cancel-recipe" class="button">Cancel</div>
 			</div>
 		</div>
 	</div>

@@ -82,7 +82,6 @@ window.fadeSuccessBox = function() {
 	}, 1000);
 };
 
-
 window.populatePanel = function(id, fromDatabase) {
 
 	if (fromDatabase) {
@@ -97,6 +96,28 @@ window.populatePanel = function(id, fromDatabase) {
 		var data = getRecipe(id);
 		populatePanelSuccess(data);
 	}
+};
+
+window.clearDetailPanel = function() {
+	$('#detail-name, #detail-description, #detail-ingredients, #detail-id').html('');
+	$('#detail-link-editable, #serving-input, #mins-input, #cals-input, #new-tag').val('');
+	$('#detail-new-ingredient-input').show().html('');
+	$('#detail-tag-list li:not(#detail-new-tag-input)').remove();
+	$('#detail-new-tag-input').hide();
+	$('#detail-link').attr('href', '#').html('');
+	$('#servings').html('1');
+	$('#mins').html('1m');
+	$('#cals').html('0 cals');
+};
+
+window.singleLeftPanel = function() {
+	$('.detail-recipe').removeClass('singular');
+	$('#list-panel').addClass('singular').animate({width: 'show'}, 190);
+};
+
+window.singleRightPanel = function() {
+	$('.detail-recipe').addClass('singular');
+	$('#list-panel').removeClass('singular').animate({width: 'hide'}, 190);
 };
 
 function populatePanelSuccess(data) {
@@ -218,11 +239,12 @@ function adjustPanels(forScreenSize) {
 
 	switch(window.stage) {
 		case 'Add recipe':
-			if ($listPanel.is(':visible')) {
-				$listPanel.hide();
-				$detailPanel.addClass('singular');
-				$fullScreenMenuItem.html('Exit Full Screen').addClass('exit');
-			}
+		window.singleRightPanel();
+			// if ($listPanel.is(':visible')) {
+			// 	$listPanel.hide();
+			// 	$detailPanel.addClass('singular');
+			// 	$fullScreenMenuItem.html('Exit Full Screen').addClass('exit');
+			// }
 			break;
 		case 'View recipe':
 			if (!$detailPanel.is(':visible')) {
@@ -275,7 +297,7 @@ function changeStage(state) {
 // Reset changes made by clicking "Edit Recipe"
 function resetEdit() {
 	$('.icons').removeClass('editable');
-	$('#save-recipe').hide();
+	$('#save-recipe, #cancel-recipe').hide();
 	$('#detail-description, #detail-name').attr('contenteditable', false);
 	$('#detail-new-ingredient-input').hide();
 	if ($('.ui-sortable').length) {

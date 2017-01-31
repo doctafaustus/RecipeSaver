@@ -7,7 +7,7 @@ function createIngredientInputs() {
 
 function resetRecipeState() {
 	$('#detail-description, #detail-name').attr('contenteditable', false);
-	$('#save-recipe').hide();
+	$('#save-recipe, #cancel-recipe').hide();
 	$('#detail-ingredients').sortable('destroy');
 	$('#detail-new-ingredient-input').hide();
 }
@@ -50,24 +50,8 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	} else if (editOrAdd === 'add-recipe') {
 		console.log('Setting up for new recipe');
 		window.urlSizeFix();
-		// Clear id
-		$('#detail-id').html('');
-		// Clear tags
-		$('.tag').remove();
-		// Clear url
-		$('#detail-link-editable').val('');
-		// Clear name
-		$('#detail-name').html('');
-		// Clear ingredients
-		$('.ingredient').remove();
-		// Show new ingredient input and clear it
-		$('#detail-new-ingredient-input').show().text('');
-		// Clear description
-		$('#detail-description').html('');
-		// Clear top icon values to defaults
-		$('#servings').html('1');
-		$('#mins').html('0m');
-		$('#cals').html('0 cals');
+		window.clearDetailPanel();
+		$('#cancel-recipe').show(); // Note that this should NOT appear for editing
 	}
 
 	// Add class to top icons so that they can be editable
@@ -224,6 +208,12 @@ $('#profile').on('click', '#save-recipe', function(e) {
 });
 
 
+// Cancel new recipe
+$('#profile').on('click', '#cancel-recipe', function() {
+	window.clearDetailPanel();
+	window.singleLeftPanel();
+});
+
 
 
 
@@ -350,6 +340,7 @@ $('#profile').on('click', '.icons', function() {
       		var value = $('#cals-input').val().length ? $('#cals-input').val() : 0;
       		$('#cals').html(value + ' cals');
       	}
+      	$('#serving-input, #mins-input, #cals-input').val('');
   		}
 		});
 	});
