@@ -1,4 +1,18 @@
 /* --- Helper Functions --- */
+function saveOriginalRecipe() {
+	var recipe = {
+		title: $('#detail-name').html(),
+		ingredients: $.makeArray($('.ingredient').map(function() { return $(this).find('input').val() })),
+		description: $('#detail-description').html(),
+		url: $('#detail-link-editable').val(),
+		tags: $('#detail-tag-list').html(),
+		servings: $('#servings').html(),
+		mins: $('#mins').html(),
+		cals: $('#cals').html(),
+	};
+	return recipe;
+}
+
 function createIngredientInputs() {
 	$('.ingredient').each(function() {
 		$(this).html('<input class="temp-ing-input" type="text" value="' + $(this).html() + '">');
@@ -29,24 +43,22 @@ function checkUniqueTag(tagName) {
 
 
 /* --- Edit/Add Recipe --- */
+var originalRecipe;
 // Edit/Add recipe
 $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	var editOrAdd = $(this).attr('id');
 	if (editOrAdd === 'edit-recipe') {
 		$('#detail-options').trigger('click');
-
 		if (window.stage === 'Edit recipe') {
 			return;
 		}
-
 		changeStage('Edit recipe');
-
 		// Reset any portions adjustments
 		window.resetPortionAdjustment();
-
 		var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
 		$('#detail-link-editable').show().val(urlValue);
+
 	} else if (editOrAdd === 'add-recipe') {
 		console.log('Setting up for new recipe');
 		window.urlSizeFix();
@@ -79,6 +91,8 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	// Make ingredients list sortable
 	sortableIngredients();
 
+	// Save original recipe information
+	originalRecipe = saveOriginalRecipe();
 });
 
 // Prevent carriage return on Recipe Name input
@@ -214,8 +228,32 @@ $('#profile').on('click', '#cancel-recipe', function() {
 	window.singleLeftPanel();
 });
 
+// Undo recipe updates
+$('#profile').on('click', '#undo-recipe', function() {
+	restoreOriginalRecipe(originalRecipe);
+});
 
+function restoreOriginalRecipe(recipe) {
+	$('#detail-name').html(recipe.title);
+	var ingredientsHTML = '';
+	for (var i = 0; i < recipe.ingredients.length; i++) {
+		ingredientsHTML += '<li class="ingredient"><input class="temp-ing-input" type="text" value="' + recipe.ingredients[i] + '"></li>';
+	}
+	$('#detail-ingredients').html(ingredientsHTML);
+	$('#detail-description').html(recipe.description);
+	$('#detail-link-editable').val(recipe.url);
+	$('#detail-tag-list').html(recipe.tags);
+	$('#servings').html(recipe.servings);
+	$('#mins').html(recipe.mins);
+	$('#cals').html(recipe.cals);
 
+	// Clear and entered inputs
+	$('#detail-new-ingredient-input').html('');
+	$('#serving-input, #mins-input, #cals-input').val('');
+
+	// Make ingredients sortable again
+	sortableIngredients();
+}
 
 
 /* --- Tags --- */

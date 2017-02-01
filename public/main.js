@@ -37,7 +37,7 @@ window.urlSizeFix();
 
 window.resetPortionAdjustment = function() {
 	$('#converted-message').hide();
-	$('.converted, .converted-text').remove();
+	$('.converted, .converted-text, .original').remove();
 	$('.ingredient').show();
 }
 

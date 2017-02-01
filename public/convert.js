@@ -74,9 +74,11 @@ window.convert = function(multiplier, originalMultiplier) {
 
 	var arr = [];
 
+
 	$('.ingredient').each(function() {
 
-		var ingredientRegEx = /[a-zA-z].*/;
+		var originalText = $(this).text();
+		var ingredientRegEx = /[^\d\s].*/;
 		var wholeNumberWithFractionRegEx = /^\d+[-\s]?\d\/\d/;
 		var singleDigitOrFractionRegEx = /^\s*([\.\/\d-]+)\s*\w/;
 
@@ -128,12 +130,16 @@ window.convert = function(multiplier, originalMultiplier) {
 		var convertedClass =   !obj.unitValue ? 'original' : 'converted';
 		var convertedFootnote = !obj.unitValue ? ' (unable to convert)' : '(converted)';
 
-		$(this).after('<li class="' + convertedClass + '">' + convertedUnitValue + ' ' + obj.ingredient + ' <span class="converted-text">' + convertedFootnote + '</span>');
+		if (convertedClass === 'original') {
+			$(this).after('<li class="' + convertedClass + '">' + originalText + ' <span class="converted-text">' + convertedFootnote + '</span>');
+		} else if (convertedClass === 'converted') {
+			$(this).after('<li class="' + convertedClass + '">' + convertedUnitValue + ' ' + obj.ingredient + ' <span class="converted-text">' + convertedFootnote + '</span>');
+		}
 
 	});
 
 	// Insert "Ingredient amounts adjusted" message before ingredient list
-	$('#detail-ingredients').before('<div id="converted-message"><div id="converted-message-text">Ingredients adjusted for <span id="converted-message-num">' + originalMultiplier + '</span> serving(s)</div><img id="converted-message-close" src="/images/x-larger.png"></div>');
+	$('#detail-ingredients').before('<div id="converted-message"><div id="converted-message-text">Ingredients adjusted for <span id="converted-message-num">' + originalMultiplier + '</span> serving(s)</div><img id="converted-message-close" src="/images/x-larger.png"><div>Cooking times may vary</div></div>');
 
 	// Hide original ingredient entries
 	$('.ingredient').hide();

@@ -202,19 +202,22 @@
 		#add-recipe {
 			margin: 60px auto 60px auto;
 		}
-		#save-recipe, #cancel-recipe {
+		#save-recipe, #cancel-recipe, #undo-recipe {
 			display: none;
 			margin-top: 25px;
 		}
 		#save-recipe {
 			float: left;
 		}
-		#cancel-recipe {
+		#cancel-recipe, #undo-recipe {
 			background-color: #bbbbbb;
 			float: right;
 		}
-		#cancel-recipe:hover {
+		#cancel-recipe:hover, #undo-recipe:hover {
 			background-color: #23d82f;
+		}
+		.edit-recipe #undo-recipe {
+			display: block;
 		}
 		#menu {
 			margin: 0;
@@ -222,7 +225,7 @@
 		}
 		#menu li {
 			cursor: pointer;
-			padding-left: 18px;
+			padding-left: 28px;
 			color: white;
 			height: 28px;
 			line-height: 28px;
@@ -253,7 +256,7 @@
 			box-sizing: border-box;
 			border-bottom: solid 1px #78bcff;
 		}
-		.ingredient, .converted {
+		.ingredient, .converted, .original {
 			margin-bottom: 4px;
 			font-size: 15px;
 			line-height: 20px
@@ -581,7 +584,7 @@
 		}
 		#search-row {
 			display: block;
-			height: 44px;
+			height: 43px;
 			position: relative;
 		}
 		#search-form {
@@ -754,6 +757,7 @@
 			color: #a4a3a3;
 			font-size: 11px;
 			font-style: italic;
+			margin-bottom: 5px;
 		}
 		#converted-message {
 			border: solid 1px #08e41a;
@@ -1006,6 +1010,7 @@
 				<div id="save-recipe" class="button">Save</div>
 				<!-- Recipe Cancel Button -->
 				<div id="cancel-recipe" class="button">Cancel</div>
+				<div id="undo-recipe" class="button">Undo Changes</div>
 			</div>
 		</div>
 	</div>
