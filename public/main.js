@@ -120,6 +120,92 @@ window.singleRightPanel = function() {
 	$('#list-panel').removeClass('singular').animate({width: 'hide'}, 190);
 };
 
+window.validateRecipe = function() {
+	var hasName = false;
+	var servingsIsValid = false;
+	var readyInIsValid = false;
+	var calsIsValid = false;
+	var nameIsValid = false;
+	var ingredientNamesAreValid = true; // Note - easier to set true initially
+	var ingredientAmountIsValid = false;
+	var descriptionIsValid = false;
+	var urlIsValid = false;
+	var tagNamesAreValid = true; // Note - easier to set true initially
+	var tagAmountIsValid = false;
+
+
+	var textLimit = 4;
+	var ing_tagAmount = 4;
+	var descriptionLimit = 10;
+	var errorMessages = [];
+
+	if ($('#detail-name').text().trim().length > 0) {
+		hasName = true;
+	} else {
+		errorMessages.push('Recipe must have a name');
+	}
+	if ($('#serving-input').val().length < 4) {
+		servingsIsValid = true;
+	} else {
+		errorMessages.push('Servings must be less than 3 characters');
+	}
+	if ($('#mins-input').val().length < 6) {
+		servingsIsValid = true;
+	} else {
+		errorMessages.push('Ready In: must be less than 6 characters');
+	}
+	if ($('#cals-input').val().length < 9) {
+		calsIsValid = true;
+	} else {
+		errorMessages.push('Calories must be less than 9 characters');
+	}
+	if ($('#detail-name').text().length < textLimit) {
+		nameIsValid = true;
+	} else {
+		errorMessages.push('Recipe Name must be less than ' + textLimit + ' characters');
+	}
+	var ingErrorPushed = false;
+	$('.temp-ing-input').each(function() {
+		if ($(this).val().length >= textLimit && !ingErrorPushed) {
+			ingredientNamesAreValid = false;
+			errorMessages.push('Ingredient Names must be less than ' + textLimit + ' characters');
+			ingErrorPushed = true;;
+		}
+	});
+	if ($('.temp-ing-input').length < ing_tagAmount) {
+		ingredientAmountIsValid = true;
+	} else {
+		errorMessages.push('Number of ingredients must be less than ' + ing_tagAmount);
+	}
+	if ($('#detail-description').html().length < descriptionLimit) {
+		descriptionIsValid = true;
+	} else {
+		errorMessages.push('Description must be less than ' + descriptionLimit + ' characters');
+	}
+	if ($('#detail-link-editable').val().length < textLimit) {
+		urlIsValid = true;
+	} else {
+		errorMessages.push('URL length must be less than ' + textLimit);
+	}
+	var tagErrorPushed = false;
+	$('.new-tag').each(function() {
+		if ($(this).text().length >= textLimit && !tagErrorPushed) {
+			tagNamesAreValid = false;
+			errorMessages.push('Tag Names must be less than ' + textLimit + ' characters');
+			tagErrorPushed = true;
+		}
+	});
+	if ($('.new-tag').length < ing_tagAmount) {
+		tagAmountIsValid = true;
+	} else {
+		errorMessages.push('Number of tags must be less than ' + ing_tagAmount);
+	}
+
+	console.log(errorMessages);
+
+};
+
+
 function populatePanelSuccess(data) {
 	// Rehide everything first
 	$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
@@ -216,6 +302,7 @@ function showPopulatedInputs(data) {
 	}
 }
 
+
 // Adjust view of panels
 function adjustPanels(forScreenSize) {
 	console.log('[window stage change] - ' + window.stage);
@@ -251,6 +338,11 @@ function adjustPanels(forScreenSize) {
 				$listPanel.removeClass('singular');
 				$fullScreenMenuItem.html('Full Screen').removeClass('exit');
 			}
+			break;
+		case 'Recipes by tag':
+			$detailPanel.removeClass('singular');
+			$listPanel.animate({width: 'show'}, 190);
+			$fullScreenMenuItem.html('Full Screen').removeClass('exit');
 			break;
 		default:
 			console.log('default');
@@ -311,6 +403,15 @@ function resetEdit() {
 window.stage = 'initial';
 
 
+// Reset right panel fields if clicking any of the side buttons
+// $('#get-all-recipes, #get-recipes-by-tags, #get-favorite-recipes, #get-uncategorized-recipes').click(function() {
+// 	if (window.stage === 'Add recipe') {
+// 		window.clearDetailPanel();
+// 		console.log('clearing detail panel');
+// 	}
+// });
+
+
 
 /* --- Left Nav Categories --- */
 // Add Recipe Stage
@@ -329,6 +430,7 @@ $('body').on('click', '#get-all-recipes', function(e) {
 
 // Get all tags
 $('body').on('click', '#get-recipes-by-tags', function(e) {
+	changeStage('All tags');
 	adjustPanels();
 	if (window.stage !== 'All tags') {
 		$.ajax({
@@ -352,8 +454,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 				// Change panel title
 				$('#list-panel-heading').text('Tags');
 
-		  	// Mark stage
-		  	changeStage('All tags');
+
 		  }
 		});
 	}
@@ -418,6 +519,7 @@ $('#get-uncategorized-recipes').click(function() {
 /* --- Show Recipe Details --- */
 $('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion', function(e) {
 	e.preventDefault();
+	$('.detail-recipe').removeClass('from-new');
 	changeStage('View recipe');
 	adjustPanels();
 	var id = $(this).data('id');
@@ -428,11 +530,13 @@ $('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion'
 
 /* --- Tag Functionality --- */
 // Get recipes by tag
-$('body').on('click', '.tag-name', function(e) {
+$('body').on('click', '.tag:not(.new-tag) .tag-name', function(e) {
+
+	changeStage('Recipes by tag');
+	adjustPanels();
+
 	var tagName = $(this).text();
 	var tagColor = $(this).closest('.tag-list-name').attr('data-tag-color') ||  $(this).closest('.tag').attr('data-tag-color');
-
-	console.info('tagColor: ' + tagColor)
 
 	$.ajax({
 		type: 'POST',
@@ -445,8 +549,6 @@ $('body').on('click', '.tag-name', function(e) {
 	  	console.log(data);
 	  	var recipes = data.recipesToSend;
 	  	var color = data.tagColor;
-
-	  	
 
 	  	var recipeList = '<ul id="recipe-list-by-tag">';
 	  	recipeList += '<li class="tag-category" style="background-color: ' + color + ';">' + tagName + '</li>';
@@ -461,8 +563,7 @@ $('body').on('click', '.tag-name', function(e) {
 	  	// Change panel title
 	  	$('#list-panel-heading').text('Recipes By Tag');
 
-	  	// Mark stage
-	  	changeStage('Recipes by tag');
+
 	  }
 	});
 

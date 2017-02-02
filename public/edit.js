@@ -61,6 +61,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	} else if (editOrAdd === 'add-recipe') {
 		console.log('Setting up for new recipe');
+		$('.detail-recipe').addClass('from-new');
 		window.urlSizeFix();
 		window.clearDetailPanel();
 		$('#cancel-recipe').show(); // Note that this should NOT appear for editing
@@ -216,6 +217,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	
 		  	window.showSuccessBox($('#detail-name').text(), ' has been added to your collection!');
 		  	window.refreshRecipeList();
+		  	$('.detail-recipe').removeClass('from-new');
 		  }
 		});
 	}
@@ -274,9 +276,6 @@ $('#profile').on('click', '#detail-add-tag-button', function(e) {
   // Submit new tag if enter key pressed
   $newTag.on('keypress', function(e) {
 	    if (e.which == 13) {
-	      //$(document).off('keypress');
-	    	console.log('Submitting new tag...');
-
 	    	var tagName = $('#new-tag').val().trim();
 
 	    	if (tagName.length === 0) {
@@ -399,26 +398,12 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	  data: {id: id},
 	  success: function(data) {
 	  	console.log('Recipe deleted!');
-
-	  	
-			$('#detail-description').append('<div id="detail-message-overlay"><div id="detail-message-overlay-inner">Recipe deleted</div></div>');
-
-	  	// Show "Recipe deleted" overlay
-	  	$('#detail-message-overlay').fadeIn('slow');
 	  	// Refresh recipe list to reflect delete
 	  	window.refreshRecipeList();
 
 	  	// Show success box
-	  	var $successBox = $('#success-box');
-	  	$successBox.find('#success-message-recipe').text($('#detail-name').text());
-	  	$successBox.find('#sucess-message-text').text('has been deleted');
-	  	$successBox.addClass('temp-height');
-	  	$successBox.animate({width:'toggle'}, 425, function() {
-	  		setTimeout(function() {
-	  			$successBox.fadeOut(3000);
-	  			$successBox.removeClass('temp-height');
-	  		}, 4000);
-	  	});
+	  	window.showSuccessBox($('#detail-name').text(), ' deleted');
+	  	window.singleLeftPanel()
 	  }
 	});
 });
