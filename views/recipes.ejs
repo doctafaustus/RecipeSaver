@@ -70,7 +70,7 @@
 	    min-width: 200px;
 		}*/
 		#list-panel {
-			padding: 12px 25px 25px 25px;
+			padding: 25px;
 			width: 40%;
 			max-width: 400px;
 			margin-left: auto;
@@ -797,7 +797,7 @@
 	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 	    z-index: 1;
 		}
-		.box li:not(.tag-color-selection)  {
+		.box li:not(.tag-color-selection) {
 			padding: 3px 15px;
 			cursor: pointer;
 			height: 20px;
@@ -807,7 +807,7 @@
 			background-color: #008dff;
     	color: white;
 		}
-		#success-box {
+		#success-box, #error-box {
 			display: none;
 	    position: fixed;
 	    box-sizing: border-box;
@@ -840,6 +840,26 @@
 		#success-message-recipe {
 			font-weight: bold;
 		}
+		#error-box {
+			display: none;
+			border-top: solid 5px red;
+		}
+		#error-box #error-box-inner {
+			display: flex;
+		}
+		#error-box .close {
+			align-self: flex-start;
+		}
+		#error-messages {
+			align-self: flex-start;
+		}
+		.error-message {
+			margin-bottom: 4px;
+		}
+		.error-message.no-wrap {
+			white-space: nowrap;
+    	overflow: hidden;
+		}
 		@media screen and (max-width: 1464px) {
 /*	    #list-panel {
 	    	margin-left: 20px;
@@ -848,6 +868,15 @@
 	    	margin-right: 20px;
 	    }*/
 		}
+		@media screen and (max-width: 1265px) {
+			.edit-recipe .detail-recipe:not(.singular) #detail-icons {
+				clear: both;
+			}
+			.edit-recipe .detail-recipe:not(.singular) #edit-messaging {
+				margin-bottom: 7px;
+			}
+		}
+
  	</style>
 </head>
 <body>
@@ -1026,6 +1055,15 @@
 	  	<div id="success-message">
 	  		<span id="success-message-recipe"></span> <span id="sucess-message-text"></span>
 	  	</div>
+		  <svg class="close" viewBox="0 0 32 32">
+		  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+		  </svg>
+	  </div>
+  </div>
+
+  <div id="error-box" class="box">
+  	<div id="error-box-inner">
+	  	<div id="error-messages"></div>
 		  <svg class="close" viewBox="0 0 32 32">
 		  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
 		  </svg>

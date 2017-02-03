@@ -48,6 +48,7 @@ var originalRecipe;
 $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	var editOrAdd = $(this).attr('id');
+
 	if (editOrAdd === 'edit-recipe') {
 		$('#detail-options').trigger('click');
 		if (window.stage === 'Edit recipe') {
@@ -57,6 +58,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 		// Reset any portions adjustments
 		window.resetPortionAdjustment();
 		var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
+			$('#detail-id, #detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
 
 	} else if (editOrAdd === 'add-recipe') {
@@ -136,9 +138,23 @@ $('#profile').on('keyup', '.ingredient', function(e) {
 
 // Save recipe
 $('#profile').on('click', '#save-recipe', function(e) {
+	var errors = window.validateRecipe();
+	if (errors.length) {
+		var errorList = '';
+		for (var i = 0; i < errors.length; i++) {
+			errorList += '<div class="error-message">' + errors[i] + '</div>';
+		}
+		var $errorBox = $('#error-box');
+		$errorBox.find('#error-messages').html(errorList);
+		$errorBox.find('.error-message').addClass('no-wrap');
+		$errorBox.hide().animate({width:'show'}, 425, function() {
+			$errorBox.find('.error-message').removeClass('no-wrap');
+		});
+		return;
+	}
 
-	/* Add Validation */
-
+	// Hide any previous error box open if no errors
+	$('#error-box').hide();
 
 	var newRecipeName = $('#detail-name').text().trim();
 	var ingredients = [];
@@ -228,11 +244,14 @@ $('#profile').on('click', '#save-recipe', function(e) {
 $('#profile').on('click', '#cancel-recipe', function() {
 	window.clearDetailPanel();
 	window.singleLeftPanel();
+	// Hide validation error box
+	$('#error-box').hide();
 });
 
 // Undo recipe updates
 $('#profile').on('click', '#undo-recipe', function() {
 	restoreOriginalRecipe(originalRecipe);
+	$('#error-box').hide();
 });
 
 function restoreOriginalRecipe(recipe) {
@@ -406,4 +425,9 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	  	window.singleLeftPanel()
 	  }
 	});
+});
+
+// Close error box
+$('#error-box .close').click(function() {
+	$('#error-box').hide();
 });

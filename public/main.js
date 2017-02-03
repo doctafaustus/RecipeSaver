@@ -99,7 +99,7 @@ window.populatePanel = function(id, fromDatabase) {
 };
 
 window.clearDetailPanel = function() {
-	$('#detail-name, #detail-description, #detail-ingredients, #detail-id').html('');
+	$('#detail-name, #detail-description, #detail-ingredients, #detail-id, #detail-new-ingredient-input').html('');
 	$('#detail-link-editable, #serving-input, #mins-input, #cals-input, #new-tag').val('');
 	$('#detail-new-ingredient-input').show().html('');
 	$('#detail-tag-list li:not(#detail-new-tag-input)').remove();
@@ -172,7 +172,7 @@ window.validateRecipe = function() {
 			ingErrorPushed = true;;
 		}
 	});
-	if ($('.temp-ing-input').length < ing_tagAmount) {
+	if ($('#detail-tag-list .tag').length < ing_tagAmount) {
 		ingredientAmountIsValid = true;
 	} else {
 		errorMessages.push('Number of ingredients must be less than ' + ing_tagAmount);
@@ -202,6 +202,7 @@ window.validateRecipe = function() {
 	}
 
 	console.log(errorMessages);
+	return errorMessages;
 
 };
 
@@ -363,6 +364,9 @@ function changeStage(state) {
 	window.stage = state;
 	$('html').removeClass();
 	$('html').addClass(slugify(state));
+
+	// Hide validation error box
+	$('#error-box').hide();
 
 	// Show URL input and hide formatted link
 	if (state !== 'Add recipe') {
