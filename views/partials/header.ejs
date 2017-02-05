@@ -10,23 +10,24 @@
 		<li id="recipes"><a href="/recipes">My Recipes</a></li>
 		<li id="chrome-extension"><a href="#">Chrome Extension</a></li>
 		<li id="blog"><a href="/blog">Blog</a></li>
-		<li id="about"><a href="#">About</a></li>
 		<li id="support"><a href="#">Support</a></li>
+
+		<!-- Search Bar (only visible on homepage) -->
+		<li id="search-row">
+			<form id="search-form">
+				<span id="search-icon"></span>
+				<input type="text" placeholder="Search Recipes" id="search-form-input" autocomplete="off">
+			</form>
+			<div id="search-suggestions" class="box">
+				<ul></ul>
+			</div>
+		</li>
 
 		<li id="logout"><a href="#">Logout</a></li>
 		<li id="account"><a href="/account">Account</a></li>
 	</ul>
 
-	<!-- Search Bar (only visible on homepage) -->
-	<div id="search-row">
-		<form id="search-form">
-			<span id="search-icon"></span>
-			<input type="text" placeholder="Search Recipes" id="search-form-input" autocomplete="off">
-		</form>
-	</div>
-	<div id="search-suggestions" class="box">
-		<ul></ul>
-	</div>
+
 
 </div>
 

@@ -45,7 +45,6 @@ table {
 
 /* --- Header --- */
 #top-bar {
-	overflow: hidden;
 	background-color: white;
 	box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
 }
@@ -84,8 +83,65 @@ table {
 #nav li.active-menu a {
 	color: black;
 }
+#nav li#search-row {
+	display: none;
+  line-height: normal;
+  margin-left: 40px;
+}
+#nav li#search-row li {
+	height: auto;
+	line-height: 20px;
+	display: block;
+	margin-left: 0;
+}
 #search-row, #search-suggestions {
 	display: none;
+}
+#search-icon {
+	content: url(/images/search-icon.png);
+	position: relative;
+	top: 4px;
+}
+#search-row {
+	display: inline-block;
+	margin-left: 45px;
+	height: 43px;
+	position: relative;
+}
+#search-form {
+	margin: 0 auto;
+	text-align: center;
+	border: solid 1px #089de3;
+  border-radius: 20px;
+  width: 400px;
+}
+#search-form-input {
+	width: 350px;
+  height: 30px;
+  padding-left: 5px;
+  border: 0;
+  background: transparent;
+}
+#search-form-input:focus {
+	border: 0;
+	outline: none;
+}
+#search-suggestions {
+	display: none;
+  width: 350px;
+  margin: 0 auto;
+  position: absolute;
+  background-color: white;
+  z-index: 5;
+  right: 24px;
+  top: 34px;
+}
+.suggestion {
+	cursor: pointer;
+	padding-left: 8px;
+}
+.sug-bold {
+	font-weight: bold;
 }
 
 

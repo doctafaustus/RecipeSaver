@@ -93,9 +93,26 @@ window.populatePanel = function(id, fromDatabase) {
 		  success: populatePanelSuccess,
 		});
 	} else {
+		console.info(id);
 		var data = getRecipe(id);
+		console.info(data);
 		populatePanelSuccess(data);
 	}
+};
+
+window.resetRecipeState = function() {
+	$('#detail-description, #detail-name').attr('contenteditable', false);
+	$('#save-recipe, #cancel-recipe').hide();
+	$('#detail-ingredients').sortable('destroy');
+	$('#detail-new-ingredient-input').html('').hide();
+};
+
+window.reloadRightPanel = function() {
+	window.populatePanel($('#detail-id').text());
+	window.resetRecipeState();
+	$('.editable').removeClass('editable');
+	changeStage('View recipe');
+	$('#error-box').hide();
 };
 
 window.clearDetailPanel = function() {
@@ -408,12 +425,12 @@ window.stage = 'initial';
 
 
 // Reset right panel fields if clicking any of the side buttons
-// $('#get-all-recipes, #get-recipes-by-tags, #get-favorite-recipes, #get-uncategorized-recipes').click(function() {
-// 	if (window.stage === 'Add recipe') {
-// 		window.clearDetailPanel();
-// 		console.log('clearing detail panel');
-// 	}
-// });
+$('#get-all-recipes, #get-recipes-by-tags, #get-favorite-recipes, #get-uncategorized-recipes').click(function() {
+	if (window.stage === 'Edit recipe') {
+		window.reloadRightPanel();
+		console.log('clearing detail panel');
+	}
+});
 
 
 

@@ -1,29 +1,8 @@
 /* --- Helper Functions --- */
-function saveOriginalRecipe() {
-	var recipe = {
-		title: $('#detail-name').html(),
-		ingredients: $.makeArray($('.ingredient').map(function() { return $(this).find('input').val() })),
-		description: $('#detail-description').html(),
-		url: $('#detail-link-editable').val(),
-		tags: $('#detail-tag-list').html(),
-		servings: $('#servings').html(),
-		mins: $('#mins').html(),
-		cals: $('#cals').html(),
-	};
-	return recipe;
-}
-
 function createIngredientInputs() {
 	$('.ingredient').each(function() {
 		$(this).html('<input class="temp-ing-input" type="text" value="' + $(this).html() + '">');
 	});
-}
-
-function resetRecipeState() {
-	$('#detail-description, #detail-name').attr('contenteditable', false);
-	$('#save-recipe, #cancel-recipe').hide();
-	$('#detail-ingredients').sortable('destroy');
-	$('#detail-new-ingredient-input').hide();
 }
 
 function sortableIngredients() {
@@ -43,7 +22,6 @@ function checkUniqueTag(tagName) {
 
 
 /* --- Edit/Add Recipe --- */
-var originalRecipe;
 // Edit/Add recipe
 $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
@@ -58,7 +36,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 		// Reset any portions adjustments
 		window.resetPortionAdjustment();
 		var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
-			$('#detail-id, #detail-new-ingredient-input').html('');
+			$('#detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
 
 	} else if (editOrAdd === 'add-recipe') {
@@ -94,8 +72,6 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	// Make ingredients list sortable
 	sortableIngredients();
 
-	// Save original recipe information
-	originalRecipe = saveOriginalRecipe();
 });
 
 // Prevent carriage return on Recipe Name input
@@ -203,7 +179,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  success: function(data) {
 		  	console.log('Updated recipe!');
 		  	window.populatePanel(data.id, true);
-		  	resetRecipeState();
+		  	window.resetRecipeState();
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
 		  	$('#detail-options-dropdown').hide();
@@ -225,7 +201,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  success: function(data) {
 		  	console.log('Updated recipe!');
 		  	window.populatePanel(data.id, true);
-		  	resetRecipeState();
+		  	window.resetRecipeState();
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
 		  	$('#detail-options-dropdown').hide();
@@ -250,31 +226,9 @@ $('#profile').on('click', '#cancel-recipe', function() {
 
 // Undo recipe updates
 $('#profile').on('click', '#undo-recipe', function() {
-	restoreOriginalRecipe(originalRecipe);
-	$('#error-box').hide();
+	window.reloadRightPanel();
 });
 
-function restoreOriginalRecipe(recipe) {
-	$('#detail-name').html(recipe.title);
-	var ingredientsHTML = '';
-	for (var i = 0; i < recipe.ingredients.length; i++) {
-		ingredientsHTML += '<li class="ingredient"><input class="temp-ing-input" type="text" value="' + recipe.ingredients[i] + '"></li>';
-	}
-	$('#detail-ingredients').html(ingredientsHTML);
-	$('#detail-description').html(recipe.description);
-	$('#detail-link-editable').val(recipe.url);
-	$('#detail-tag-list').html(recipe.tags);
-	$('#servings').html(recipe.servings);
-	$('#mins').html(recipe.mins);
-	$('#cals').html(recipe.cals);
-
-	// Clear and entered inputs
-	$('#detail-new-ingredient-input').html('');
-	$('#serving-input, #mins-input, #cals-input').val('');
-
-	// Make ingredients sortable again
-	sortableIngredients();
-}
 
 
 /* --- Tags --- */
