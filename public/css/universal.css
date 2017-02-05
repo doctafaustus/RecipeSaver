@@ -143,6 +143,40 @@ table {
 .sug-bold {
 	font-weight: bold;
 }
+@media screen and (max-width: 1250px) {
+	#nav li#recipes {
+		margin-left: 15px;
+	}
+	#nav li#logout {
+		margin-right: 15px;
+	}
+}
+@media screen and (max-width: 1175px) {
+	#search-form {
+		width: 257px;
+	}
+	#search-form-input {
+		width: 209px;
+	}
+}
+@media screen and (max-width: 1032px) {
+	#nav li#search-row {
+		display: none !important;
+	}
+}
+@media screen and (max-width: 730px) {
+	#nav li a {
+		font-size: 12px;
+	}
+}
+@media screen and (max-width: 675px) {
+	#nav li#recipes, #nav li {
+		margin-left: 6px;
+	}
+	#nav li#logout {
+		margin-right: 6px;
+	}
+}
 
 
 /* --- Wrapper --- */
