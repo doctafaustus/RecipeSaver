@@ -22,6 +22,7 @@ article {
 }
 article p {
 	line-height: 29px;
+	margin-bottom: 20px;
 }
 #article-top {
 	background-color: #089de3;
@@ -108,7 +109,7 @@ li.static {
 .author, .date {
 	display: block;
 }
-#article-text {
+.article-text {
 	margin-top: 40px;
 	clear: both;
 	font-family: 'Roboto Slab', serif;
@@ -127,6 +128,18 @@ li.static {
   font-size: 26px;
   font-family: 'Source Sans Pro';
   margin: 20px 0;
+}
+article p.double-break {
+	margin-bottom: 40px;
+}
+article p.top-margin {
+	margin-top: 20px;
+}
+.blog-bold {
+	font-weight: bold;
+}
+.flow-image {
+	width: 100%;
 }
 #disqus_thread {
 	width: 610px;
@@ -222,3 +235,4 @@ footer {
 	clear: both;
 	margin-bottom: 38px;
 }
+
