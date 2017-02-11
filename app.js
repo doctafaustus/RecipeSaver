@@ -51,6 +51,8 @@ passport.use(new TwitterStrategy({
     callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/twitter/return',
   },
   function(token, tokenSecret, profile, done) {
+  	console.log('-------------------------------------');
+  	console.log(profile);
 	  process.nextTick(function() {
 	    User.findOne({ 'twitterId' : profile.id }, function(err, user) {
 	      if (err) {
@@ -168,7 +170,7 @@ app.get('/login/twitter', passport.authenticate('twitter'));
 
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('Successful Twitter authentication, redirect home.');
-	res.redirect('/#recipes');
+	res.redirect('/#from-twitter');
 });
 
 app.get('/checklogin', loggedIn, function(req, res) {
