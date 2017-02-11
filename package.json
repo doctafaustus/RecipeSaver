@@ -24,11 +24,14 @@
     "ejs": "^2.5.1",
     "express": "^4.13.1",
     "express-session": "^1.14.0",
+    "mongoose": "^4.8.2",
     "nodemailer": "^2.7.2",
     "on-finished": "^2.3.0",
     "passport": "^0.2.2",
     "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
     "passport-twitter": "^1.0.3",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "serve-favicon": "^2.3.2"
   }
 }

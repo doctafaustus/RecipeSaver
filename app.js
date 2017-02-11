@@ -2,10 +2,35 @@ var express = require('express');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var favicon = require('serve-favicon');
+
+// DATABASE
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema; //allows use to define our schema
+var ObjectId = Schema.ObjectId;
+
+mongoose.Promise = global.Promise; // Removes decprecation warning
+mongoose.connect('mongodb://localhost/recipe_saver', function() {
+	console.log('Connected to local db!');
+});
+
+var User = mongoose.model('User', new Schema({
+	id: ObjectId,
+	name: String,
+	twitterId: String,
+	twitterDisplayName: String,
+	//email: { type: String, unique: true, lowercase: true, trim: true },
+	//password: String,
+	//resetPasswordToken: String,
+  //resetPasswordExpires: String,
+  creationDate: {type: Date, default: Date.now}
+}));
+
 
 // CUSTOM MODULES
 var emailSupport = require('./mods/emailSupport.js');
@@ -15,27 +40,68 @@ var emailSupport = require('./mods/emailSupport.js');
 //var Unitz = require('unitz');
 //console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
 
+
 var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
+var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
+var googleAppSecret = process.env.PORT ? null : fs.readFileSync('./private/googleAppSecret.txt').toString();
+
 passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
     consumerSecret: twitterAppSecret,
-    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/twitter/return'
+    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/twitter/return',
   },
-  function(token, tokenSecret, profile, cb) {
-    return cb(null, profile);
-  }));
+  function(token, tokenSecret, profile, done) {
+	  process.nextTick(function() {
+	    User.findOne({ 'twitterId' : profile.id }, function(err, user) {
+	      if (err) {
+					return done(err);
+				}
+	      if (user) {
+	      	console.log('Twitter user found, yo!');
+	        return done(null, user); // User found, return that user
+	      } else { // User not found, create new user
+	      	console.log('Creating new Twitter user');
+	        var newUser = new User();
+	        newUser.name = profile.displayName;
+	        newUser.twitterId = profile.id;
+	        newUser.twitterDisplayName = profile.displayName;
+	        newUser.save(function(err) {
+	          if (err) {
+	            throw err;
+	          }
+	          return done(null, newUser);
+	        });
+	      }
+	    });
+	  });
+	}
+));
 
-var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
+
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
-    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/facebook/callback'
+    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/facebook/callback',
   },
   function(token, tokenSecret, profile, cb) {
     return cb(null, profile);
   }));
 //   function(accessToken, refreshToken, profile, cb) {
 //     User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+//       return cb(err, user);
+//     });
+//   }
+// ));
+passport.use(new GoogleStrategy({
+    clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
+    clientSecret: googleAppSecret,
+    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/google/callback',
+  },
+  function(token, tokenSecret, profile, cb) {
+    return cb(null, profile);
+  }));
+//   function(accessToken, refreshToken, profile, cb) {
+//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
 //       return cb(err, user);
 //     });
 //   }
@@ -56,17 +122,18 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.use(session({ secret: 'anything' }));
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+
 
 function loggedIn(req, res, next) {
 	console.log(req.user);
@@ -79,11 +146,28 @@ function loggedIn(req, res, next) {
   }
 }
 
+
+app.get('/testuser', function(req, res) {
+	console.log('/testuser');
+  User.findOne({name: 'Billy'}, function(err, user) {
+  	console.log('LOOKING');
+    if (!user) {
+      console.log('No user found');
+      return;
+    }
+    console.log(user);
+    res.sendStatus(200);
+  });
+});
+
+
+
+
 // Login with Twitter
 app.get('/login/twitter', passport.authenticate('twitter'));
 
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
-  console.log('User has been authenticated!');
+  console.log('Successful Twitter authentication, redirect home.');
 	res.redirect('/#recipes');
 });
 
@@ -103,10 +187,19 @@ app.get('/login/facebook',
 app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log('Successful authentication, redirect home.');
+    console.log('Successful Facebook authentication, redirect home.');
     res.redirect('/');
   });
 
+app.get('/login/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+
+app.get('/login/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    console.log('Successful Google authentication, redirect home.');
+    res.redirect('/');
+  });
 
 
 
@@ -132,6 +225,10 @@ app.get('/blog/cookbook-review-fast-food', function(req, res) {
   res.render('cookbook-review-fast-food.ejs');
 });
 
+
+app.get('/privacy-policy', function(req, res) {
+	res.render('privacy-policy.ejs');
+});
 
 // Email support form
 app.post('/support', emailSupport);
