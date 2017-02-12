@@ -810,8 +810,10 @@
 
 	<div id="left-nav">
 		<div id="logo">
-			<img src="images/logo-white-circle.png">
-			<span id="logo-text">Recipe Saver</span>
+			<a href="/">
+				<img src="images/logo-white-circle.png">
+				<span id="logo-text">Recipe Saver</span>
+			</a>
 		</div>
 		<div id="add-recipe" class="button">Add New Recipe</div>
 
@@ -854,12 +856,12 @@
 			<div id="list-panel-inner">
 				<ul class="recipe-list">
 					<% for (var i = 0; i < recipes.length; i++) { %>
-						<li class="recipe-list-entry" data-id="<%= recipes[i].id %>">
+						<li class="recipe-list-entry" data-id="<%= recipes[i]._id %>">
 							<span class="recipe-list-entry-left">
-								<a><%= recipes[i].name %></a>
+								<a><%= recipes[i].recipeName %></a>
 							</span>
 							<span class="recipe-list-entry-date">
-								<a><%= recipes[i].date %></a>
+								<a><%= recipes[i].creationDate %></a>
 							</span>
 						</li>
 					<% } %>

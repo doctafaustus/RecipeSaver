@@ -10,7 +10,7 @@ window.refreshRecipeList = function() {
 			var recipes = data;
 			var recipeList = '<ul id="recipe-list">';
 			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].creationDate + '</a></span></li>';
 			}
 			recipeList += '</ul>';
 			$('#list-panel-inner').html(recipeList);
@@ -80,24 +80,6 @@ window.fadeSuccessBox = function() {
 		}
 		window.successBoxTimer--;
 	}, 1000);
-};
-
-window.populatePanel = function(id, fromDatabase) {
-
-	if (fromDatabase) {
-		$.ajax({
-			type: 'POST',
-		  url: '/recipe',
-		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		  data: { id: id},
-		  success: populatePanelSuccess,
-		});
-	} else {
-		console.info(id);
-		var data = getRecipe(id);
-		console.info(data);
-		populatePanelSuccess(data);
-	}
 };
 
 window.resetRecipeState = function() {
@@ -223,6 +205,23 @@ window.validateRecipe = function() {
 
 };
 
+window.populatePanel = function(id, fromDatabase) {
+	if (fromDatabase) {
+		console.log('fromDatabase: ' + fromDatabase);
+		$.ajax({
+			type: 'POST',
+		  url: '/recipe',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  data: { id: id},
+		  success: populatePanelSuccess,
+		});
+	} else {
+		console.warn(id);
+		var data = getRecipe(id);
+		console.info(data);
+		populatePanelSuccess(data);
+	}
+};
 
 function populatePanelSuccess(data) {
 	// Rehide everything first
@@ -266,7 +265,7 @@ function populatePanelSuccess(data) {
 	$('#detail-link').text(data.url).attr('href', data.url);
 
 	// Recipe Name
-	$('#detail-name').text(data.name);
+	$('#detail-name').text(data.recipeName);
 
 	// Recipe Ingredients
 	$('.ingredient').remove();
@@ -281,13 +280,13 @@ function populatePanelSuccess(data) {
 
 
 	// Recipe Description
-	$('#detail-description').html(data.more)
+	$('#detail-description').html(data.description);
 
 	// Recipe ID
-	$('#detail-id').text(data.id);
+	$('#detail-id').text(data._id);
 
 	// Recipe Date
-	$('#detail-date').text(data.date);
+	$('#detail-date').text(data.creationDate);
 
 	// Show/Hide Recipe URL
 	if ($('#detail-link').attr('href').length) {
@@ -304,7 +303,7 @@ function populatePanelSuccess(data) {
 
 function getRecipe(id) {
   return recipes.filter(function(v) {
-    return v.id == id;
+    return v._id == id;
   })[0];
 }
 
@@ -312,7 +311,7 @@ function showPopulatedInputs(data) {
 	if (data.ingredients && data.ingredients.length) {
 		$('#detail-ingredients').removeClass('init-hide');
 	}
-	if (data.more.length) {
+	if (data.description.length) {
 		$('#detail-description').removeClass('init-hide');
 	}
 	if (data.url.length) {

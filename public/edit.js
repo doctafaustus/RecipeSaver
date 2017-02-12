@@ -114,32 +114,32 @@ $('#profile').on('keyup', '.ingredient', function(e) {
 
 // Save recipe
 $('#profile').on('click', '#save-recipe', function(e) {
-	var errors = window.validateRecipe();
-	if (errors.length) {
-		var errorList = '';
-		for (var i = 0; i < errors.length; i++) {
-			errorList += '<div class="error-message">' + errors[i] + '</div>';
-		}
-		var $errorBox = $('#error-box');
-		$errorBox.find('#error-messages').html(errorList);
-		$errorBox.find('.error-message').addClass('no-wrap');
-		$errorBox.hide().animate({width:'show'}, 425, function() {
-			$errorBox.find('.error-message').removeClass('no-wrap');
-		});
-		return;
-	}
+	// var errors = window.validateRecipe();
+	// if (errors.length) {
+	// 	var errorList = '';
+	// 	for (var i = 0; i < errors.length; i++) {
+	// 		errorList += '<div class="error-message">' + errors[i] + '</div>';
+	// 	}
+	// 	var $errorBox = $('#error-box');
+	// 	$errorBox.find('#error-messages').html(errorList);
+	// 	$errorBox.find('.error-message').addClass('no-wrap');
+	// 	$errorBox.hide().animate({width:'show'}, 425, function() {
+	// 		$errorBox.find('.error-message').removeClass('no-wrap');
+	// 	});
+	// 	return;
+	// }
 
 	// Hide any previous error box open if no errors
 	$('#error-box').hide();
 
-	var newRecipeName = $('#detail-name').text().trim();
+	var recipeName = $('#detail-name').text().trim();
 	var ingredients = [];
 	$('.ingredient').each(function() {
 		ingredients.push($(this).find('input').val().trim());
 	});
 
 	var url = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
-	var newRecipeDescription = $('#detail-description').html();
+	var description = $('#detail-description').html();
 	var servings = $('#serving-input').val();
 	var readyIn = $('#mins-input').val();
 	var cals = $('#cals-input').val();
@@ -165,7 +165,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		tags.push({name: tagInputText, color: null});
 	}
 	
-	var data = { recipeDescription: newRecipeDescription, recipeName: newRecipeName, ingredients: ingredients, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
+	var data = { description: description, recipeName: recipeName, ingredients: ingredients, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
 
 	if (window.stage === 'Edit recipe') {
 		data.id = $('#detail-id').text();

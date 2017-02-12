@@ -8,6 +8,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var favicon = require('serve-favicon');
+var request = require('request');
 
 // DATABASE
 var mongoose = require('mongoose');
@@ -24,18 +25,27 @@ var User = mongoose.model('User', new Schema({
 	name: String,
 	twitterId: String,
 	twitterDisplayName: String,
-	//email: { type: String, unique: true, lowercase: true, trim: true },
-	//password: String,
-	//resetPasswordToken: String,
-  //resetPasswordExpires: String,
-  creationDate: {type: Date, default: Date.now}
+  creationDate: {type: Date, default: Date.now},
+}));
+
+var Recipe = mongoose.model('Recipe', new Schema({
+	id: ObjectId,
+	user_id: String,
+	recipeName: String,
+	ingredients: [String],
+	description: String,
+	url: String,
+	tags: [String],
+	servings: String,
+	readyIn: String,
+	cals: String,
+	favorite: Boolean,
+  creationDate: {type: Date, default: Date.now},
 }));
 
 
 // CUSTOM MODULES
 var emailSupport = require('./mods/emailSupport.js');
-
-
 
 //var Unitz = require('unitz');
 //console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
@@ -149,53 +159,89 @@ function loggedIn(req, res, next) {
 }
 
 
-app.get('/testuser', function(req, res) {
-	console.log('/testuser');
-  User.findOne({name: 'Billy'}, function(err, user) {
-  	console.log('LOOKING');
-    if (!user) {
-      console.log('No user found');
-      return;
-    }
-    console.log(user);
-    res.sendStatus(200);
+/* --- ROUTES --- */
+// Home page
+app.get('/', function(req, res) {
+	res.render('index.ejs', {regMessage: 'none'});
+});
+// Blog routes
+require('./mods/blogRoutes')(app);
+// Email support form
+app.post('/support', emailSupport);
+// Account page
+app.get('/account', function(req, res) {
+	res.render('account.ejs');
+});
+// Privacy policy
+app.get('/privacy-policy', function(req, res) {
+	res.render('privacy-policy.ejs');
+});
+
+
+
+// app.get('/recipes', function(req, res) {
+//   res.render('recipes.ejs', {recipes: recipes});
+// });
+// Recipes page
+app.get('/recipes', function(req, res) {
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  	if (err) throw err;
+  	console.log(req.user._id + '\'s recipes retrieved!');
+  	console.log(recipes);
+  	res.render('recipes.ejs', {recipes: recipes});
   });
 });
+
+
+// Add or update recipe
+app.post('/recipe-update', function(req, res) {
+
+	// Save new recipe
+  if (req.body.isNew) {
+		var recipe = new Recipe({
+			user_id: req.user._id,
+			recipeName: req.body.recipeName,
+			ingredients: req.body.ingredients,
+			description: req.body.description,
+			url: req.body.url,
+			tags: [],
+			servings: req.body.servings,
+			readyIn: req.body.readyIn,
+			cals: req.body.cals,
+		});
+    if (req.body.tags) {
+      //handleTags(req.body.tags, recipe);
+    }
+		recipe.save(function(err, recipe) {
+		  if (err) throw err;
+		  console.log(recipe.recipeName + ' saved!');
+		  res.json(recipe);
+		});
+    return;
+  }
+	// Add in functionality to mark as a favorite or not
+});
+
 
 
 
 
 // Login with Twitter
 app.get('/login/twitter', passport.authenticate('twitter'));
-
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('Successful Twitter authentication, redirect home.');
 	res.redirect('/#from-twitter');
 });
-
-app.get('/checklogin', loggedIn, function(req, res) {
-  res.sendStatus(200);
-});
-
-app.get('/logout', function(req, res) {
-	req.session.destroy();
-  res.sendStatus(200);
-});
-
-
 app.get('/login/facebook',
   passport.authenticate('facebook'));
-
 app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Facebook authentication, redirect home.');
     res.redirect('/');
   });
-
 app.get('/login/google',
   passport.authenticate('google', { scope: ['profile'] }));
-
 app.get('/login/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
@@ -203,142 +249,121 @@ app.get('/login/google/callback',
     res.redirect('/');
   });
 
-
-
-
-
-
-app.get('/', function(req, res) {
-	res.render('index.ejs', {regMessage: 'none'});
+app.get('/checklogin', loggedIn, function(req, res) {
+  res.sendStatus(200);
 });
-
-app.get('/account', function(req, res) {
-	res.render('account.ejs');
-});
-
-app.get('/blog', function(req, res) {
-  res.render('blog.ejs');
-});
-
-app.get('/blog/its-here-recipe-saver-2-debuts', function(req, res) {
-  res.render('its-here-recipe-saver-2-debuts.ejs');
-});
-app.get('/blog/cookbook-review-fast-food', function(req, res) {
-  res.render('cookbook-review-fast-food.ejs');
+app.get('/logout', function(req, res) {
+	req.session.destroy();
+  res.sendStatus(200);
 });
 
 
-app.get('/privacy-policy', function(req, res) {
-	res.render('privacy-policy.ejs');
-});
-
-// Email support form
-app.post('/support', emailSupport);
 
 
 
-app.get('/recipes', function(req, res) {
-  res.render('recipes.ejs', {recipes: recipes});
-});
+
+
+
+
 
 app.post('/recipe', function(req, res) {
   var recipeToUpdate = getRecipe(req.body.id);
   res.json(recipeToUpdate);
 });
 
-app.post('/recipe-update', function(req, res) {
-  if (req.body.favoriteType) {
+// app.post('/recipe-update', function(req, res) {
+//   if (req.body.favoriteType) {
 
-    var favoriteValue = req.body.favoriteType === 'add' ? true : false;
-    var recipeToUpdate = getRecipe(req.body.id);
-    recipeToUpdate.favorite = favoriteValue;
-    res.json({});
-    return;
-  }
-
-
-  if (req.body.isNew) {
-
-    var recipeIDs = recipes.map(function(i) {
-      return i.id;
-    });
-
-    var newRecipe = {
-      id: Math.max.apply(null, recipeIDs) + 1,
-      name: req.body.recipeName,
-      ingredients: req.body.ingredients,
-      more: req.body.recipeDescription,
-      url: req.body.url,
-      servings: req.body.servings,
-      readyIn: req.body.readyIn,
-      cals: req.body.cals,
-      tags: [],
-      date: '1/11/17'
-    };
-
-    if (req.body.tags) {
-      handleTags(req.body.tags, newRecipe);
-    }
-
-    recipes.push(newRecipe);
-    res.json(newRecipe);
-    return;
-  }
+//     var favoriteValue = req.body.favoriteType === 'add' ? true : false;
+//     var recipeToUpdate = getRecipe(req.body.id);
+//     recipeToUpdate.favorite = favoriteValue;
+//     res.json({});
+//     return;
+//   }
 
 
-  console.log(req.body.id);
-  var recipeToUpdate = getRecipe(req.body.id);
+//   if (req.body.isNew) {
 
-  // Update recipe name
-  if (req.body.recipeName) {
-    recipeToUpdate.name = req.body.recipeName;
-  }
+//     var recipeIDs = recipes.map(function(i) {
+//       return i.id;
+//     });
 
-  // Update ingredients
-  if (req.body.ingredients) {
-  	console.log('Updating recipe ingredients');
-  	console.log(req.body.ingredients);
-  	recipeToUpdate.ingredients = req.body.ingredients
-  }
+//     var newRecipe = {
+//       id: Math.max.apply(null, recipeIDs) + 1,
+//       name: req.body.recipeName,
+//       ingredients: req.body.ingredients,
+//       more: req.body.recipeDescription,
+//       url: req.body.url,
+//       servings: req.body.servings,
+//       readyIn: req.body.readyIn,
+//       cals: req.body.cals,
+//       tags: [],
+//       date: '1/11/17'
+//     };
 
-  // Update recipe description
-  if (req.body.recipeDescription) {
-    recipeToUpdate.more = req.body.recipeDescription;
-  }
+//     if (req.body.tags) {
+//       handleTags(req.body.tags, newRecipe);
+//     }
 
-  // Update tags
-  if (req.body.tags) {
+//     recipes.push(newRecipe);
+//     res.json(newRecipe);
+//     return;
+//   }
 
-    var submittedTags = req.body.tags;
 
-    // Clear existing tags
-    recipeToUpdate.tags = [];
+//   console.log(req.body.id);
+//   var recipeToUpdate = getRecipe(req.body.id);
 
-    handleTags(submittedTags, recipeToUpdate);
-  }
+//   // Update recipe name
+//   if (req.body.recipeName) {
+//     recipeToUpdate.name = req.body.recipeName;
+//   }
 
-  // Update URL
-  if (req.body.url === '' || req.body.url) {
-  	recipeToUpdate.url = req.body.url;
-  }
+//   // Update ingredients
+//   if (req.body.ingredients) {
+//   	console.log('Updating recipe ingredients');
+//   	console.log(req.body.ingredients);
+//   	recipeToUpdate.ingredients = req.body.ingredients
+//   }
 
-  // Update servings
-  if (req.body.servings) {
-    recipeToUpdate.servings = req.body.servings;
-  }
+//   // Update recipe description
+//   if (req.body.recipeDescription) {
+//     recipeToUpdate.more = req.body.recipeDescription;
+//   }
 
-  // Update ready time
-  if (req.body.readyIn) {
-    recipeToUpdate.readyIn = req.body.readyIn;
-  }
+//   // Update tags
+//   if (req.body.tags) {
 
-  // Update calories
-  if (req.body.cals) {
-    recipeToUpdate.cals = req.body.cals;
-  }
+//     var submittedTags = req.body.tags;
 
-  res.json(recipeToUpdate);
-});
+//     // Clear existing tags
+//     recipeToUpdate.tags = [];
+
+//     handleTags(submittedTags, recipeToUpdate);
+//   }
+
+//   // Update URL
+//   if (req.body.url === '' || req.body.url) {
+//   	recipeToUpdate.url = req.body.url;
+//   }
+
+//   // Update servings
+//   if (req.body.servings) {
+//     recipeToUpdate.servings = req.body.servings;
+//   }
+
+//   // Update ready time
+//   if (req.body.readyIn) {
+//     recipeToUpdate.readyIn = req.body.readyIn;
+//   }
+
+//   // Update calories
+//   if (req.body.cals) {
+//     recipeToUpdate.cals = req.body.cals;
+//   }
+
+//   res.json(recipeToUpdate);
+// });
 
 
 function handleTags(arr, recipe) {
@@ -593,7 +618,3 @@ var recipes = [
     favorite: true,
   },
 ];
-
-
-/* --- TO DO ---*/
-// Reset function for editing to revert data
