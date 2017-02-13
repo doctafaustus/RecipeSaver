@@ -10,7 +10,7 @@ window.refreshRecipeList = function() {
 			var recipes = data;
 			var recipeList = '<ul id="recipe-list">';
 			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].creationDate + '</a></span></li>';
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
 			}
 			recipeList += '</ul>';
 			$('#list-panel-inner').html(recipeList);
@@ -286,7 +286,7 @@ function populatePanelSuccess(data) {
 	$('#detail-id').text(data._id);
 
 	// Recipe Date
-	$('#detail-date').text(data.creationDate);
+	$('#detail-date').text(new Date(data.creationDate).getTime());
 
 	// Show/Hide Recipe URL
 	if ($('#detail-link').attr('href').length) {
@@ -418,6 +418,14 @@ function resetEdit() {
 }
 
 
+function formatDates() {
+	$('.recipe-list-entry-date a').each(function() {
+		var time = +$(this).html();
+		moment(new Date(time)).format('M/D/YY')
+		$(this).html(moment(new Date(time)).format('M/D/YY'));
+	});
+}
+formatDates();
 
 /* --- Set window object's initial stage ---*/
 window.stage = 'initial';

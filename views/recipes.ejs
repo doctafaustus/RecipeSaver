@@ -861,7 +861,7 @@
 								<a><%= recipes[i].recipeName %></a>
 							</span>
 							<span class="recipe-list-entry-date">
-								<a><%= recipes[i].creationDate %></a>
+								<a><%= new Date(recipes[i].creationDate).getTime() %></a>
 							</span>
 						</li>
 					<% } %>
@@ -1017,12 +1017,12 @@
 	</ul>
 
 
+	<script src="moment.js"></script>
 	<script src="main.js"></script>
 	<script src="edit.js"></script>
 	<script src="convert.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<script src="fraction.js"></script>
-	<script src="moment.js"></script>
 	<script>
 		// Mark active header menu
 		document.getElementById('recipes').className = 'active-menu';

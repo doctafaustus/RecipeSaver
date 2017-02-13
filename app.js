@@ -10,6 +10,8 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 
+
+
 // DATABASE
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema; //allows use to define our schema
@@ -24,7 +26,8 @@ var User = mongoose.model('User', new Schema({
 	id: ObjectId,
 	name: String,
 	twitterId: String,
-	twitterDisplayName: String,
+	facebookId: String,
+	googleId: String,
   creationDate: {type: Date, default: Date.now},
 }));
 
@@ -47,14 +50,11 @@ var Recipe = mongoose.model('Recipe', new Schema({
 // CUSTOM MODULES
 var emailSupport = require('./mods/emailSupport.js');
 
-//var Unitz = require('unitz');
-//console.log(Unitz.parse('19/50 tbsps').convert('tsp', true))
-
-
 var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
 var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
 var googleAppSecret = process.env.PORT ? null : fs.readFileSync('./private/googleAppSecret.txt').toString();
 
+// Twitter login
 passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
     consumerSecret: twitterAppSecret,
@@ -65,9 +65,7 @@ passport.use(new TwitterStrategy({
   	console.log(profile);
 	  process.nextTick(function() {
 	    User.findOne({ 'twitterId' : profile.id }, function(err, user) {
-	      if (err) {
-					return done(err);
-				}
+	      if (err) return done(err);
 	      if (user) {
 	      	console.log('Twitter user found, yo!');
 	        return done(null, user); // User found, return that user
@@ -76,7 +74,6 @@ passport.use(new TwitterStrategy({
 	        var newUser = new User();
 	        newUser.name = profile.displayName;
 	        newUser.twitterId = profile.id;
-	        newUser.twitterDisplayName = profile.displayName;
 	        newUser.save(function(err) {
 	          if (err) {
 	            throw err;
@@ -88,42 +85,61 @@ passport.use(new TwitterStrategy({
 	  });
 	}
 ));
-
-
+// Facebook login
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
     callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/facebook/callback',
   },
-  function(token, tokenSecret, profile, cb) {
-    return cb(null, profile);
-  }));
-//   function(accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
+	function(token, refreshToken, profile, done) {
+		process.nextTick(function() {
+			User.findOne({ 'facebookId' : profile.id }, function(err, user) {
+				if (err) return done(err);
+				if (user) {
+					return done(null, user);
+				} else {
+					var newUser = new User();
+					newUser.name = profile.displayName;
+					newUser.facebookId = profile.id;
+					newUser.save(function(err) {
+						if (err) throw err;
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	}
+));
+// Google login
 passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: googleAppSecret,
     callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/google/callback',
   },
-  function(token, tokenSecret, profile, cb) {
-    return cb(null, profile);
-  }));
-//   function(accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
-
+	function(token, refreshToken, profile, done) {
+		process.nextTick(function() {
+			User.findOne({ 'google.id' : profile.id }, function(err, user) {
+				if (err) return done(err);
+				if (user) {
+					return done(null, user);
+				} else {
+					var newUser = new User();
+					newUser.name = profile.displayName;
+					newUser.googleId = profile.id;
+					newUser.save(function(err) {
+						if (err) throw err;
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	}
+));
+	
 
 passport.serializeUser(function(user, cb) {
   cb(null, user);
 });
-
 passport.deserializeUser(function(obj, cb) {
   cb(null, obj);
 });
@@ -154,7 +170,7 @@ function loggedIn(req, res, next) {
     next();
   } else {
     console.log('no');
-    res.sendStatus(401);
+    res.redirect('/login/twitter');
   }
 }
 
@@ -179,15 +195,11 @@ app.get('/privacy-policy', function(req, res) {
 
 
 
-// app.get('/recipes', function(req, res) {
-//   res.render('recipes.ejs', {recipes: recipes});
-// });
 // Recipes page
-app.get('/recipes', function(req, res) {
+app.get('/recipes', /*loggedIn,*/ function(req, res) {
   Recipe.find({user_id: req.user._id}, function(err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
-  	console.log(recipes);
   	res.render('recipes.ejs', {recipes: recipes});
   });
 });
