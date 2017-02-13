@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
+var bcrypt = require('bcryptjs');
 
 
 
@@ -24,6 +25,8 @@ mongoose.connect('mongodb://localhost/recipe_saver', function() {
 
 var User = mongoose.model('User', new Schema({
 	id: ObjectId,
+	email: String,
+	password: String,
 	name: String,
 	twitterId: String,
 	facebookId: String,
@@ -164,12 +167,10 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 
 
 function loggedIn(req, res, next) {
-	console.log(req.user);
+	//onsole.log(req.user);
   if (req.user) {
-    console.log('yes');
     next();
   } else {
-    console.log('no');
     res.redirect('/login/twitter');
   }
 }
@@ -194,9 +195,29 @@ app.get('/privacy-policy', function(req, res) {
 });
 
 
+// Local login
+app.post('/local-login', function(req, res) {
+	User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
+		if (!user) {
+			res.render('login.ejs', {error: 'Invalid email or password.'});
+		} else {
+			if (bcrypt.compareSync(req.body.password, user.password)) {
+				req.session.user = user;
+				console.log(req.session.user);
+				res.redirect('/profile');
+			} else {
+				console.log(req.body.email.toLowerCase() + ' entered an incorrect password or username');
+				//res.render('login.ejs', { reset: 'none', error: 'Invalid email or password.'});				
+			}
+		}
+	});
+});
+
+
+
 
 // Recipes page
-app.get('/recipes', /*loggedIn,*/ function(req, res) {
+app.get('/recipes', loggedIn, function(req, res) {
   Recipe.find({user_id: req.user._id}, function(err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
