@@ -10,6 +10,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
+var async = require('async');
 
 
 
@@ -41,7 +42,7 @@ var Recipe = mongoose.model('Recipe', new Schema({
 	ingredients: [String],
 	description: String,
 	url: String,
-	tags: [String],
+	tags: { type : Array , "default" : [] },
 	servings: String,
 	readyIn: String,
 	cals: String,
@@ -221,13 +222,37 @@ app.get('/recipes', loggedIn, function(req, res) {
   Recipe.find({user_id: req.user._id}, function(err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
-  	res.render('recipes.ejs', {recipes: recipes});
+  	res.render('recipes.ejs', {recipes: recipes, loginId: req.user._id.toString()});
+  });
+});
+
+// Get all recipes
+app.get('/get-all-recipes', function(req, res) {
+  console.log('/get-all-recipes');
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  	if (err) throw err;
+  	console.log(req.user._id + '\'s recipes retrieved!');
+  	res.json(recipes);
   });
 });
 
 
+
 // Add or update recipe
 app.post('/recipe-update', function(req, res) {
+	// Favorite recipe
+  if (req.body.favoriteType) {
+    var favoriteValue = req.body.favoriteType === 'add' ? true : false;
+  	Recipe.findOne({_id: req.body.id}, function(err, recipe) {
+    	recipe.favorite = favoriteValue;
+			recipe.save(function(err, recipe) {
+			  if (err) throw err;
+			  console.log(recipe.recipeName + ' favorited!');
+    		res.json({});
+			});
+  	});
+  }
+
 
 	// Save new recipe
   if (req.body.isNew) {
@@ -241,22 +266,153 @@ app.post('/recipe-update', function(req, res) {
 			servings: req.body.servings,
 			readyIn: req.body.readyIn,
 			cals: req.body.cals,
+			favorite: false,
 		});
     if (req.body.tags) {
-      //handleTags(req.body.tags, recipe);
+      handleTagsAndSave(req.user._id, req.body.tags, recipe, res);
+    } else {
+			recipe.save(function(err, recipe) {
+			  if (err) throw err;
+			  console.log(recipe.recipeName + ' saved!');
+			  res.json(recipe);
+			});
+	    return;
     }
+  }
+
+});
+function handleTagsAndSave(userId, requestTags, recipe, res) {
+  // Set default new color
+  var color = '#808080';
+  Recipe.find({user_id: userId}, function(err, recipes) {
+  	if (err) throw err;
+		var tags = [];
+	  requestTags.forEach(function(el, pos) {
+	    for (var i = 0; i < recipes.length; i++) {
+	      for (var j = 0; j < recipes[i].tags.length; j++) {
+	        if (requestTags[pos].name === recipes[i].tags[j].name) {
+	          color = recipes[i].tags[j].color;
+	          break;
+	        } else if (requestTags[pos].color) {
+	          color = requestTags[pos].color;
+	        }
+	      }
+	    }
+	    recipe.tags.push({'name': requestTags[pos].name, 'color': color});
+	    // Reset color
+	    color = '#808080';
+	  });
 		recipe.save(function(err, recipe) {
 		  if (err) throw err;
 		  console.log(recipe.recipeName + ' saved!');
 		  res.json(recipe);
 		});
-    return;
-  }
-	// Add in functionality to mark as a favorite or not
+  });
+}
+
+
+// Get favorite recipes
+app.get('/get-favorite-recipes', function(req, res) {
+  console.log('/get-favorite-recipes');
+  Recipe.find({favorite: true}, function(err, recipes) {
+  	if (err) throw err;
+  	res.json(recipes);
+  });
 });
 
 
+// Get all tags
+app.get('/get-all-tags', function(req, res) {
+  console.log('/get-all-tags');
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  	if (err) throw err;
+	  // First get all user-defined tags
+	  var uniqueTags = [];
+	  for (var i = 0; i < recipes.length; i++) {
+	    for (var j = 0; j < recipes[i].tags.length; j++) {
+	      pushIfNew(uniqueTags, recipes[i].tags[j]);
+	    }
+	  }
+	  res.json(uniqueTags);
+  });
+});
 
+
+// Get recipes by tag
+app.post('/get-recipes-by-tag', function(req, res) {
+  console.log('/get-recipes-by-tag');
+
+  var tagName = req.body.tagName;
+  var tagColor = req.body.tagColor;
+  var recipesToSend = [];
+
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  	if (err) throw err;
+	  for (var i = 0; i < recipes.length; i++) {
+	    for (var j = 0; j < recipes[i].tags.length; j++) {
+	      if (recipes[i].tags[j].name === tagName) {
+	        recipesToSend.push(recipes[i]);
+	      }
+	    }
+	  }
+	  res.json({recipesToSend: recipesToSend, tagColor: tagColor, tagName: tagName});
+  });
+});
+
+
+// Update tag color
+app.post('/update-tag-color', function(req, res) {
+	var tagColorToChange = req.body.tagColorToChange;
+	var newTagColor = req.body.newTagColor;
+	var tagName = req.body.tagName;
+	console.log(tagName);
+
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  	if (err) throw err;
+
+  	var recipesToSave = [];
+		for (var i = 0; i < recipes.length; i++) {
+			for (var j = 0; j < recipes[i].tags.length; j++) {
+				if (recipes[i].tags[j].color === tagColorToChange && recipes[i].tags[j].name === tagName) {
+
+					recipes[i].tags[j].color = newTagColor;
+
+					// For some reason, MongoDB is not saving updated tag colors unless we set the recipe tags to an entirely different value first and then resetting the value to the changed tag array
+					var clonedTags = recipes[i].tags.slice(0);
+					recipes[i].tags = [];
+					recipes[i].tags = clonedTags;
+
+					recipesToSave.push(recipes[i]);
+				}
+			}
+		}
+
+		if (recipesToSave.length == 0) {
+			res.sendStatus(200);
+		} else {
+			var counter = 0;
+			for (var k = 0; k < recipesToSave.length; k++) {
+				console.log(recipesToSave[k])
+				recipesToSave[k].save(function(err, record) {
+				  if (err) throw err;
+				  console.log('Saving ' + record.recipeName);
+				  counter++;
+				});
+			}
+
+			// Wait until all records in the recipesToSave array are finished saving then send the response
+			(function poll() {
+				setTimeout(function () {
+					if (counter === recipesToSave.length) {
+						res.json(recipes);
+					} else {
+						poll();
+					}
+				}, 50);
+			})();
+		}
+  });
+});
 
 
 // Login with Twitter
@@ -295,14 +451,14 @@ app.get('/logout', function(req, res) {
 
 
 
-
-
-
-
 app.post('/recipe', function(req, res) {
   var recipeToUpdate = getRecipe(req.body.id);
   res.json(recipeToUpdate);
 });
+
+
+
+
 
 // app.post('/recipe-update', function(req, res) {
 //   if (req.body.favoriteType) {
@@ -399,82 +555,37 @@ app.post('/recipe', function(req, res) {
 // });
 
 
-function handleTags(arr, recipe) {
-  // Set default new color
-  var color = '#808080';
+// function handleTags(arr, recipe) {
+//   // Set default new color
+//   var color = '#808080';
 
-  arr.forEach(function(el, pos) {
-    for (var i = 0; i < recipes.length; i++) {
-      for (var j = 0; j < recipes[i].tags.length; j++) {
-        if (arr[pos].name === recipes[i].tags[j].name) {
-          color = recipes[i].tags[j].color;
-          break;
-        } else if (arr[pos].color) {
-          color = arr[pos].color;
-        }
-      }
-    }
+//   arr.forEach(function(el, pos) {
+//     for (var i = 0; i < recipes.length; i++) {
+//       for (var j = 0; j < recipes[i].tags.length; j++) {
+//         if (arr[pos].name === recipes[i].tags[j].name) {
+//           color = recipes[i].tags[j].color;
+//           break;
+//         } else if (arr[pos].color) {
+//           color = arr[pos].color;
+//         }
+//       }
+//     }
 
-    recipe.tags.push({'name': arr[pos].name, 'color': color});
+//     recipe.tags.push({'name': arr[pos].name, 'color': color});
 
-    // Reset color
-    color = '#808080';
-  });
-}
-
-
-// Get all tags
-app.get('/get-all-tags', function(req, res) {
-  console.log('/get-all-tags');
-
-  // First get all user-defined tags
-  var uniqueTags = [];
-  for (var i = 0; i < recipes.length; i++) {
-    for (var j = 0; j < recipes[i].tags.length; j++) {
-      pushIfNew(uniqueTags, recipes[i].tags[j]);
-    }
-  }
-
-  console.log(uniqueTags)
-  res.json(uniqueTags);
-});
+//     // Reset color
+//     color = '#808080';
+//   });
+// }
 
 
-// Get recipes by tag
-app.post('/get-recipes-by-tag', function(req, res) {
-  console.log('/get-recipes-by-tag');
-  var tagName = req.body.tagName;
-  var tagColor = req.body.tagColor;
-  var recipesToSend = [];
-
-  for (var i = 0; i < recipes.length; i++) {
-    for (var j = 0; j < recipes[i].tags.length; j++) {
-      if (recipes[i].tags[j].name === tagName) {
-        recipesToSend.push(recipes[i]);
-      }
-    }
-  }
-
-  res.json({recipesToSend: recipesToSend, tagColor: tagColor, tagName: tagName});
-});
 
 
-// Get all recipes
-app.get('/get-all-recipes', function(req, res) {
-  console.log('/get-all-recipes');
-  res.json(recipes);
-});
 
-// Get favorite recipes
-app.get('/get-favorite-recipes', function(req, res) {
-  console.log('/get-favorite-recipes');
-  var favoriteRecipes = recipes.filter(function(i) {
-    if (i.favorite === true) {
-      return i;
-    }
-  });
-  res.json(favoriteRecipes);
-});
+
+
+
+
 
 // Get uncategorized recipes
 app.get('/get-uncategorized-recipes', function(req, res) {
@@ -487,24 +598,7 @@ app.get('/get-uncategorized-recipes', function(req, res) {
   res.json(uncategorizedRecipes);
 });
 
-// Update tag color
-app.post('/update-tag-color', function(req, res) {
-	var tagColorToChange = req.body.tagColorToChange;
-	var newTagColor = req.body.newTagColor;
-	var tagName = req.body.tagName;
-	console.log(tagName);
 
-	for (var i = 0; i < recipes.length; i++) {
-		for (var j = 0; j < recipes[i].tags.length; j++) {
-			if (recipes[i].tags[j].color === tagColorToChange && recipes[i].tags[j].name === tagName) {
-				recipes[i].tags[j].color = newTagColor;
-			}
-		}
-	}
-
-	res.sendStatus(200);
-
-});
 
 
 

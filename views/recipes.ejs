@@ -238,9 +238,9 @@
 		#menu li:hover {
 			background-color: #089de3;
 		}
-		#menu li {
+/*		#menu li {
 			line-height: normal;
-		}
+		}*/
 		#top-bar {
 			background-color: white;
 			box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
@@ -1029,6 +1029,10 @@
 
 		// Save global reference to recipes so we can find retrieve them wit search
 		window.recipes = <%- JSON.stringify(recipes) %>;
+
+		// Log the user id
+		console.log('Db user id: ' + '<%= loginId %>');
+
 	</script>
 
 </body>
