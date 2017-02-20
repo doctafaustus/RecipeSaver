@@ -528,10 +528,11 @@ $('#get-uncategorized-recipes').click(function() {
 			var recipes = data;
 			var recipeList = '<ul id="recipe-list">';
 			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i].id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].name + '</a></span><span class="recipe-list-entry-date"><a>' + recipes[i].date + '</a></span></li>';
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i]._id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
 			}
 			recipeList += '</ul>';
 			$('#list-panel-inner').html(recipeList);
+			formatDates();
 
 			// Change panel title
 			$('#list-panel-heading').text('Uncategorized Recipes');
@@ -723,25 +724,25 @@ $('#search-form-input').keyup(function() {
 	var list = '';
 
 	// Sort recipes by name first
-	recipes = recipes.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+	recipes = recipes.sort(function(a,b) {return (a.recipeName > b.recipeName) ? 1 : ((b.recipeName > a.recipeName) ? -1 : 0);} );
 
 	// Get all recipes that contain the input
 	for (var i = 0, recipesLength = recipes.length; i < recipesLength; i++) {
-		if (recipes[i].name.toLowerCase().indexOf(input) > -1 && foundRecipes < limit) {
+		if (recipes[i].recipeName.toLowerCase().indexOf(input) > -1 && foundRecipes < limit) {
 
 
 			// Bold the substring that was searched for by inserting a span
-			var startPos = recipes[i].name.toLowerCase().indexOf(input);
+			var startPos = recipes[i].recipeName.toLowerCase().indexOf(input);
 			var endPos = startPos + input.length;
 
-			var strStart = recipes[i].name.substring(0, startPos);
-			var boldPart = recipes[i].name.substring(startPos, endPos);
-			var strEnd = recipes[i].name.substring(endPos);
+			var strStart = recipes[i].recipeName.substring(0, startPos);
+			var boldPart = recipes[i].recipeName.substring(startPos, endPos);
+			var strEnd = recipes[i].recipeName.substring(endPos);
 
 			var formattedStr = strStart + '<span class="sug-bold">' + boldPart + '</span>' + strEnd;
 
 
-			list += '<li class="suggestion" data-id="' + recipes[i].id + '">' + formattedStr + '</li>';
+			list += '<li class="suggestion" data-id="' + recipes[i]._id + '">' + formattedStr + '</li>';
 			foundRecipes++;
 		}
 	}

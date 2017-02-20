@@ -243,7 +243,7 @@ app.post('/recipe-update', function(req, res) {
 	// Favorite recipe
   if (req.body.favoriteType) {
     var favoriteValue = req.body.favoriteType === 'add' ? true : false;
-  	Recipe.findOne({_id: req.body.id}, function(err, recipe) {
+  	Recipe.findOne({user_id: req.user._id, _id: req.body.id}, function(err, recipe) {
     	recipe.favorite = favoriteValue;
 			recipe.save(function(err, recipe) {
 			  if (err) throw err;
@@ -314,11 +314,25 @@ function handleTagsAndSave(userId, requestTags, recipe, res) {
 // Get favorite recipes
 app.get('/get-favorite-recipes', function(req, res) {
   console.log('/get-favorite-recipes');
-  Recipe.find({favorite: true}, function(err, recipes) {
+  Recipe.find({user_id: req.user._id, favorite: true}, function(err, recipes) {
   	if (err) throw err;
   	res.json(recipes);
   });
 });
+
+
+// Get uncategorized recipes
+app.get('/get-uncategorized-recipes', function(req, res) {
+  console.log('/get-uncategorized-recipes');
+  Recipe.find({user_id: req.user._id, tags: {$size: 0} }, function(err, recipes) {
+  	if (err) throw err;
+  	res.json(recipes);
+  });
+});
+
+
+
+
 
 
 // Get all tags
@@ -411,6 +425,17 @@ app.post('/update-tag-color', function(req, res) {
 				}, 50);
 			})();
 		}
+  });
+});
+
+
+
+// Delete recipe
+app.post('/delete-recipe', function(req, res) {
+  Recipe.remove({user_id: req.user._id, _id: req.body.id}, function(err, recipe) {
+  	if (err) throw err;
+  	console.log('Recipe id: ' + req.body.id + ' was deleted');
+		res.sendStatus(200);
   });
 });
 
@@ -578,38 +603,6 @@ app.post('/recipe', function(req, res) {
 //   });
 // }
 
-
-
-
-
-
-
-
-
-
-// Get uncategorized recipes
-app.get('/get-uncategorized-recipes', function(req, res) {
-  console.log('/get-uncategorized-recipes');
-  var uncategorizedRecipes = recipes.filter(function(i) {
-    if (i.tags.length === 0) {
-      return i;
-    }
-  });
-  res.json(uncategorizedRecipes);
-});
-
-
-
-
-
-
-// Delete recipe
-app.post('/delete-recipe', function(req, res) {
-	recipes = recipes.filter(function(e) {
-    return e.id != req.body.id;
-  });
-	res.sendStatus(200);
-});
 
 
 
