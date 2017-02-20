@@ -178,7 +178,8 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  data: data,
 		  success: function(data) {
 		  	console.log('Updated recipe!');
-		  	window.populatePanel(data.id, true);
+		  	console.info(data);
+		  	window.populatePanel(data._id, true);
 		  	window.resetRecipeState();
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
@@ -200,7 +201,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 
 		  success: function(data) {
 		  	console.log('Updated recipe!');
-		  	window.populatePanel(data.id, true);
+		  	window.populatePanel(data._id, true);
 		  	window.resetRecipeState();
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
@@ -350,7 +351,6 @@ $('#profile').on('click', '.icons', function() {
       		var value = $('#cals-input').val().length ? $('#cals-input').val() : 0;
       		$('#cals').html(value + ' cals');
       	}
-      	$('#serving-input, #mins-input, #cals-input').val('');
   		}
 		});
 	});

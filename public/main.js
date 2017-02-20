@@ -299,6 +299,9 @@ function populatePanelSuccess(data) {
 	showPopulatedInputs(data);
 
 	urlSizeFix();
+
+	// Clear top info vals
+	$('#serving-input, #mins-input, #cals-input').val('');
 }
 
 
@@ -914,7 +917,6 @@ $('#profile')
 });
 
 
-
 /* --- Fullscreen Mode --- */
 $('#profile').on('click', '#full-screen', function() {
 	// If already in fullscreeen mode then go back to 2 panels
@@ -934,6 +936,15 @@ $('#profile').on('click', '#print', function() {
 	// To slide menu up:
 	$('#detail-options').click();
 	window.print();
+});
+
+
+// Ensure recipe links start with at least http://
+$('#profile').on('mousedown', '#detail-link', function() {
+	var href = $(this).attr('href').trim();
+	if (href !== ''  && href.indexOf('http') === -1 && href.indexOf('www.') === -1) {
+		$(this).attr('href', 'http://' + href);
+	}
 });
 
 
