@@ -185,6 +185,9 @@ function loggedIn(req, res, next) {
 app.get('/', function(req, res) {
 	res.render('index.ejs', {regMessage: 'none'});
 });
+app.get('/home', function(req, res) {
+	res.render('home.ejs');
+});
 // Blog routes
 require('./mods/blogRoutes')(app);
 // Email support form

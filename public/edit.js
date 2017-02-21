@@ -72,6 +72,9 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	// Make ingredients list sortable
 	sortableIngredients();
 
+	// Focus on name at first
+	$('#detail-name').focus();
+
 });
 
 // Prevent carriage return on Recipe Name input

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Recipe Saver | Home</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	<style>
+		body {
+			font-family: 'Raleway', sans-serif;
+			padding-bottom: 500px;
+		}
+		#home-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: #232427;
+			height: 68px;
+			font-family: 'Cabin', Arial;
+			font-size: 23px;
+			box-sizing: border-box;
+			padding-left: 20px;
+		}
+		#home-logo {
+			vertical-align: middle;
+			width: 192px;
+			display: block;
+			text-decoration: none;
+		}
+		#home-logo img {
+			vertical-align: middle;
+		}
+		#home-logo-text {
+			display: inline-block;
+			margin-left: 6px;
+			color: white;
+		}
+		#nav {
+			border: 0;
+		}
+		#nav li:hover {
+			border-bottom: solid 3px #23d82f;
+		}
+		#nav li a, #nav li a:hover {
+			color: white;
+		}
+		#home-cover, #hero-left, #hero-right {
+			height: 525px;
+			font-weight: 400;
+			color: white;
+		}
+		#home-cover {
+			background-color: white;
+		  background: url(images/hero-compressed-cut-reversed.jpg) no-repeat; 
+		  -webkit-background-size: cover;
+		  -moz-background-size: cover;
+		  -o-background-size: cover;
+		  background-size: cover;
+		  background-position: bottom;
+		}
+
+		.home-wrapper {
+			width: 1220px;
+			margin: 0 auto;
+		}
+		#hero-left {
+			width: 890px;
+			float: left;
+			background-color: rgba(21, 20, 20, 0.75);
+		}
+		#save-any {
+			font-size: 47px;
+			width: 319px;
+			padding-bottom: 3px;
+			border-bottom: solid 2px #1685ba;
+			margin: 150px auto 80px auto;
+			font-family: 'Cabin', Arial;
+		}
+		#hero-left p {
+			width: 530px;
+			margin: 0 auto;
+			font-family: 'Raleway', sans-serif;
+			font-size: 20.5px;
+			line-height: 30px;
+
+		}
+		#hero-right {
+			width: 330px;
+			float: right;
+			background-color: rgba(21, 20, 20, 0.89);
+		}
+		#hero-right h2 {
+			border-bottom: solid 2px #1685ba;
+			width: 130px;
+			font-size: 30px;
+			padding-bottom: 2px;
+			margin: 50px auto 35px auto;
+			font-family: 'Cabin', Arial;
+		}
+		#reg-options li {
+			width: 260px;
+			height: 56px;
+			margin: 0 auto 25px auto;
+		}
+		#reg-options li a {
+			display: block;
+			height: 100%;
+			color: white;
+			text-decoration: none;
+			line-height: 56px;
+			padding-left: 74px;
+		}
+		#twitter-reg {
+			background: url(images/twitter-reg.png) no-repeat;
+		}
+		#facebook-reg {
+			background: url(images/facebook-reg.png) no-repeat;
+		}
+		#gmail-reg {
+			background: url(images/gmail-reg.png) no-repeat;
+		}
+		#email-reg {
+			background: url(images/email-reg.png) no-repeat;
+		}
+		#home-banner {
+			height: 84px;
+			line-height: 84px;
+			font-size: 22px;
+			background-color: #1281b5;
+			color: white;
+			text-align: center;
+		}
+		#home-laptop-section {
+			background-color: #f3f3f3;
+			padding: 60px 0;
+			overflow: auto;
+			overflow-x: hidden;
+		}
+		#laptop-left, #laptop-right {
+			width: 48%;
+			box-sizing: border-box;
+		}
+		#laptop-left {
+			float: left;
+			padding-left: 50px;
+		}
+		#laptop-right {
+			float: right;
+			padding-left: 40px;
+		}
+		#laptop-right h2 {
+			font-size: 38px;
+			margin-top: 71px;
+			margin-bottom: 28px;
+		}
+		#laptop-right p {
+	    font-size: 18px;
+	    line-height: 29px;
+	    width: 520px;
+		}
+		#value-props {
+			box-sizing: border-box;
+			padding: 60px 0;
+		}
+		#value-props h3 {
+			font-weight: bold;
+			text-align: center;
+			color: #066b9a;
+			font-size: 30px;
+			margin-bottom: 25px;
+		}
+		#value-props p#value-prop-subtitle {
+			text-align: center;
+	    width: 546px;
+	    margin: 0 auto;
+	    font-size: 19px;
+	    line-height: 24px;
+	    margin-bottom: 60px;
+		}
+		#value-prop-icons {
+   		display: flex;
+    	justify-content: space-between;
+		}
+		#value-prop-icons h4 {
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 25px;
+		}
+		#value-prop-icons li {
+			text-align: center;
+		}
+		.value-prop-container {
+			height: 103px;
+		}
+		#value-prop-icons p.value-prop-summary {
+			color: black;
+			text-align: left;
+			width: 252px;
+			line-height: 22px;
+		}
+		.value-prop-icon {
+			margin: 0 auto 25px auto;
+		}
+		#hero-strip {
+			background: url(images/hero-strip.png) no-repeat;
+	    -webkit-background-size: cover;
+	    -moz-background-size: cover;
+	    -o-background-size: cover;
+	    background-size: cover;
+	    height: 200px;
+	    overflow: auto;
+		}
+		#hero-strip-box {
+			background-color: #23d82f;
+			width: 505px;
+			padding: 27px;
+			margin: 0 auto;
+			margin-top: 61px;
+			font-size: 23px;
+			text-align: center;
+			color: #051302;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="home-header">
+		<a id="home-logo" href="/">
+			<img src="/images/home-logo.png">
+			<div id="home-logo-text">Recipe Saver</div>
+		</a>
+		<div id="nav">
+			<ul>
+				<li id="recipes"><a href="/recipes">My Recipes</a></li>
+				<li id="chrome-extension"><a href="#">Chrome Extension</a></li>
+				<li id="blog"><a href="/blog">Blog</a></li>
+				<li id="support"><a href="#">Support</a></li>
+				<li id="logout"><a href="/logout">Logout</a></li>
+				<li id="account"><a href="/account">Account</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="home-cover">
+		<div class="home-wrapper">
+			<div id="hero-left">
+				<h1 id="save-any">Save any recipe.</h1>
+				<p>
+					Recipe Saver lets you create, save, edit, and categorize any recipe, no matter where you find. Now all of your recipes can be kept in just one place.
+				</p>
+			</div>
+			<div id="hero-right">
+				<h2>Try It Now</h2>
+				<ul id="reg-options">
+					<li id="twitter-reg"><a href="">Sign-in with Twitter</a></li>
+					<li id="facebook-reg"><a href="">Sign-in with Facebook</a></li>
+					<li id="gmail-reg"><a href="">Sign-in with Google</a></li>
+					<li id="email-reg"><a href="">Sign-in with Email</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="home-banner">Join the thousands of people who store their favorite recipes on Recipe Saver.</div>
+
+	<div id="home-laptop-section">
+		<div class="home-wrapper">
+			<div id="laptop-left">
+				<img src="images/laptop.png" id="laptop">
+			</div>
+			<div id="laptop-right">
+				<h2>One site - every recipe</h2>
+				<p>
+					Enter a recipe from scratch. Save the url from online recipes. Or use the Chrome extension to automatically extract the recipe from popular recipe sites.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div id="value-props">
+		<div class="home-wrapper">
+			<h3>The ultimate tool for home cooks</h3>
+			<p id="value-prop-subtitle">
+				Recipe Saver was designed as fast, quick-loading application so you can do what you need to do and get cooking.
+			</p>
+			<ul id="value-prop-icons">
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/plans-icon.png">
+					</div>
+					<h4>Two Plans</h4>
+					<p class="value-prop-summary">
+						Your first 60 recipes are free. After that you may sign up for a pro plan for $x per month for as long as you like.
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/centralize-icon.png">
+					</div>
+					<h4>Consolidation</h4>
+					<p class="value-prop-summary">
+						Forget spreadsheets or bookmarks. Store all your recipes here on one site so they'll never get lost or forgotten again. 
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/extension-icon.png">
+					</div>
+					<h4>Extension</h4>
+					<p class="value-prop-summary">
+						Save recipes and URLs with the click of a button with the Chrome extension. It requires no effort at all!
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/organize-icon.png">
+					</div>
+					<h4>Organization</h4>
+					<p class="value-prop-summary">
+						Stay organized by adding your own tags, search by name, or sort by name or date. Easily search for what you need and voilà!
+					</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="hero-strip">
+		<div id="hero-strip-box">Create your recipe collection today</div>
+	</div>
+
+	<div id="blog-bio">
+		<div class="home-wrapper">
+			<div id="blog-bio-left">
+				<div class="blog-bio-title">Latest Blog Post</div>
+				<a id="featured-blog-post" href="/">
+					<img id="blog-post-image" src="images/blog/fast-food-homepage.jpg">
+					<div id="blog-post-title">Cookbook Review: Gordon Ramsay's Fast Food</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
