@@ -298,11 +298,12 @@ table {
 }
 
 
-/* --- BLOG FOOTER --- */
+/* --- FOOTER --- */
 footer {
 	margin-top: 55px;
 	background-color: #444444;
   color: white;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 #footer-inner, #copyright-inner {
 	width: 800px;
@@ -321,6 +322,7 @@ footer {
 	width: 194px;
 	float: left;
 	margin-bottom: 77px;
+	color: white;
 }
 #footer-logo img {
 	float: left;

@@ -12,7 +12,6 @@
 	<style>
 		body {
 			font-family: 'Raleway', sans-serif;
-			padding-bottom: 500px;
 		}
 		#home-header {
 			display: flex;
@@ -163,8 +162,8 @@
 	    width: 520px;
 		}
 		#value-props {
+			padding: 100px 0;
 			box-sizing: border-box;
-			padding: 60px 0;
 		}
 		#value-props h3 {
 			font-weight: bold;
@@ -213,6 +212,7 @@
 	    background-size: cover;
 	    height: 200px;
 	    overflow: auto;
+	    overflow-x: hidden;
 		}
 		#hero-strip-box {
 			background-color: #23d82f;
@@ -224,6 +224,111 @@
 			text-align: center;
 			color: #051302;
 		}
+		#blog-bio-left {
+			width: 455px;
+			margin-left: 20px;
+			float: left;
+			text-align: center;
+		}
+		.blog-bio-title {
+	    font-weight: bold;
+	    text-align: center;
+	    color: #066b9a;
+	    font-size: 30px;
+	    margin-bottom: 25px;
+		}
+		.gray-box {
+	    border: solid 1px #aeaeae;
+	    display: inline-block;
+	    padding-bottom: 12px;
+	    color: black;
+	    text-align: left;
+	    border-radius: 4px;
+	    text-decoration: none;
+	    position: relative;
+		}
+		.gray-box:hover, .gray-box:hover #bio-link {
+	    text-decoration: underline;
+		}
+		.gray-box-link {
+			margin-top: 11px;
+			margin-left: 12px;
+		}
+		#blog-bio {
+			background-color: #f3f3f3;
+			padding: 100px 0;
+			overflow: auto;
+			overflow-x: hidden;
+		}
+		#blog-bio-right {
+			width: 545px;
+			float: right;
+			text-align: center;
+			margin-right: 20px;
+		}
+		#bio {
+			height: 228px;
+		}
+		#bio-left {
+			float: left;
+		}
+		#bio-right {
+			float: left;
+		}
+		#me-bio {
+			display: inline-block;
+			float: left;
+			border-right: solid 1px #aeaeae;
+			border-bottom: solid 1px #aeaeae;
+			border-radius: 4px;
+		}
+		#bio-text {
+			float: right;
+			width: 250px;
+			padding: 12px 12px 0 12px;
+			font-size: 15px;
+			line-height: 21px;
+		}
+		#bio-bottom {
+			clear: both;
+			float: left;
+			margin-top: 13px;
+		}
+		#popout {
+			float: right;
+			margin-right: 12px;
+		}
+		#popout img {
+			position: absolute;
+	    top: 8px;
+	    right: 8px;
+		}
+		footer {
+			margin-top: 0;
+		}
+		#footer-inner, #copyright-inner {
+			width: 1020px;
+		}
+		#read-more-modal {
+			border: solid 1px blue;
+	    position: fixed;
+	    width: 1000px;
+	    top: 50%;
+	    transform: translateY(-50%);
+	    left: 0;
+	    right: 0;
+	    margin-left: auto;
+	    margin-right: auto;
+	    padding: 35px;
+	    z-index: 6;
+	    background-color: white;
+	    border-radius: 3px 3px 3px 3px;
+	    border: 1px solid #B9BCC0;
+	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+	    max-height: calc(100vh - 203px);
+	    overflow-y: auto;
+		}
+
 	</style>
 </head>
 <body>
@@ -335,16 +440,65 @@
 
 	<div id="blog-bio">
 		<div class="home-wrapper">
+
 			<div id="blog-bio-left">
 				<div class="blog-bio-title">Latest Blog Post</div>
-				<a id="featured-blog-post" href="/">
+				<a id="featured-blog-post" class="gray-box" href="/blog/cookbook-review-fast-food">
 					<img id="blog-post-image" src="images/blog/fast-food-homepage.jpg">
-					<div id="blog-post-title">Cookbook Review: Gordon Ramsay's Fast Food</div>
+					<div class="gray-box-link">Cookbook Review: Gordon Ramsay's Fast Food</div>
+				</a>
+			</div>
+
+			<div id="blog-bio-right">
+				<div class="blog-bio-title">How Recipe Saver Began</div>
+				<a href="/" class="gray-box" id="bio">
+					<span id="popout"><img src="images/popout.png"></span>
+					<div id="bio-left">
+						<img id="me-bio" src="images/me-bio.png">
+						<div class="gray-box-link" id="bio-bottom">
+							<span id="bio-link">Read More...</span>
+						</div>
+					</div>
+					<div id="bio-right">
+						<div id="bio-text">
+								Hello friends! I'm Bill Coloe and welcome to Recipe Saver! Your spot for storing and organizing your favorite recipes. I've always enjoyed discovering recipes online but could never find an efficient way to track them all in one place. I felt like it was a problem that should've been solved already but I thought maybe I could create a solution.
+						</div>
+					</div>
 				</a>
 			</div>
 		</div>
 	</div>
 
+	<!-- Footer -->
+	<% include ./partials/footer %>
+
+	<div id="read-more-modal">
+		<h5>Back in 2011, I realized how badly I needed to expand my cooking knowledge when I couldn't think of anything to prepare my date other than boiled hot dogs.</h5>
+		<p>
+			Chucking two premade pork links into a pool of hot water and slapping them on stale buns was really no way to impress someone, so I knew it was only a matter of time until I was exposed as a home cook imposter.
+		</p>
+		<p>
+			I did what anyone else in my position would do - I turned to the Internet for a fancy recipe so I could fake it until I made it. A vegetarian stir fry dish  turned out to be a hit and I lived to cook another day. Weeks later, I was asked to make it again but silly old me forgot to save the recipe and there was no way I could remember the ingredients off my head. Fearing being found out, I spent hours hours searching for the original recipe and realized how important it was to keep track of my favorite recipes in the future.
+		</p>
+		<p>
+			In the months that followed, and keeping up my facade as a decent home cook, I tried all sorts of recipe keeping methods. Bookmarks were quick and easy but the messy and disparate naming conventions made things disorganized. Spreadsheets worked for a while, but I had to spend a fair amount of time formating, backing up and organizing data.
+		</p>
+		<p>
+			Many recipe website included a "recipe box" but I was constrained to only being able to save recipes hosted on that site. Other meal planning websites felt too heavy with features I didn't want or need.
+		</p>
+		<p>
+			It turned out that around this time I was beginning my career and a Front End Developer and decided to build a simple site that would allow you to enter your own collection of recipes online, accompanied with a Chrome Extension. It was simple, no-frills, and rudimentary but it worked and so Recipe Saver 1.0 was born. 
+		</p>
+		<p>
+			I posted the application my Facebook and LinkedIn profile, but didn't truly expect many people to sign up other than some friends and family. With a marketing budget of $0, the site somehow found it's way into many people's screen, and before long I had thousands of registered users.
+		</p>
+		<p>
+			Realizing that I may have solved a problem for more people than intended, I decided to recreate the entire application to make it more streamlined and polished. Recipe Saver 2.0 is simply the latest incarnation of my attempt to make saving recipes easier for everyone. With new features being added routinely (without getting in the way of what you love), I hope you'll find this site a valuable addition to your home cooking toolbox. 
+		</p>
+		<p>
+			I'd love to hear your thoughts on what you've thought of this site so drop us a line at contact@recipesaver.net if you have any feedback at all.
+		</p>
+	</div>
 
 </body>
 </html>
