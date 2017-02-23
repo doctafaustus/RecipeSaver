@@ -6,6 +6,7 @@
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
 
 	<!-- Stylesheets -->
 	<link href="/css/universal.css" rel="stylesheet">
@@ -204,25 +205,38 @@
 		.value-prop-icon {
 			margin: 0 auto 25px auto;
 		}
-		#hero-strip {
-			background: url(images/hero-strip.png) no-repeat;
-	    -webkit-background-size: cover;
-	    -moz-background-size: cover;
-	    -o-background-size: cover;
-	    background-size: cover;
+		.hero-strip {
 	    height: 200px;
 	    overflow: auto;
 	    overflow-x: hidden;
 		}
-		#hero-strip-box {
+		.hero-strip-box {
 			background-color: #23d82f;
-			width: 505px;
+			width: 425px;
 			padding: 27px;
 			margin: 0 auto;
 			margin-top: 61px;
 			font-size: 23px;
 			text-align: center;
 			color: #051302;
+			font-family: 'Source Sans Pro', sans-serif;
+		}
+		#hero-strip-top {
+			background: url(images/hero-strip.png) no-repeat;
+	    -webkit-background-size: cover;
+	    -moz-background-size: cover;
+	    -o-background-size: cover;
+	    background-size: cover;
+		}
+		#hero-strip-top .hero-strip-box {
+			width: 330px;
+		}
+		#hero-strip-bottom {
+			background: url(images/ingredients-compressed.png) no-repeat;
+			-webkit-background-size: cover;
+	    -moz-background-size: cover;
+	    -o-background-size: cover;
+	    background-size: cover;
 		}
 		#blog-bio-left {
 			width: 455px;
@@ -268,6 +282,12 @@
 		}
 		#bio {
 			height: 228px;
+			background-image: url(images/popout.png);
+			background-repeat: no-repeat;
+    	background-position: 98% 8px;	
+		}
+		#bio:hover {
+			background-image: url(images/popout-blue.png);
 		}
 		#bio-left {
 			float: left;
@@ -310,6 +330,7 @@
 			width: 1020px;
 		}
 		#read-more-modal {
+			display: none;
 			border: solid 1px blue;
 	    position: fixed;
 	    width: 1000px;
@@ -327,8 +348,56 @@
 	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 	    max-height: calc(100vh - 203px);
 	    overflow-y: auto;
+	    font-family: 'Source Sans Pro', sans-serif;
 		}
-
+		.close {
+			fill: black;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+		}
+		#read-more-modal-left {
+			width: 300px;
+			height: 372px;
+    	margin-bottom: 5px;
+	    float: left;
+	    margin-right: 25px;
+		}
+		#read-more-modal-pic {
+			border: solid 1px blue;
+			width: 300px;
+			height: 300px;
+			margin-bottom: 12px;
+		}
+		#read-more-modal-caption-top {
+			margin-bottom: 10px;
+			font-weight: bold;
+			font-size: 19px;
+		}
+		#read-more-modal-caption-bottom {
+			font-size: 18px;
+		}
+		#read-more-modal h5 {
+	    font-weight: bold;
+	    font-size: 20px;
+	    margin-bottom: 24px;
+		}
+		#read-more-modal p {
+			margin-bottom: 20px;
+   	 	font-size: 17px;
+    	line-height: 20px;
+		}
+		#read-more-modal p#read-more-last-p {
+			margin-bottom: 0;
+		}
+		#modal-contact {
+			color: #066b9a;
+			cursor: pointer;
+			font-weight: bold;
+		}
+		#modal-contact:hover{ 
+			text-decoration: underline;
+		}
 	</style>
 </head>
 <body>
@@ -434,8 +503,8 @@
 		</div>
 	</div>
 
-	<div id="hero-strip">
-		<div id="hero-strip-box">Create your recipe collection today</div>
+	<div class="hero-strip" id="hero-strip-top">
+		<div class="hero-strip-box">Save, organize, and print</div>
 	</div>
 
 	<div id="blog-bio">
@@ -452,7 +521,7 @@
 			<div id="blog-bio-right">
 				<div class="blog-bio-title">How Recipe Saver Began</div>
 				<a href="/" class="gray-box" id="bio">
-					<span id="popout"><img src="images/popout.png"></span>
+<!-- 					<span id="popout"><img src="images/popout.png"></span> -->
 					<div id="bio-left">
 						<img id="me-bio" src="images/me-bio.png">
 						<div class="gray-box-link" id="bio-bottom">
@@ -469,36 +538,56 @@
 		</div>
 	</div>
 
+	<div class="hero-strip" id="hero-strip-bottom">
+		<div class="hero-strip-box">Create your recipe collection today</div>
+	</div>
+
 	<!-- Footer -->
 	<% include ./partials/footer %>
 
-	<div id="read-more-modal">
-		<h5>Back in 2011, I realized how badly I needed to expand my cooking knowledge when I couldn't think of anything to prepare my date other than boiled hot dogs.</h5>
+<div id="read-more-modal">
+	  <svg class="close" viewBox="0 0 32 32">
+	  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+	  </svg>
+  	<div id="read-more-modal-left">
+  		<div id="read-more-modal-pic"></div>
+  		<div id="read-more-modal-caption-top">Bill Coloe</div>
+  		<div id="read-more-modal-caption-bottom">Founder, Recipe Saver</div>
+  	</div>
+		<h5>It all started in 2011, when I realized the only thing I knew how to cook for my dinner date was boiled hot dogs.</h5>
 		<p>
-			Chucking two premade pork links into a pool of hot water and slapping them on stale buns was really no way to impress someone, so I knew it was only a matter of time until I was exposed as a home cook imposter.
+			Chucking two premade pork links into a pool of hot water and slapping them on stale buns was no way to impress someone, so I knew it was only a matter of time until I was exposed as a home cook imposter. I did what anyone else in my position would do - I turned to the Internet for a fancy recipe so I could fake it until I made it. 
 		</p>
 		<p>
-			I did what anyone else in my position would do - I turned to the Internet for a fancy recipe so I could fake it until I made it. A vegetarian stir fry dish  turned out to be a hit and I lived to cook another day. Weeks later, I was asked to make it again but silly old me forgot to save the recipe and there was no way I could remember the ingredients off my head. Fearing being found out, I spent hours hours searching for the original recipe and realized how important it was to keep track of my favorite recipes in the future.
+			A vegetarian stir fry dish turned out to be a hit and I lived to cook another day. Weeks later, I was asked to make it again but silly old me forgot to save the recipe and there was no way I could remember the ingredients off the top of my head. Fearing being found out, I spent hours searching for the original recipe and consequently realized how important it was to keep track of my favorite recipes in the future.
 		</p>
 		<p>
 			In the months that followed, and keeping up my facade as a decent home cook, I tried all sorts of recipe keeping methods. Bookmarks were quick and easy but the messy and disparate naming conventions made things disorganized. Spreadsheets worked for a while, but I had to spend a fair amount of time formating, backing up and organizing data.
 		</p>
 		<p>
-			Many recipe website included a "recipe box" but I was constrained to only being able to save recipes hosted on that site. Other meal planning websites felt too heavy with features I didn't want or need.
+			Many recipe websites included a "recipe box" but I was constrained to only being able to save recipes hosted on that site. Other meal planning websites felt too clunky with features I didn't want or need. Around this time I had begun my career and a Front End Developer and decided to build a simple site that would allow you to enter your own collection of recipes online, accompanied with a companion Chrome Extension. It was simple, no-frills, and rudimentary but it worked and so Recipe Saver 1.0 was born. 
 		</p>
 		<p>
-			It turned out that around this time I was beginning my career and a Front End Developer and decided to build a simple site that would allow you to enter your own collection of recipes online, accompanied with a Chrome Extension. It was simple, no-frills, and rudimentary but it worked and so Recipe Saver 1.0 was born. 
+			I posted the application my Facebook and LinkedIn profile, but didn't expect many people to sign up other than some friends and family. With a marketing budget of $0, the site somehow found it's way onto many people's screens, and before long I had thousands of registered users. Realizing that I may have solved a problem for more people than intended, I decided to recreate the entire application to make it much more polished. Recipe Saver 2.0 is simply the latest incarnation of my attempt to make saving recipes easier for everyone. With new features being added routinely (without getting in the way of what you love), I hope you'll find this site a valuable addition to your home cooking toolbox. 
 		</p>
-		<p>
-			I posted the application my Facebook and LinkedIn profile, but didn't truly expect many people to sign up other than some friends and family. With a marketing budget of $0, the site somehow found it's way into many people's screen, and before long I had thousands of registered users.
-		</p>
-		<p>
-			Realizing that I may have solved a problem for more people than intended, I decided to recreate the entire application to make it more streamlined and polished. Recipe Saver 2.0 is simply the latest incarnation of my attempt to make saving recipes easier for everyone. With new features being added routinely (without getting in the way of what you love), I hope you'll find this site a valuable addition to your home cooking toolbox. 
-		</p>
-		<p>
-			I'd love to hear your thoughts on what you've thought of this site so drop us a line at contact@recipesaver.net if you have any feedback at all.
+		<p id="read-more-last-p">
+			I'd love to hear your thoughts on what you've thought of this site so <span id="modal-contact">drop us a line</span> at if you have any feedback at all. Happy recipe hunting!
 		</p>
 	</div>
+	<div id="support-overlay"></div>
 
+
+	<script src="/js/jquery.min.js"></script>
+	<script>
+		$('#bio').click(function(e) {
+			e.preventDefault();
+			$('#read-more-modal, #support-overlay').fadeIn();
+		});
+		$('#read-more-modal .close').click(function() {
+			$('#read-more-modal, #support-overlay').fadeOut();
+		});
+	</script>
 </body>
 </html>
+
+
