@@ -66,9 +66,12 @@ table {
 #nav li a:hover {
 	color: #1AAFD0;
 }
-#logout, #account {
+#logout, #account, #login {
 	float: right;
 	margin-right: 15px;
+}
+#login {
+	margin-right: 30px;
 }
 #nav li#logout {
 	margin-left: 0;
@@ -76,6 +79,9 @@ table {
 }
 #nav li#recipes {
 	margin-left: 50px;
+}
+#nav li#login {
+	margin-left: 15px;
 }
 #nav li.active-menu {
 	border-bottom: solid 3px #23d82f;
@@ -429,13 +435,20 @@ footer {
 	background: -webkit-linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
 	background: linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
 }
-.reg-login-wrapper {
+/*.reg-login-wrapper {
 	position: absolute;
   width: 585px;
   top: 40%;
   transform: translateY(-50%);
   left: 0;
   right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Source Sans Pro', sans-serif;
+}*/
+.reg-login-wrapper {
+  width: 585px;
+  margin-top: 10%;
   margin-left: auto;
   margin-right: auto;
   font-family: 'Source Sans Pro', sans-serif;
@@ -478,7 +491,13 @@ footer {
   text-align: center;
   color: #066b9a;
   font-size: 36px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+.reg-login-form h2 {
+	text-align: center;
+	color: #066b9a;
+	font-size: 27px;
+	margin-bottom: 30px;
 }
 .reg-login-form label {
 	display: block;
@@ -555,4 +574,59 @@ footer {
 	text-decoration: none;
 	border: solid 1px #1685ba;
 	color: #1685ba;
+}
+#reg-options li {
+	width: 260px;
+	height: 54px;
+	margin: 0 auto 25px auto;
+}
+#reg-options li a {
+	display: block;
+	height: 100%;
+	color: white;
+	text-decoration: none;
+	line-height: 54px;
+	padding-left: 70px;
+}
+#twitter-reg {
+	background: url(/images/twitter-reg-sprite.png) no-repeat;
+}
+#facebook-reg {
+	background: url(/images/facebook-reg-sprite.png) no-repeat;
+}
+#gmail-reg {
+	background: url(/images/gmail-reg-sprite.png) no-repeat;
+}
+#email-reg {
+	background: url(/images/email-reg-sprite.png) no-repeat;
+}
+#reg-options li:hover {
+	background-position: 0px -54px;
+}
+#reg-login-separator {
+	border-top: solid 1px #23d82f;
+  font-size: 24px;
+  margin: 50px auto 20px auto;
+  text-align: center;
+  width: 400px;
+}
+#reg-login-separator-or {
+	display: inline-block;
+	padding: 0 15px;
+	position: relative;
+	margin: 0 auto;
+	top: -15px;
+	background-color: white;
+	color: #a1a1a1;
+}
+#forgot-password {
+  color: #979797;
+  margin-top: 12px;
+  display: inline-block;
+  float: right;
+  text-decoration: none;
+}
+#forgot-password:hover {
+	color: black;
+	text-decoration: underline;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Recipe Saver | Sign Up</title>
+	<title>Recipe Saver | Login</title>
 
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
@@ -27,18 +27,36 @@
 		</div>
 
 		<div class="reg-login-form">
-			<h1>Sign Up via Email</h1>
-			<form method="POST">
-				<label>Name:</label>
-				<input type="text" name="name" id="name"><br>
-				<label>Email:</label>
-				<input type="email" name="email" id="emailReg"><br>
-				<label>Password:</label>
-				<input type="password" name="password" id="password"><br>
-				<label>Confirm Password:</label>
-				<input type="password" name="passwordConfirm" id="passwordConfirm">
-				<input type="submit" id="submit" value="Register">
-			</form>
+
+			<h1>Log In With:</h1>
+			<ul id="reg-options">
+				<li id="twitter-reg"><a href="">Log-in with Twitter</a></li>
+				<li id="facebook-reg"><a href="">Log-in with Facebook</a></li>
+				<li id="gmail-reg"><a href="">Log-in with Google</a></li>
+			</ul>
+
+
+			<div id="reg-login-separator">
+				<div id="reg-login-separator-or">or</div>
+			</div>
+
+			<div id="email-login">
+				<div id="email-login-callout">
+					<h2>Log In Via Email Account</h2>
+				</div>
+
+				<form method="POST" action="/login" id="login-form">
+					<label>Email:</label>	
+					<input type="email" name="email" id="email">
+					<label>Password:</label>
+					<input type="password" name="password" id="password">
+					<input type="submit" value="Log In">
+				</form>
+
+				<a id="forgot-password" href="#">Forgot Password?</a><div style="clear: both"></div>
+			</div>
+
+
 		</div>
 
 		<div class="reg-login-outer">
@@ -50,8 +68,8 @@
 			</ul>
 
 			<div id="right-pull">
-				<div id="right-pull-text">Already have an account?</div>
-				<a class="right-pull-cta" href="/login">Log In</a>
+				<div id="right-pull-text">Need an account?</div>
+				<a class="right-pull-cta" href="/register">Register</a>
 			</div>
 		</div>
 

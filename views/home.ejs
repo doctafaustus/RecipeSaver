@@ -23,7 +23,7 @@
 			font-family: 'Cabin', Arial;
 			font-size: 23px;
 			box-sizing: border-box;
-			padding-left: 20px;
+			padding-left: 30px;
 		}
 		#home-logo {
 			vertical-align: middle;
@@ -48,6 +48,7 @@
 		}
 		#nav li a, #nav li a:hover {
 			color: white;
+			display: block;
 		}
 		#home-cover, #hero-left, #hero-right {
 			height: 525px;
@@ -101,31 +102,6 @@
 			padding-bottom: 2px;
 			margin: 50px auto 35px auto;
 			font-family: 'Cabin', Arial;
-		}
-		#reg-options li {
-			width: 260px;
-			height: 56px;
-			margin: 0 auto 25px auto;
-		}
-		#reg-options li a {
-			display: block;
-			height: 100%;
-			color: white;
-			text-decoration: none;
-			line-height: 56px;
-			padding-left: 74px;
-		}
-		#twitter-reg {
-			background: url(images/twitter-reg.png) no-repeat;
-		}
-		#facebook-reg {
-			background: url(images/facebook-reg.png) no-repeat;
-		}
-		#gmail-reg {
-			background: url(images/gmail-reg.png) no-repeat;
-		}
-		#email-reg {
-			background: url(images/email-reg.png) no-repeat;
 		}
 		#home-banner {
 			height: 84px;
@@ -263,6 +239,9 @@
 		}
 		.gray-box:hover, .gray-box:hover #bio-link {
 	    text-decoration: underline;
+		}
+		.gray-box:hover{
+			border: solid 1px #066b9a;
 		}
 		.gray-box-link {
 			margin-top: 11px;
@@ -423,7 +402,7 @@
 			margin-bottom: 12px;
 		}
 		#read-more-modal-caption-top {
-			margin-bottom: 10px;
+			margin-bottom: 5px;
 			font-weight: bold;
 			font-size: 19px;
 			color: #066b9a;
@@ -468,8 +447,7 @@
 				<li id="chrome-extension"><a href="#">Chrome Extension</a></li>
 				<li id="blog"><a href="/blog">Blog</a></li>
 				<li id="support"><a href="#">Support</a></li>
-				<li id="logout"><a href="/logout">Logout</a></li>
-				<li id="account"><a href="/account">Account</a></li>
+				<li id="login"><a href="/login">Login</a></li>
 			</ul>
 		</div>
 	</div>
@@ -485,10 +463,10 @@
 			<div id="hero-right">
 				<h2>Try It Now</h2>
 				<ul id="reg-options">
-					<li id="twitter-reg"><a href="">Sign-in with Twitter</a></li>
-					<li id="facebook-reg"><a href="">Sign-in with Facebook</a></li>
-					<li id="gmail-reg"><a href="">Sign-in with Google</a></li>
-					<li id="email-reg"><a href="/register">Sign-in with Email</a></li>
+					<li id="twitter-reg"><a href="">Sign-up with Twitter</a></li>
+					<li id="facebook-reg"><a href="">Sign-up with Facebook</a></li>
+					<li id="gmail-reg"><a href="">Sign-up with Google</a></li>
+					<li id="email-reg"><a href="/register">Sign-up with Email</a></li>
 				</ul>
 			</div>
 		</div>
@@ -666,13 +644,28 @@
 	<script>
 
 		// Bio modal
-		var $modalContent = $('#read-more-modal, #support-overlay')
+		var $modal = $('#read-more-modal');
+		var $overlay = $('#support-overlay');
+		var $body = $('body');
+
 		$('#bio').click(function(e) {
 			e.preventDefault();
-			$modalContent.fadeIn();
+			$modal.fadeIn();
+			$overlay.fadeIn(function() {
+				$body.on('click.temp', function(e) {
+					var container = $('#read-more-modal');
+					if (!container.is(e.target) && container.has(e.target).length === 0) {
+						$modal.fadeOut();
+						$overlay.fadeOut();
+						$body.off('click.temp');
+					}
+				});
+			});
 		});
+
 		$('#read-more-modal .close').click(function() {
-			$modalContent.fadeOut();
+			$modal.fadeOut();
+			$overlay.fadeOut();
 		});
 
 	</script>
