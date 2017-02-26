@@ -402,8 +402,6 @@ footer {
 #footer-bottom {
 	margin-top: 50px;
 }
-
-
 #copyright {
 	clear: both;
 	background-color: #26282e;
@@ -417,4 +415,144 @@ footer {
   height: 42px;
   margin: 0 auto;
   font-size: 16px;
+}
+
+
+/* --- REGISTER / LOGIN --- */
+.reg-login {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	border-top: solid 5px #1685ba;
+	background: #1685ba;
+	background: -moz-linear-gradient(45deg,  #23d82f 0%, #1685ba 100%);
+	background: -webkit-linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
+	background: linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
+}
+.reg-login-wrapper {
+	position: absolute;
+  width: 585px;
+  top: 40%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#reg-login-logo {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 68px;
+	font-family: 'Cabin', Arial;
+	font-size: 23px;
+	box-sizing: border-box;
+	width: 193px;
+	margin: 0 auto 20px auto
+}
+.logo {
+  vertical-align: middle;
+  width: 192px;
+  display: block;
+  text-decoration: none;
+}
+.logo img {
+	vertical-align: middle;
+}
+.reg-login-logo-text {
+	display: inline-block;
+	margin-left: 6px;
+	color: white;
+	letter-spacing: 1px;
+}
+.reg-login-form {
+	box-sizing: border-box;
+  background-color: white;
+  border-radius: 3px 3px 3px 3px;
+  border: 1px solid #B9BCC0;
+  box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+  padding: 30px;
+}
+.reg-login-form h1 {
+  text-align: center;
+  color: #066b9a;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+.reg-login-form label {
+	display: block;
+	margin-top: 8px;
+	margin-bottom: 4px;
+	font-family: 'Raleway', sans-serif;
+	font-size: 14px;
+}
+.reg-login-form input {
+	height: 40px;
+	width: 100%;
+	margin-bottom: 10px;
+	border-radius: 2px;
+	border: solid 1px #CDCFD2;
+	padding-left: 10px;
+	font-size: 17px;
+	box-sizing: border-box;
+}
+.reg-login-form input[type="submit"] {
+	box-sizing: border-box;
+	padding-left: 0;
+	margin-bottom: 0;
+  text-align: center;
+  border-radius: 4px;
+  height: 52px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #089de3;
+  color: #fff;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: .02em;
+	margin-top: 15px;
+}
+.reg-login-form input[type="submit"]:hover {
+	background-color: #23d82f;
+	border: 0;
+}
+.reg-login-outer {
+	color: white;
+	margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.reg-login-outer li {
+	display: inline-block;
+	margin-left: 6px;
+}
+.reg-login-outer li.first-link {
+	margin-left: 0;
+}
+.reg-login-outer li:after {
+	content: '\2022';
+	margin-left: 10px;
+}
+.reg-login-outer li.last-link:after {
+	content: '';
+	margin-left: 0px;
+}
+.reg-login-outer a {
+	color: white;
+	text-decoration: none;
+}
+.reg-login-outer a:hover {
+	text-decoration: underline;
+}
+.right-pull-cta {
+	border: solid 1px white;
+	display: inline-block;
+	margin-top: 10px;
+	padding: 5px 10px 8px 10px;
+	float: right;
+}
+.reg-login-outer a.right-pull-cta:hover {
+	text-decoration: none;
+	border: solid 1px #1685ba;
+	color: #1685ba;
 }

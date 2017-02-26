@@ -188,6 +188,9 @@ app.get('/', function(req, res) {
 app.get('/home', function(req, res) {
 	res.render('home.ejs');
 });
+app.get('/register', function(req, res) {
+	res.render('register.ejs');
+});
 // Blog routes
 require('./mods/blogRoutes')(app);
 // Email support form

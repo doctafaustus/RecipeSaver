@@ -38,6 +38,7 @@
 			display: inline-block;
 			margin-left: 6px;
 			color: white;
+			letter-spacing: 1px;
 		}
 		#nav {
 			border: 0;
@@ -166,20 +167,23 @@
 			padding: 100px 0;
 			box-sizing: border-box;
 		}
+		.blue-heading {
+	    font-weight: bold;
+	    text-align: center;
+	    color: #066b9a;
+	    font-size: 30px;
+		}
 		#value-props h3 {
-			font-weight: bold;
-			text-align: center;
-			color: #066b9a;
-			font-size: 30px;
 			margin-bottom: 25px;
 		}
-		#value-props p#value-prop-subtitle {
+		.subtitle {
 			text-align: center;
+			font-size: 19px;
+			line-height: 24px;
+			margin: 0 auto 60px auto;
+		}
+		#value-props p#value-prop-subtitle {
 	    width: 546px;
-	    margin: 0 auto;
-	    font-size: 19px;
-	    line-height: 24px;
-	    margin-bottom: 60px;
 		}
 		#value-prop-icons {
    		display: flex;
@@ -245,10 +249,6 @@
 			text-align: center;
 		}
 		.blog-bio-title {
-	    font-weight: bold;
-	    text-align: center;
-	    color: #066b9a;
-	    font-size: 30px;
 	    margin-bottom: 25px;
 		}
 		.gray-box {
@@ -295,7 +295,7 @@
 		#bio-right {
 			float: left;
 		}
-		#me-bio {
+		#bio-thumb {
 			display: inline-block;
 			float: left;
 			border-right: solid 1px #aeaeae;
@@ -323,6 +323,63 @@
 	    top: 8px;
 	    right: 8px;
 		}
+		#integrations {
+			padding: 100px 0;
+			overflow: auto;
+			overflow-x: hidden;
+			text-align: center;
+		}
+		#integrations-title {
+			margin-bottom: 35px;
+		}
+		#integrations-summary {
+			width: 800px;
+		}
+		#integrations-pics ul {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+		#review {
+			overflow: auto;
+    	display: inline-block;
+			margin: 70px auto 0 auto;
+		}
+		#review-bg {
+			width: 922px;
+			height: 98px;
+			box-sizing: border-box;
+			background-image: url(images/quote-box.png);
+			background-repeat: no-repeat;
+	    color: white;
+	    font-size: 18px;
+	    line-height: 25px;
+	    padding: 23px 50px 0 45px;
+	    text-align: left;
+	    float: left;
+		}
+		#quote-author {
+			width: 185px;
+			float: left;
+			margin-left: 25px;
+		}
+		#quote-img {
+			float: left;
+			margin-top: 8px;
+			margin-right: 16px;
+		}
+		#quote-author-name, #quote-author-title {
+			display: inline-block;
+			float: left;
+		}
+		#quote-author-name {
+			margin-top: 25px;
+			margin-bottom: 6px;
+		}
+		#quote-author-title {
+			font-style: italic;
+		}
+
 		footer {
 			margin-top: 0;
 		}
@@ -331,7 +388,6 @@
 		}
 		#read-more-modal {
 			display: none;
-			border: solid 1px blue;
 	    position: fixed;
 	    width: 1000px;
 	    top: 50%;
@@ -364,15 +420,13 @@
 	    margin-right: 25px;
 		}
 		#read-more-modal-pic {
-			border: solid 1px blue;
-			width: 300px;
-			height: 300px;
 			margin-bottom: 12px;
 		}
 		#read-more-modal-caption-top {
 			margin-bottom: 10px;
 			font-weight: bold;
 			font-size: 19px;
+			color: #066b9a;
 		}
 		#read-more-modal-caption-bottom {
 			font-size: 18px;
@@ -381,6 +435,7 @@
 	    font-weight: bold;
 	    font-size: 20px;
 	    margin-bottom: 24px;
+	    color: #066b9a;
 		}
 		#read-more-modal p {
 			margin-bottom: 20px;
@@ -433,7 +488,7 @@
 					<li id="twitter-reg"><a href="">Sign-in with Twitter</a></li>
 					<li id="facebook-reg"><a href="">Sign-in with Facebook</a></li>
 					<li id="gmail-reg"><a href="">Sign-in with Google</a></li>
-					<li id="email-reg"><a href="">Sign-in with Email</a></li>
+					<li id="email-reg"><a href="/register">Sign-in with Email</a></li>
 				</ul>
 			</div>
 		</div>
@@ -458,8 +513,8 @@
 
 	<div id="value-props">
 		<div class="home-wrapper">
-			<h3>The ultimate tool for home cooks</h3>
-			<p id="value-prop-subtitle">
+			<h3 class="blue-heading">The ultimate tool for home cooks</h3>
+			<p id="value-prop-subtitle" class="subtitle">
 				Recipe Saver was designed as fast, quick-loading application so you can do what you need to do and get cooking.
 			</p>
 			<ul id="value-prop-icons">
@@ -511,7 +566,7 @@
 		<div class="home-wrapper">
 
 			<div id="blog-bio-left">
-				<div class="blog-bio-title">Latest Blog Post</div>
+				<div class="blog-bio-title blue-heading">Latest Blog Post</div>
 				<a id="featured-blog-post" class="gray-box" href="/blog/cookbook-review-fast-food">
 					<img id="blog-post-image" src="images/blog/fast-food-homepage.jpg">
 					<div class="gray-box-link">Cookbook Review: Gordon Ramsay's Fast Food</div>
@@ -519,11 +574,11 @@
 			</div>
 
 			<div id="blog-bio-right">
-				<div class="blog-bio-title">How Recipe Saver Began</div>
+				<div class="blog-bio-title blue-heading">How Recipe Saver Began</div>
 				<a href="/" class="gray-box" id="bio">
 <!-- 					<span id="popout"><img src="images/popout.png"></span> -->
 					<div id="bio-left">
-						<img id="me-bio" src="images/me-bio.png">
+						<img id="bio-thumb" src="images/bio-thumb.jpg">
 						<div class="gray-box-link" id="bio-bottom">
 							<span id="bio-link">Read More...</span>
 						</div>
@@ -538,6 +593,36 @@
 		</div>
 	</div>
 
+	<div id="integrations">
+		<div class="home-wrapper">
+			<div id="integrations-title" class="blue-heading">Integrations to Capture Everything</div>
+			<div id="integrations-summary" class="subtitle">
+				Several top recipes sites are integrated with our Chrome extension so you can capture the entire recipe text and ingredients. For nonintegrated sites  we'll save the page URL to your collection whether it be a video, blog post, or text recipe.
+			</div>
+			<div id="integrations-pics">
+				<ul>
+					<li><img src="images/integration-allrecipes.png"></li>
+					<li><img src="images/integration-chowhound.png"></li>
+					<li><img src="images/integration-foodnetwork.png"></li>
+					<li><img src="images/integration-epicurious.png"></li>
+					<li><img src="images/integration-food.png"></li>
+				</ul>
+			</div>
+
+			<div id="review">
+				<div id="review-bg">
+					I love this extension! With dietary restrictions, it's tough to keep all your recipes in one place - but this handy tool is perfect for that.
+				</div>
+				<div id="quote-author">
+					<img id="quote-img" src="images/lillie.png">
+					<div id="quote-author-name">Lille Lemon</div>
+					<div id="quote-author-title">Singer</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<div class="hero-strip" id="hero-strip-bottom">
 		<div class="hero-strip-box">Create your recipe collection today</div>
 	</div>
@@ -550,7 +635,7 @@
 	  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
 	  </svg>
   	<div id="read-more-modal-left">
-  		<div id="read-more-modal-pic"></div>
+  		<img id="read-more-modal-pic" src="images/bio-expanded.jpg">
   		<div id="read-more-modal-caption-top">Bill Coloe</div>
   		<div id="read-more-modal-caption-bottom">Founder, Recipe Saver</div>
   	</div>
@@ -579,13 +664,17 @@
 
 	<script src="/js/jquery.min.js"></script>
 	<script>
+
+		// Bio modal
+		var $modalContent = $('#read-more-modal, #support-overlay')
 		$('#bio').click(function(e) {
 			e.preventDefault();
-			$('#read-more-modal, #support-overlay').fadeIn();
+			$modalContent.fadeIn();
 		});
 		$('#read-more-modal .close').click(function() {
-			$('#read-more-modal, #support-overlay').fadeOut();
+			$modalContent.fadeOut();
 		});
+
 	</script>
 </body>
 </html>
