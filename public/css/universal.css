@@ -552,6 +552,7 @@ footer {
 	font-family: 'Source Sans Pro', sans-serif;
 	letter-spacing: .02em;
 	margin-top: 15px;
+	border: 0;
 }
 .reg-login-form input[type="submit"]:hover {
 	background-color: #23d82f;
