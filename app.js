@@ -52,8 +52,8 @@ var Recipe = mongoose.model('Recipe', new Schema({
 
 
 // CUSTOM MODULES
-var emailSupport = require('./mods/emailSupport.js');
 var checkCaptcha = require('./mods/checkCaptcha.js');
+var sendEmail = require('./mods/sendEmail.js');
 
 var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
 var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
@@ -142,24 +142,6 @@ passport.use(new GoogleStrategy({
 	}
 ));
 
-// function checkCaptcha(req, res, next) {
-//   if (req.body.gRecaptchaResponse === undefined || req.body.gRecaptchaResponse === '' || req.body.gRecaptchaResponse === null) {
-//     console.log('Captcha vaildation failed');
-//     res.sendStatus(403);
-//     return;
-//   } else {
-//   	var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + captchaSecretKey + "&response=" + req.body.gRecaptchaResponse + "&remoteip=" + req.connection.remoteAddress;
-// 	  request(verificationUrl, function(error, response, body) {
-// 	    var body = JSON.parse(body);
-// 	    if (body.success !== undefined && !body.success) {
-// 	      console.log('failed captcha verification');
-// 	      res.sendStatus(403);
-// 	      return;
-// 	    }
-// 	  	next();
-// 	  });
-//   }
-// }
 // Local login
 passport.use(new LocalStrategy({
 		usernameField : 'email',
@@ -253,7 +235,7 @@ app.listen(process.env.PORT || 3000, function() {
 
 
 
-app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), function(req, res){
+app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), sendEmail(require('./mods/registrationEmail.js'), 'registration'), function(req, res){
   	console.log('done registering!');
   	res.sendStatus(200);
 });
@@ -287,7 +269,7 @@ app.get('/login', function(req, res) {
 // Blog routes
 require('./mods/blogRoutes')(app);
 // Email support form
-app.post('/support', emailSupport);
+app.post('/support', checkCaptcha, sendEmail(require('./mods/supportEmail.js'), 'support'));
 // Privacy policy
 app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');

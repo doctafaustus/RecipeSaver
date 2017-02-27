@@ -1,5 +1,14 @@
-$(document).ready(function() {
+var captchaCallback = function() {
+	// Support form captcha
+  grecaptcha.render('support-recaptcha', {'sitekey' : '6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc'});
 
+  // Registration form captcha
+  if (document.getElementById('register-recaptcha')) {
+    window.registerRecaptchaId = grecaptcha.render('register-recaptcha', {'sitekey' : '6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc'});
+  }
+};
+
+$(document).ready(function() {
 	// Open support modal
 	$('#support a, #support-footer a, #reg-login-support').click(function(e) {
 		e.preventDefault();

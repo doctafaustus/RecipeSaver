@@ -20,7 +20,7 @@
 			<label>DETAILS *</label>
 			<textarea id="support-message" placeholder="What can we help you with?"></textarea>
 			<input type="submit" id="support-submit" class="button" value="Submit">
-			<div id="support-recaptcha" class="g-recaptcha" data-sitekey="6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc"></div>
+			<div id="support-recaptcha"></div>
 			<div id="support-recaptcha-error"></div>
 		</form>
 	</div>
@@ -36,7 +36,7 @@
 <div id="support-overlay"></div>
 
 <!-- Google Captcha Script -->
-<script src='https://www.google.com/recaptcha/api.js' async></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=captchaCallback&render=explicit' async></script>
 
 <!-- Feedback Form Script -->
 <script src="/support.js" async></script>

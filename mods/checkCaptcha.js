@@ -3,9 +3,9 @@ var request = require('request');
 var captchaSecretKey = process.env.PORT ? null : fs.readFileSync('./private/captchaSecretKey.txt').toString();
 
 function checkCaptcha(req, res, next) {
-	console.log('working');
+	console.log('checking captcha...');
   if (req.body.gRecaptchaResponse === undefined || req.body.gRecaptchaResponse === '' || req.body.gRecaptchaResponse === null) {
-    console.log('Captcha vaildation failed');
+    console.log('captcha vaildation failed');
     res.sendStatus(403);
     return;
   } else {
