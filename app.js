@@ -3,6 +3,7 @@ var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -56,6 +57,7 @@ var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twit
 var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
 var googleAppSecret = process.env.PORT ? null : fs.readFileSync('./private/googleAppSecret.txt').toString();
 
+
 // Twitter login
 passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
@@ -66,7 +68,7 @@ passport.use(new TwitterStrategy({
   	console.log('-------------------------------------');
   	console.log(profile);
 	  process.nextTick(function() {
-	    User.findOne({ 'twitterId' : profile.id }, function(err, user) {
+	    User.findOne({ 'twitterId': profile.id }, function(err, user) {
 	      if (err) return done(err);
 	      if (user) {
 	      	console.log('Twitter user found, yo!');
@@ -95,7 +97,7 @@ passport.use(new FacebookStrategy({
   },
 	function(token, refreshToken, profile, done) {
 		process.nextTick(function() {
-			User.findOne({ 'facebookId' : profile.id }, function(err, user) {
+			User.findOne({ 'facebookId': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
 					return done(null, user);
@@ -120,7 +122,7 @@ passport.use(new GoogleStrategy({
   },
 	function(token, refreshToken, profile, done) {
 		process.nextTick(function() {
-			User.findOne({ 'google.id' : profile.id }, function(err, user) {
+			User.findOne({ 'google.id': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
 					return done(null, user);
@@ -137,14 +139,75 @@ passport.use(new GoogleStrategy({
 		});
 	}
 ));
-	
+// Local login
+passport.use(new LocalStrategy({
+		usernameField : 'email',
+		passwordField : 'password',
+		passReqToCallback : true,
+	},
+	function(req, email, password, done) {
+		// The email parameter is really req.body.email
+	  process.nextTick(function() {
+	  	if (req.body.reqType === 'register') {
+		    User.findOne({ 'email':  email }, function(err, user) {
+		      if (err) return done(err);
+		      if (user) {
+		        console.log(req.body.email + ' is already registered');
+		        return done(null, false); // A 401 error will be returned
+		      } else { // Otherwise, save new user
+		      	var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+						var newUser = new User();
+						newUser.name = req.body.name;
+						newUser.email = req.body.email;
+						newUser.password = hash;
+						newUser.save(function(err) {
+		          if (err) throw err;
+		          console.log('Saving ' + req.body.email);
+		          return done(null, newUser);
+		        });
+		      }
+		    });
+	  	} else if (req.body.reqType === 'login') {
+				User.findOne({ 'email': email }, function(err, user) {
+					if (err) return done(err);
+					if (!user) {
+						console.log(req.body.email + ' incorrect username or password');
+						return done(null, false);
+					}
+					if (bcrypt.compareSync(req.body.password, user.password)) {
+						console.log('found user!');
+						return done(null, user);
+					} else {
+						console.log(req.body.email + ' incorrect username or password');
+						return done(null, false);
+					}
+				});
+	  	}
+	  });
+	}
+));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+	console.log('serializeUser');
+	console.log(user._id);
+  cb(null, user._id);
 });
-passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+passport.deserializeUser(function(id, done) {
+	console.log('deserializeUser');
+  User.findById(id, function(err, user) {
+      done(err, user);
+  });
 });
+
+
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+  	console.log('User not logged in');
+   	res.render('login.ejs', {message: 'Please log in to continue'});
+  }
+}
 
 
 // Create a new Express application.
@@ -158,9 +221,6 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
-
-// Use application-level middleware for common functionality, including
-// logging, parsing, and session handling.
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 
@@ -169,15 +229,24 @@ app.listen(process.env.PORT || 3000, function() {
 	console.log('App listening on port 3000');
 });
 
-function loggedIn(req, res, next) {
-	//onsole.log(req.user);
-  if (req.user) {
-    next();
-  } else {
-    res.redirect('/login/twitter');
-  }
-}
 
+
+
+app.post('/register', passport.authenticate('local', { session: true }), function(req, res){
+  	console.log('done registering!');
+  	res.sendStatus(200);
+});
+app.post('/login', passport.authenticate('local', { session: true }), function(req, res){
+  	console.log('done logging in!');
+  	res.sendStatus(200);
+});
+
+// Account page
+app.get('/account', loggedIn, function(req, res) {
+	console.log('/account');
+	console.log(req.user);
+	res.render('account.ejs');
+});
 
 
 /* --- ROUTES --- */
@@ -198,10 +267,6 @@ app.get('/login', function(req, res) {
 require('./mods/blogRoutes')(app);
 // Email support form
 app.post('/support', emailSupport);
-// Account page
-app.get('/account', function(req, res) {
-	res.render('account.ejs');
-});
 // Privacy policy
 app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');
@@ -254,7 +319,7 @@ app.get('/checklogin', loggedIn, function(req, res) {
 });
 app.get('/logout', function(req, res) {
 	req.session.destroy();
-  res.sendStatus(200);
+  res.redirect('/login');
 });
 
 

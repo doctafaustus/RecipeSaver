@@ -28,7 +28,7 @@
 
 		<div class="reg-login-form">
 			<h1>Sign Up via Email</h1>
-			<form method="POST">
+			<form id="register-form">
 				<label>Name:</label>
 				<input type="text" name="name" id="name"><br>
 				<label>Email:</label>
@@ -39,6 +39,7 @@
 				<input type="password" name="passwordConfirm" id="passwordConfirm">
 				<input type="submit" id="submit" value="Register">
 			</form>
+			<div id="reg-login-error"></div>
 		</div>
 
 		<div class="reg-login-outer">
@@ -46,7 +47,7 @@
 				<li class="first-link"><a href="/">Home</a></li>
 				<li><a href="#">Chrome Extension</a></li>
 				<li><a href="/blog">Blog</a></li>
-				<li class="last-link"><a href="#">Support</a></li>
+				<li class="last-link"><a id="reg-login-support" href="#">Support</a></li>
 			</ul>
 
 			<div id="right-pull">
@@ -54,9 +55,46 @@
 				<a class="right-pull-cta" href="/login">Log In</a>
 			</div>
 		</div>
-
-
 	</div>
+
+	<script src="/js/jquery.min.js"></script>
+	<!-- Support Form -->
+	<% include /partials/support-form %>
+
+	<script>
+		$('#register-form').submit(function(e) {
+			e.preventDefault();
+
+			// Hide any lingering error message
+			var $error = $('#reg-login-error');
+			$error.html('').hide();
+
+			var data = {
+				reqType: 'register',
+				name: $('#name').val().trim(),
+				email: $('#emailReg').val().trim().toLowerCase(),
+				password: $('#password').val(),
+			};
+
+			$.ajax({
+				type: 'POST',
+			  url: '/register',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: data,
+			  success: function(data) {
+			  	console.log('registered!');
+			  	window.location.href = '/account';
+			  },
+			  error: function(jqXHR) {
+			  	if (jqXHR.status === 401) {
+			  		var errorMessage = 'That email address is already registered';
+			  		console.log(errorMessage);
+			  		$error.html(errorMessage).show();
+			  	}
+			  }
+			});
+		});
+	</script>
 </body>
 </html>
 

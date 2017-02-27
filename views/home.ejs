@@ -637,8 +637,9 @@
 			I'd love to hear your thoughts on what you've thought of this site so <span id="modal-contact">drop us a line</span> at if you have any feedback at all. Happy recipe hunting!
 		</p>
 	</div>
-	<div id="support-overlay"></div>
 
+	<!-- Support Form -->
+	<% include /partials/support-form %>
 
 	<script src="/js/jquery.min.js"></script>
 	<script>
@@ -646,21 +647,11 @@
 		// Bio modal
 		var $modal = $('#read-more-modal');
 		var $overlay = $('#support-overlay');
-		var $body = $('body');
 
 		$('#bio').click(function(e) {
 			e.preventDefault();
 			$modal.fadeIn();
-			$overlay.fadeIn(function() {
-				$body.on('click.temp', function(e) {
-					var container = $('#read-more-modal');
-					if (!container.is(e.target) && container.has(e.target).length === 0) {
-						$modal.fadeOut();
-						$overlay.fadeOut();
-						$body.off('click.temp');
-					}
-				});
-			});
+			$overlay.fadeIn();
 		});
 
 		$('#read-more-modal .close').click(function() {

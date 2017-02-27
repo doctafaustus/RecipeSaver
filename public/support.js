@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	// Open support modal
-	$('#support a, #support-footer a').click(function(e) {
+	$('#support a, #support-footer a, #reg-login-support').click(function(e) {
 		e.preventDefault();
 		if (!$('#support-modal').is('visible')) {
 			$('#support-modal, #support-overlay').show();

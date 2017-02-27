@@ -27,7 +27,11 @@
 		</div>
 
 		<div class="reg-login-form">
-
+			<% if (locals.message) { %>
+				<div id="message">
+					<%= message %>
+				</div>
+			<% } %>
 			<h1>Log In With:</h1>
 			<ul id="reg-options">
 				<li id="twitter-reg"><a href="">Log-in with Twitter</a></li>
@@ -45,13 +49,15 @@
 					<h2>Log In Via Email Account</h2>
 				</div>
 
-				<form method="POST" action="/login" id="login-form">
+				<form id="login-form">
 					<label>Email:</label>	
-					<input type="email" name="email" id="email">
+					<input type="email" name="email" id="emailLogin">
 					<label>Password:</label>
 					<input type="password" name="password" id="password">
 					<input type="submit" value="Log In">
 				</form>
+
+				<div id="reg-login-error"></div>
 
 				<a id="forgot-password" href="#">Forgot Password?</a><div style="clear: both"></div>
 			</div>
@@ -64,7 +70,7 @@
 				<li class="first-link"><a href="/">Home</a></li>
 				<li><a href="#">Chrome Extension</a></li>
 				<li><a href="/blog">Blog</a></li>
-				<li class="last-link"><a href="#">Support</a></li>
+				<li class="last-link"><a id="reg-login-support" href="#">Support</a></li>
 			</ul>
 
 			<div id="right-pull">
@@ -73,8 +79,46 @@
 			</div>
 		</div>
 
-
 	</div>
+	
+	<script src="/js/jquery.min.js"></script>
+	<!-- Support Form -->
+	<% include /partials/support-form %>
+
+	<script>
+		$('#login-form').submit(function(e) {
+			e.preventDefault();
+
+			// Hide any lingering error message
+			var $error = $('#reg-login-error');
+			$error.html('').hide();
+
+			var data = {
+				reqType: 'login',
+				email: $('#emailLogin').val().trim().toLowerCase(),
+				password: $('#password').val(),
+			};
+
+			$.ajax({
+				type: 'POST',
+			  url: '/login',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: data,
+			  success: function(data) {
+			  	console.log('logged in!');
+			  	window.location.href = '/recipes';
+			  },
+			  error: function(jqXHR) {
+			  	if (jqXHR.status === 401) {
+			  		var errorMessage = 'Incorrect username and/or password';
+			  		console.log(errorMessage);
+			  		$error.html(errorMessage).show();
+			  	}
+			  }
+			});
+		});
+	</script>
+
 </body>
 </html>
 
