@@ -12,6 +12,7 @@ var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
 var async = require('async');
+var captchaSecretKey = process.env.PORT ? null : fs.readFileSync('./private/captchaSecretKey.txt').toString();
 
 
 
@@ -139,6 +140,25 @@ passport.use(new GoogleStrategy({
 		});
 	}
 ));
+
+function checkCaptcha(req, res, next) {
+  if (req.body.gRecaptchaResponse === undefined || req.body.gRecaptchaResponse === '' || req.body.gRecaptchaResponse === null) {
+    console.log('Captcha vaildation failed');
+    res.sendStatus(403);
+    return;
+  } else {
+  	var verificationUrl = "https://www.google.com/recaptcha/api/siteverify?secret=" + captchaSecretKey + "&response=" + req.body.gRecaptchaResponse + "&remoteip=" + req.connection.remoteAddress;
+	  request(verificationUrl, function(error, response, body) {
+	    var body = JSON.parse(body);
+	    if (body.success !== undefined && !body.success) {
+	      console.log('failed captcha verification');
+	      res.sendStatus(403);
+	      return;
+	    }
+	  	next();
+	  });
+  }
+}
 // Local login
 passport.use(new LocalStrategy({
 		usernameField : 'email',
@@ -232,7 +252,7 @@ app.listen(process.env.PORT || 3000, function() {
 
 
 
-app.post('/register', passport.authenticate('local', { session: true }), function(req, res){
+app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), function(req, res){
   	console.log('done registering!');
   	res.sendStatus(200);
 });

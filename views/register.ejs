@@ -37,6 +37,7 @@
 				<input type="password" name="password" id="password"><br>
 				<label>Confirm Password:</label>
 				<input type="password" name="passwordConfirm" id="passwordConfirm">
+				<div id="register-recaptcha" class="g-recaptcha" data-sitekey="6LeWjRMUAAAAANJVtCMzAcR5juxvKHeFgVIYrmOc" style="margin-top: 8px;"></div>
 				<input type="submit" id="submit" value="Register">
 			</form>
 			<div id="reg-login-error"></div>
@@ -59,14 +60,20 @@
 
 	<script src="/js/jquery.min.js"></script>
 	<!-- Support Form -->
-	<% include /partials/support-form %>
+<!-- 	<% include /partials/support-form %> -->
 
 	<script>
+		var $error = $('#reg-login-error');
+
+		function errorMessage(msg) {
+			console.log(msg);
+			$error.html(msg).show();
+		}
+
 		$('#register-form').submit(function(e) {
 			e.preventDefault();
 
 			// Hide any lingering error message
-			var $error = $('#reg-login-error');
 			$error.html('').hide();
 
 			var data = {
@@ -74,6 +81,7 @@
 				name: $('#name').val().trim(),
 				email: $('#emailReg').val().trim().toLowerCase(),
 				password: $('#password').val(),
+				gRecaptchaResponse: grecaptcha.getResponse(),
 			};
 
 			$.ajax({
@@ -86,10 +94,11 @@
 			  	window.location.href = '/account';
 			  },
 			  error: function(jqXHR) {
+			  	grecaptcha.reset();
 			  	if (jqXHR.status === 401) {
-			  		var errorMessage = 'That email address is already registered';
-			  		console.log(errorMessage);
-			  		$error.html(errorMessage).show();
+			  		errorMessage('That email address is already registered');
+			  	} else if (jqXHR.status === 403) {
+			  		errorMessage('Captcha vaildation failed');
 			  	}
 			  }
 			});
