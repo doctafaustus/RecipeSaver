@@ -211,14 +211,11 @@ passport.use(new LocalStrategy({
 ));
 
 passport.serializeUser(function(user, cb) {
-	console.log('serializeUser');
-	console.log(user._id);
   cb(null, user._id);
 });
 passport.deserializeUser(function(id, done) {
-	console.log('deserializeUser');
   User.findById(id, function(err, user) {
-      done(err, user);
+    done(err, user);
   });
 });
 
