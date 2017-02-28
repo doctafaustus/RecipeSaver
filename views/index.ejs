@@ -1,50 +1,666 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Recipe Saver</title>
-	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	<title>Recipe Saver | Home</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	<style>
+		body {
+			font-family: 'Raleway', sans-serif;
+		}
+		#home-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background-color: #232427;
+			height: 68px;
+			font-family: 'Cabin', Arial;
+			font-size: 23px;
+			box-sizing: border-box;
+			padding-left: 30px;
+		}
+		#home-logo {
+			vertical-align: middle;
+			width: 192px;
+			display: block;
+			text-decoration: none;
+		}
+		#home-logo img {
+			vertical-align: middle;
+		}
+		#home-logo-text {
+			display: inline-block;
+			margin-left: 6px;
+			color: white;
+			letter-spacing: 1px;
+		}
+		#nav {
+			border: 0;
+		}
+		#nav li:hover {
+			border-bottom: solid 3px #23d82f;
+		}
+		#nav li a, #nav li a:hover {
+			color: white;
+			display: block;
+		}
+		#home-cover, #hero-left, #hero-right {
+			height: 525px;
+			font-weight: 400;
+			color: white;
+		}
+		#home-cover {
+			background-color: white;
+		  background: url(images/hero-compressed-cut-reversed.jpg) no-repeat; 
+		  -webkit-background-size: cover;
+		  -moz-background-size: cover;
+		  -o-background-size: cover;
+		  background-size: cover;
+		  background-position: bottom;
+		}
+
+		.home-wrapper {
+			width: 1220px;
+			margin: 0 auto;
+		}
+		#hero-left {
+			width: 890px;
+			float: left;
+			background-color: rgba(21, 20, 20, 0.75);
+		}
+		#save-any {
+			font-size: 47px;
+			width: 319px;
+			padding-bottom: 3px;
+			border-bottom: solid 2px #1685ba;
+			margin: 150px auto 80px auto;
+			font-family: 'Cabin', Arial;
+		}
+		#hero-left p {
+			width: 530px;
+			margin: 0 auto;
+			font-family: 'Raleway', sans-serif;
+			font-size: 20.5px;
+			line-height: 30px;
+
+		}
+		#hero-right {
+			width: 330px;
+			float: right;
+			background-color: rgba(21, 20, 20, 0.89);
+		}
+		#hero-right h2 {
+			border-bottom: solid 2px #1685ba;
+			width: 130px;
+			font-size: 30px;
+			padding-bottom: 2px;
+			margin: 50px auto 35px auto;
+			font-family: 'Cabin', Arial;
+		}
+		#home-banner {
+			height: 84px;
+			line-height: 84px;
+			font-size: 22px;
+			background-color: #1281b5;
+			color: white;
+			text-align: center;
+		}
+		#home-laptop-section {
+			background-color: #f3f3f3;
+			padding: 60px 0;
+			overflow: auto;
+			overflow-x: hidden;
+		}
+		#laptop-left, #laptop-right {
+			width: 48%;
+			box-sizing: border-box;
+		}
+		#laptop-left {
+			float: left;
+			padding-left: 50px;
+		}
+		#laptop-right {
+			float: right;
+			padding-left: 40px;
+		}
+		#laptop-right h2 {
+			font-size: 38px;
+			margin-top: 71px;
+			margin-bottom: 28px;
+		}
+		#laptop-right p {
+	    font-size: 18px;
+	    line-height: 29px;
+	    width: 520px;
+		}
+		#value-props {
+			padding: 100px 0;
+			box-sizing: border-box;
+		}
+		.blue-heading {
+	    font-weight: bold;
+	    text-align: center;
+	    color: #066b9a;
+	    font-size: 30px;
+		}
+		#value-props h3 {
+			margin-bottom: 25px;
+		}
+		.subtitle {
+			text-align: center;
+			font-size: 19px;
+			line-height: 24px;
+			margin: 0 auto 60px auto;
+		}
+		#value-props p#value-prop-subtitle {
+	    width: 546px;
+		}
+		#value-prop-icons {
+   		display: flex;
+    	justify-content: space-between;
+		}
+		#value-prop-icons h4 {
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 25px;
+		}
+		#value-prop-icons li {
+			text-align: center;
+		}
+		.value-prop-container {
+			height: 103px;
+		}
+		#value-prop-icons p.value-prop-summary {
+			color: black;
+			text-align: left;
+			width: 252px;
+			line-height: 22px;
+		}
+		.value-prop-icon {
+			margin: 0 auto 25px auto;
+		}
+		.hero-strip {
+	    height: 200px;
+	    overflow: auto;
+	    overflow-x: hidden;
+		}
+		.hero-strip-box {
+			background-color: #23d82f;
+			width: 425px;
+			padding: 27px;
+			margin: 0 auto;
+			margin-top: 61px;
+			font-size: 23px;
+			text-align: center;
+			color: #051302;
+			font-family: 'Source Sans Pro', sans-serif;
+		}
+		#hero-strip-top {
+			background: url(images/hero-strip.png) no-repeat;
+	    -webkit-background-size: cover;
+	    -moz-background-size: cover;
+	    -o-background-size: cover;
+	    background-size: cover;
+		}
+		#hero-strip-top .hero-strip-box {
+			width: 330px;
+		}
+		#hero-strip-bottom {
+			background: url(images/ingredients-compressed.png) no-repeat;
+			-webkit-background-size: cover;
+	    -moz-background-size: cover;
+	    -o-background-size: cover;
+	    background-size: cover;
+		}
+		#blog-bio-left {
+			width: 455px;
+			margin-left: 20px;
+			float: left;
+			text-align: center;
+		}
+		.blog-bio-title {
+	    margin-bottom: 25px;
+		}
+		.gray-box {
+	    border: solid 1px #aeaeae;
+	    display: inline-block;
+	    padding-bottom: 12px;
+	    color: black;
+	    text-align: left;
+	    border-radius: 4px;
+	    text-decoration: none;
+	    position: relative;
+		}
+		.gray-box:hover, .gray-box:hover #bio-link {
+	    text-decoration: underline;
+		}
+		.gray-box:hover{
+			border: solid 1px #066b9a;
+		}
+		.gray-box-link {
+			margin-top: 11px;
+			margin-left: 12px;
+		}
+		#blog-bio {
+			background-color: #f3f3f3;
+			padding: 100px 0;
+			overflow: auto;
+			overflow-x: hidden;
+		}
+		#blog-bio-right {
+			width: 545px;
+			float: right;
+			text-align: center;
+			margin-right: 20px;
+		}
+		#bio {
+			height: 228px;
+			background-image: url(images/popout.png);
+			background-repeat: no-repeat;
+    	background-position: 98% 8px;	
+		}
+		#bio:hover {
+			background-image: url(images/popout-blue.png);
+		}
+		#bio-left {
+			float: left;
+		}
+		#bio-right {
+			float: left;
+		}
+		#bio-thumb {
+			display: inline-block;
+			float: left;
+			border-right: solid 1px #aeaeae;
+			border-bottom: solid 1px #aeaeae;
+			border-radius: 4px;
+		}
+		#bio-text {
+			float: right;
+			width: 250px;
+			padding: 12px 12px 0 12px;
+			font-size: 15px;
+			line-height: 21px;
+		}
+		#bio-bottom {
+			clear: both;
+			float: left;
+			margin-top: 13px;
+		}
+		#popout {
+			float: right;
+			margin-right: 12px;
+		}
+		#popout img {
+			position: absolute;
+	    top: 8px;
+	    right: 8px;
+		}
+		#integrations {
+			padding: 100px 0;
+			overflow: auto;
+			overflow-x: hidden;
+			text-align: center;
+		}
+		#integrations-title {
+			margin-bottom: 35px;
+		}
+		#integrations-summary {
+			width: 800px;
+		}
+		#integrations-pics ul {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+		#review {
+			overflow: auto;
+    	display: inline-block;
+			margin: 70px auto 0 auto;
+		}
+		#review-bg {
+			width: 922px;
+			height: 98px;
+			box-sizing: border-box;
+			background-image: url(images/quote-box.png);
+			background-repeat: no-repeat;
+	    color: white;
+	    font-size: 18px;
+	    line-height: 25px;
+	    padding: 23px 50px 0 45px;
+	    text-align: left;
+	    float: left;
+		}
+		#quote-author {
+			width: 185px;
+			float: left;
+			margin-left: 25px;
+		}
+		#quote-img {
+			float: left;
+			margin-top: 8px;
+			margin-right: 16px;
+		}
+		#quote-author-name, #quote-author-title {
+			display: inline-block;
+			float: left;
+		}
+		#quote-author-name {
+			margin-top: 25px;
+			margin-bottom: 6px;
+		}
+		#quote-author-title {
+			font-style: italic;
+		}
+
+		footer {
+			margin-top: 0;
+		}
+		#footer-inner, #copyright-inner {
+			width: 1020px;
+		}
+		#read-more-modal {
+			display: none;
+	    position: fixed;
+	    width: 1000px;
+	    top: 50%;
+	    transform: translateY(-50%);
+	    left: 0;
+	    right: 0;
+	    margin-left: auto;
+	    margin-right: auto;
+	    padding: 35px;
+	    z-index: 6;
+	    background-color: white;
+	    border-radius: 3px 3px 3px 3px;
+	    border: 1px solid #B9BCC0;
+	    box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+	    max-height: calc(100vh - 203px);
+	    overflow-y: auto;
+	    font-family: 'Source Sans Pro', sans-serif;
+		}
+		.close {
+			fill: black;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+		}
+		#read-more-modal-left {
+			width: 300px;
+			height: 372px;
+    	margin-bottom: 5px;
+	    float: left;
+	    margin-right: 25px;
+		}
+		#read-more-modal-pic {
+			margin-bottom: 12px;
+		}
+		#read-more-modal-caption-top {
+			margin-bottom: 5px;
+			font-weight: bold;
+			font-size: 19px;
+			color: #066b9a;
+		}
+		#read-more-modal-caption-bottom {
+			font-size: 18px;
+		}
+		#read-more-modal h5 {
+	    font-weight: bold;
+	    font-size: 20px;
+	    margin-bottom: 24px;
+	    color: #066b9a;
+		}
+		#read-more-modal p {
+			margin-bottom: 20px;
+   	 	font-size: 17px;
+    	line-height: 20px;
+		}
+		#read-more-modal p#read-more-last-p {
+			margin-bottom: 0;
+		}
+		#modal-contact {
+			color: #066b9a;
+			cursor: pointer;
+			font-weight: bold;
+		}
+		#modal-contact:hover{ 
+			text-decoration: underline;
+		}
+	</style>
 </head>
 <body>
-	<h1>Recipe Saver</h1>
-	<nav>
-		<a href="/home">Home</a> |
-		<a href="/login/twitter">Twitter Login</a> |
-		<a href="/login/facebook">Facebook Login</a> |
-		<a href="/login/google">Google Login</a> |
-		<a href="/checklogin">Check log in</a> |
-		<a href="/logout">Logout</a> |
-		<a href="/register">Register</a> |
-		<a href="/account">Account</a> |
-		<a href="/recipes">My Recipes</a>
-		<a href="/testuser">Test User</a>
-	</nav>
-	<%= regMessage %>
 
-	<br>
-	<br>
-	<form>
-		<input type="text" id="email" placeholder="email">
-		<input type="text" id="password" placeholder="password">
-		<input type="submit"> 
-	</form>
+	<div id="home-header">
+		<a id="home-logo" href="/">
+			<img src="/images/home-logo.png">
+			<div id="home-logo-text">Recipe Saver</div>
+		</a>
+		<div id="nav">
+			<ul>
+				<li id="recipes"><a href="/recipes">My Recipes</a></li>
+				<li id="chrome-extension"><a href="#">Chrome Extension</a></li>
+				<li id="blog"><a href="/blog">Blog</a></li>
+				<li id="support"><a href="#">Support</a></li>
+				<li id="login"><a href="/login">Login</a></li>
+			</ul>
+		</div>
+	</div>
 
-	
-	<script src="js/jquery.min.js"></script>
+	<div id="home-cover">
+		<div class="home-wrapper">
+			<div id="hero-left">
+				<h1 id="save-any">Save any recipe.</h1>
+				<p>
+					Recipe Saver lets you create, save, edit, and categorize any recipe, no matter where you find. Now all of your recipes can be kept in just one place.
+				</p>
+			</div>
+			<div id="hero-right">
+				<h2>Try It Now</h2>
+				<ul id="reg-options">
+					<li id="twitter-reg"><a href="">Sign-up with Twitter</a></li>
+					<li id="facebook-reg"><a href="">Sign-up with Facebook</a></li>
+					<li id="gmail-reg"><a href="">Sign-up with Google</a></li>
+					<li id="email-reg"><a href="/register">Sign-up with Email</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="home-banner">Join the thousands of people who store their favorite recipes on Recipe Saver.</div>
+
+	<div id="home-laptop-section">
+		<div class="home-wrapper">
+			<div id="laptop-left">
+				<img src="images/laptop.png" id="laptop">
+			</div>
+			<div id="laptop-right">
+				<h2>One site - every recipe</h2>
+				<p>
+					Enter a recipe from scratch. Save the url from online recipes. Or use the Chrome extension to automatically extract the recipe from popular recipe sites.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div id="value-props">
+		<div class="home-wrapper">
+			<h3 class="blue-heading">The ultimate tool for home cooks</h3>
+			<p id="value-prop-subtitle" class="subtitle">
+				Recipe Saver was designed as fast, quick-loading application so you can do what you need to do and get cooking.
+			</p>
+			<ul id="value-prop-icons">
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/plans-icon.png">
+					</div>
+					<h4>Two Plans</h4>
+					<p class="value-prop-summary">
+						Your first 60 recipes are free. After that you may sign up for a pro plan for $x per month for as long as you like.
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/centralize-icon.png">
+					</div>
+					<h4>Consolidation</h4>
+					<p class="value-prop-summary">
+						Forget spreadsheets or bookmarks. Store all your recipes here on one site so they'll never get lost or forgotten again. 
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/extension-icon.png">
+					</div>
+					<h4>Extension</h4>
+					<p class="value-prop-summary">
+						Save recipes and URLs with the click of a button with the Chrome extension. It requires no effort at all!
+					</p>
+				</li>
+				<li>
+					<div class="value-prop-container">
+						<img class="value-prop-icon" src="images/organize-icon.png">
+					</div>
+					<h4>Organization</h4>
+					<p class="value-prop-summary">
+						Stay organized by adding your own tags, search by name, or sort by name or date. Easily search for what you need and voilà!
+					</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="hero-strip" id="hero-strip-top">
+		<div class="hero-strip-box">Save, organize, and print</div>
+	</div>
+
+	<div id="blog-bio">
+		<div class="home-wrapper">
+
+			<div id="blog-bio-left">
+				<div class="blog-bio-title blue-heading">Latest Blog Post</div>
+				<a id="featured-blog-post" class="gray-box" href="/blog/cookbook-review-fast-food">
+					<img id="blog-post-image" src="images/blog/fast-food-homepage.jpg">
+					<div class="gray-box-link">Cookbook Review: Gordon Ramsay's Fast Food</div>
+				</a>
+			</div>
+
+			<div id="blog-bio-right">
+				<div class="blog-bio-title blue-heading">How Recipe Saver Began</div>
+				<a href="/" class="gray-box" id="bio">
+<!-- 					<span id="popout"><img src="images/popout.png"></span> -->
+					<div id="bio-left">
+						<img id="bio-thumb" src="images/bio-thumb.jpg">
+						<div class="gray-box-link" id="bio-bottom">
+							<span id="bio-link">Read More...</span>
+						</div>
+					</div>
+					<div id="bio-right">
+						<div id="bio-text">
+								Hello friends! I'm Bill Coloe and welcome to Recipe Saver! Your spot for storing and organizing your favorite recipes. I've always enjoyed discovering recipes online but could never find an efficient way to track them all in one place. I felt like it was a problem that should've been solved already but I thought maybe I could create a solution.
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div id="integrations">
+		<div class="home-wrapper">
+			<div id="integrations-title" class="blue-heading">Integrations to Capture Everything</div>
+			<div id="integrations-summary" class="subtitle">
+				Several top recipes sites are integrated with our Chrome extension so you can capture the entire recipe text and ingredients. For nonintegrated sites  we'll save the page URL to your collection whether it be a video, blog post, or text recipe.
+			</div>
+			<div id="integrations-pics">
+				<ul>
+					<li><img src="images/integration-allrecipes.png"></li>
+					<li><img src="images/integration-chowhound.png"></li>
+					<li><img src="images/integration-foodnetwork.png"></li>
+					<li><img src="images/integration-epicurious.png"></li>
+					<li><img src="images/integration-food.png"></li>
+				</ul>
+			</div>
+
+			<div id="review">
+				<div id="review-bg">
+					I love this extension! With dietary restrictions, it's tough to keep all your recipes in one place - but this handy tool is perfect for that.
+				</div>
+				<div id="quote-author">
+					<img id="quote-img" src="images/lillie.png">
+					<div id="quote-author-name">Lille Lemon</div>
+					<div id="quote-author-title">Singer</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="hero-strip" id="hero-strip-bottom">
+		<div class="hero-strip-box">Create your recipe collection today</div>
+	</div>
+
+	<!-- Footer -->
+	<% include ./partials/footer %>
+
+<div id="read-more-modal">
+	  <svg class="close" viewBox="0 0 32 32">
+	  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+	  </svg>
+  	<div id="read-more-modal-left">
+  		<img id="read-more-modal-pic" src="images/bio-expanded.jpg">
+  		<div id="read-more-modal-caption-top">Bill Coloe</div>
+  		<div id="read-more-modal-caption-bottom">Founder, Recipe Saver</div>
+  	</div>
+		<h5>It all started in 2011, when I realized the only thing I knew how to cook for my dinner date was boiled hot dogs.</h5>
+		<p>
+			Chucking two premade pork links into a pool of hot water and slapping them on stale buns was no way to impress someone, so I knew it was only a matter of time until I was exposed as a home cook imposter. I did what anyone else in my position would do - I turned to the Internet for a fancy recipe so I could fake it until I made it. 
+		</p>
+		<p>
+			A vegetarian stir fry dish turned out to be a hit and I lived to cook another day. Weeks later, I was asked to make it again but silly old me forgot to save the recipe and there was no way I could remember the ingredients off the top of my head. Fearing being found out, I spent hours searching for the original recipe and consequently realized how important it was to keep track of my favorite recipes in the future.
+		</p>
+		<p>
+			In the months that followed, and keeping up my facade as a decent home cook, I tried all sorts of recipe keeping methods. Bookmarks were quick and easy but the messy and disparate naming conventions made things disorganized. Spreadsheets worked for a while, but I had to spend a fair amount of time formating, backing up and organizing data.
+		</p>
+		<p>
+			Many recipe websites included a "recipe box" but I was constrained to only being able to save recipes hosted on that site. Other meal planning websites felt too clunky with features I didn't want or need. Around this time I had begun my career and a Front End Developer and decided to build a simple site that would allow you to enter your own collection of recipes online, accompanied with a companion Chrome Extension. It was simple, no-frills, and rudimentary but it worked and so Recipe Saver 1.0 was born. 
+		</p>
+		<p>
+			I posted the application my Facebook and LinkedIn profile, but didn't expect many people to sign up other than some friends and family. With a marketing budget of $0, the site somehow found it's way onto many people's screens, and before long I had thousands of registered users. Realizing that I may have solved a problem for more people than intended, I decided to recreate the entire application to make it much more polished. Recipe Saver 2.0 is simply the latest incarnation of my attempt to make saving recipes easier for everyone. With new features being added routinely (without getting in the way of what you love), I hope you'll find this site a valuable addition to your home cooking toolbox. 
+		</p>
+		<p id="read-more-last-p">
+			I'd love to hear your thoughts on what you've thought of this site so <span id="modal-contact">drop us a line</span> at if you have any feedback at all. Happy recipe hunting!
+		</p>
+	</div>
+
+	<!-- Support Form -->
+	<% include /partials/support-form %>
+
+	<script src="/js/jquery.min.js"></script>
 	<script>
-		$('form').submit(function(e) {
+
+		// Bio modal
+		var $modal = $('#read-more-modal');
+		var $overlay = $('#support-overlay');
+
+		$('#bio').click(function(e) {
 			e.preventDefault();
-			$.ajax({
-				type: 'POST',
-				url: '/local-login',
-	 	 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	 	 		data: {email: $('#email').val(), password: $('#password').val()},
-	  		success: function(data) {
-	  			console.log('YES!');
-	  		}
-			});
+			$modal.fadeIn();
+			$overlay.fadeIn();
 		});
+
+		$('#read-more-modal .close').click(function() {
+			$modal.fadeOut();
+			$overlay.fadeOut();
+		});
+
 	</script>
-
-
 </body>
 </html>
+
+
