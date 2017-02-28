@@ -239,7 +239,21 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore({ url: 'mongodb://localhost/recipe-saver'}) }));
+var mongoStoreOptions;
+
+if (!process.env.PORT) {
+	mongoStoreOptions = {
+		url: 'mongodb://localhost/recipe-saver',
+	};
+} else {
+	mongoStoreOptions = {
+		url: 'mongodb://heroku_72l62tzb:9clcc3c57hc5j3jruvca8btah@ds127399.mlab.com:27399/heroku_72l62tzb',
+		ttl: 365 * 24 * 60 * 60,
+	};
+}
+
+
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
