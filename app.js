@@ -18,11 +18,23 @@ var captchaSecretKey = process.env.PORT ? null : fs.readFileSync('./private/capt
 
 // DATABASE
 var mongoose = require('mongoose');
+var uriUtil = require('mongodb-uri');
 var Schema = mongoose.Schema; //allows use to define our schema
 var ObjectId = Schema.ObjectId;
-
+var dbOptions = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };
 mongoose.Promise = global.Promise; // Removes decprecation warning
-mongoose.connect('mongodb://localhost/recipe_saver');
+// Connect to DB
+if (!process.env.PORT) {
+	mongoose.connect('mongodb://localhost/recipe_saver');
+} else {
+	console.log("Application running in Heroku!");
+	var mongodbUri = process.env.MONGOLAB_URI; // A Heroku config variable
+	var mongooseUri = uriUtil.formatMongoose(mongodbUri);
+	console.log(mongodbUri);
+	console.log(mongooseUri);
+	mongoose.connect(mongooseUri, dbOptions);
+}
+
 
 var User = mongoose.model('User', new Schema({
 	id: ObjectId,

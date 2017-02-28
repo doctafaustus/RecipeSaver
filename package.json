@@ -26,6 +26,7 @@
     "ejs": "^2.5.1",
     "express": "^4.13.1",
     "express-session": "^1.14.0",
+    "mongodb-uri": "^0.9.7",
     "mongoose": "^4.8.2",
     "nodemailer": "^2.7.2",
     "on-finished": "^2.3.0",
