@@ -113,6 +113,10 @@
 			  		var errorMessage = 'Incorrect username and/or password';
 			  		console.log(errorMessage);
 			  		$error.html(errorMessage).show();
+			  	} else if (jqXHR.status === 404) {
+			  		var errorMessage = 'Oops! Something went terribly wrong - please email contact@recipesaver.net for help';
+			  		console.log(errorMessage);
+			  		$error.html(errorMessage).show();
 			  	}
 			  }
 			});

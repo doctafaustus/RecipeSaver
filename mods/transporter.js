@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 var fs = require('fs');
-var emailPass = process.env.PORT ? null : fs.readFileSync('./private/emailPass.txt').toString();
+var emailPass = process.env.PORT ? process.env.EMAILPASS : fs.readFileSync('./private/emailPass.txt').toString();
 
 var transporter = nodemailer.createTransport({
   host: 'smtp.mailgun.org', 

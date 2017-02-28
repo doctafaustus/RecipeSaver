@@ -99,6 +99,8 @@
 			  		errorMessage('That email address is already registered');
 			  	} else if (jqXHR.status === 403) {
 			  		errorMessage('Captcha vaildation failed');
+			  	} else if (jqXHR.status === 404) {
+			  		errorMessage('Oops! Something went terribly wrong - please email contact@recipesaver.net for help');
 			  	}
 			  }
 			});

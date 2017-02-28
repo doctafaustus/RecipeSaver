@@ -12,7 +12,6 @@ var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
 var async = require('async');
-var captchaSecretKey = process.env.PORT ? null : fs.readFileSync('./private/captchaSecretKey.txt').toString();
 
 
 
