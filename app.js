@@ -32,6 +32,7 @@ var User = mongoose.model('User', new Schema({
 	twitterId: String,
 	facebookId: String,
 	googleId: String,
+	subscription: String,
   creationDate: {type: Date, default: Date.now},
 }));
 
@@ -104,6 +105,7 @@ passport.use(new FacebookStrategy({
 				if (user) {
 					return done(null, user);
 				} else {
+					console.log('Creating new Facebook user');
 					var newUser = new User();
 					newUser.name = profile.displayName;
 					newUser.facebookId = profile.id;
@@ -124,14 +126,17 @@ passport.use(new GoogleStrategy({
   },
 	function(token, refreshToken, profile, done) {
 		process.nextTick(function() {
-			User.findOne({ 'google.id': profile.id }, function(err, user) {
+			User.findOne({ 'googleId': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
+					console.log('FOUND Google user, logging in...');
 					return done(null, user);
 				} else {
+					console.log('Creating new Google user');
 					var newUser = new User();
 					newUser.name = profile.displayName;
 					newUser.googleId = profile.id;
+					newUser.subscription = 'Free',
 					newUser.save(function(err) {
 						if (err) throw err;
 						return done(null, newUser);
@@ -248,7 +253,19 @@ app.post('/login', passport.authenticate('local', { session: true }), function(r
 app.get('/account', loggedIn, function(req, res) {
 	console.log('/account');
 	console.log(req.user);
-	res.render('account.ejs');
+	res.render('account.ejs', {accountInfo: req.user});
+});
+app.post('/delete-account', loggedIn, function(req, res) {
+	console.log('/delete-account');
+  Recipe.remove({user_id: req.user._id}, function(err, recipe) {
+  	if (err) throw err;
+  	console.log(req.user._id + '\'s recipes deleted!');
+	  User.remove({_id: req.user._id}, function(err, recipe) {
+	  	if (err) throw err;
+			console.log(req.user._id + ' deleted from db!');
+			res.sendStatus(200);
+	  });
+  });
 });
 
 
@@ -298,7 +315,7 @@ app.post('/local-login', function(req, res) {
 app.get('/login/twitter', passport.authenticate('twitter'));
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('Successful Twitter authentication, redirect home.');
-	res.redirect('/#from-twitter');
+	res.redirect('/account');
 });
 app.get('/login/facebook',
   passport.authenticate('facebook'));
@@ -306,7 +323,7 @@ app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Facebook authentication, redirect home.');
-    res.redirect('/');
+    res.redirect('/account');
   });
 app.get('/login/google',
   passport.authenticate('google', { scope: ['profile'] }));
@@ -314,7 +331,7 @@ app.get('/login/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Google authentication, redirect home.');
-    res.redirect('/');
+    res.redirect('/account');
   });
 
 app.get('/checklogin', loggedIn, function(req, res) {

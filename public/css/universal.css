@@ -203,7 +203,7 @@ table {
 
 /* --- Wrapper --- */
 #wrapper {
-	min-height: calc(100vh - 495px);
+	min-height: calc(100vh - 500px);
 }
 
 

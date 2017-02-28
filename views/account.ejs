@@ -40,12 +40,16 @@
 	    position: relative;
 	    margin-top: 50px;
 		}
+		#delete-row {
+			position: absolute;
+			bottom: 20px;
+			right: 20px;
+			font-size: 16px;
+		}
 		#left-rail {
-			border-right: solid 1px #dadada;
-			width: 258px;
+			width: 270px;
 			height: calc(100% - 23px);
 			margin-left: 20px;
-			margin-top: 15px;
 			float: left;
 		}
 		#account-image {
@@ -56,6 +60,12 @@
 		#account-info {
 			float: left;
 		}
+		#user-name {
+	    color: #066b9a;
+	    font-weight: bold;
+	    font-size: 19px;
+	    margin-top: 20px;
+		}
 		#current-account-type {
 			color: #1AAFD0;
 		}
@@ -64,21 +74,30 @@
 			padding-left: 50px;
 			height: 100%;
 			position: relative;
+			width: 60%;
 		}
 		#right-rail h2 {
 			margin-top: 11px;
+			font-size: 30px;
+			font-weight: normal;
+			margin-bottom: 25px;
+			color: #066b9a;
 		}
-		.info-row {
-			margin-bottom: 5px;
+		.info-row-title {
+	    font-size: 21px;
+	    padding-top: 10px;
+	    border-top: solid 1px #dadada;
+	    font-weight: 600;
+	    margin-bottom: 10px;
 		}
-		.info-row-left {
-			width: 140px;
-			display: inline-block;
+		.info-data {
+			margin-bottom: 12px;
 		}
-		#delete-row {
-			font-size: 14px;
+		#member-since {
+			visibility: hidden; /* Shown with jQuery to prevent flashing */
 		}
 		#delete-row a {
+			font-size: 16px;
 			color: #898e95;
 		}
 		#delete-row a:hover {
@@ -95,33 +114,43 @@
 
 	<div id="wrapper">
 		<div id="main">
+			<div id="delete-row">
+				<a href="#" id="delete-account">Delete Account</a>
+			</div>
 			<div id="left-rail">
 				<img id="account-image" src="images/account-image.png">
 				<div id="account-info">
 					<div id="user-name">
-						Bill Coloe
-					</div>
-					<div id="current-account-type">
-						Micro Subscription
-					</div>
-					<div id="delete-row">
-						<a href="#">Delete Account</a>
+						<%= accountInfo.name %>
 					</div>
 				</div>
 			</div>
 			<div id="right-rail">
 				<h2>Account Information</h2>
-				<div class="info-row">
-					<span class="info-row-left">Email Address:</span>
-					<span class="info-row-right">wcoloe@gmail.com</span>
+				<div class="info-row-title">Account Type</div>
+				<div class="info-data">
+					<%= accountInfo.subscription %>
 				</div>
-				<div class="info-row">
-					<span class="info-row-left">Member Since:</span>
-					<span class="info-row-right">2/25/14</span>
+				<div class="info-row-title">You Log-in Via</div>
+				<div class="info-data">
+					<% if (accountInfo.email) { %>
+						Email (<%= accountInfo.email %>)
+					<% } else if (accountInfo.twitterId) { %>
+						Twitter Account
+					<% } else if (accountInfo.facebookId) { %>
+						Facebook Account
+					<% } else if (accountInfo.googleId) { %>
+						Google Account
+					<% } %>
 				</div>
-				<div class="info-row">
-					<span class="info-row-left">Account Type:</span>
-					<span class="info-row-right">Micro Subscription</span>
+				<div class="info-row-title">Member Since</div>
+				<div class="info-data" id="member-since">
+					<%= accountInfo.creationDate %>
+				</div>
+
+				<div class="info-row-title">Account Actions</div>
+				<div class="info-data">
+					<a href="#">Upgrade Account</a>
 				</div>
 			</div>
 		</div>
@@ -130,9 +159,31 @@
 	<!-- Footer -->
 	<% include ./partials/footer %>
 
+	<script src="moment.js"></script>
 	<script>
 		// Mark active header menu
 		document.getElementById('account').className = 'active-menu';
+
+		// Convert creation date
+		var $creationDateDiv = $('#member-since');
+		var creationDate = $creationDateDiv.text().trim();
+		$creationDateDiv.text(moment(new Date(creationDate).getTime()).format('M/D/YY'));
+		$creationDateDiv.attr('style', 'visibility: visible;');
+
+		// Delete account
+		$('#delete-account').click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				type: 'POST',
+			  url: '/delete-account',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: { info: null},
+			  success: function() {
+			  	console.log('Account successfully deleted');
+			  	window.location.href = '/';
+			  },
+			});
+		});
 	</script>
 </body>
 </html>
