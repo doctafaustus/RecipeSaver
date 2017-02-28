@@ -22,7 +22,11 @@ var uriUtil = require('mongodb-uri');
 var Schema = mongoose.Schema; //allows use to define our schema
 var ObjectId = Schema.ObjectId;
 var dbOptions = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };
+var MongoStore = require('connect-mongo')(session);
 mongoose.Promise = global.Promise; // Removes decprecation warning
+
+
+
 // Connect to DB
 if (!process.env.PORT) {
 	mongoose.connect('mongodb://localhost/recipe_saver');
@@ -235,7 +239,7 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore({ url: 'mongodb://localhost/recipe-saver'}) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
