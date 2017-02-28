@@ -28,7 +28,7 @@ if (!process.env.PORT) {
 	mongoose.connect('mongodb://localhost/recipe_saver');
 } else {
 	console.log("Application running in Heroku!");
-	var mongodbUri = process.env.MONGOLAB_URI; // A Heroku config variable
+	var mongodbUri = process.env.MONGODB_URI; // A Heroku config variable
 	var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 	console.log('mongodbUri: ' + mongodbUri);
 	console.log(mongooseUri);
