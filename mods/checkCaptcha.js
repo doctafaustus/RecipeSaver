@@ -1,6 +1,6 @@
 var fs = require('fs');
 var request = require('request');
-var captchaSecretKey = process.env.PORT ? null : fs.readFileSync('./private/captchaSecretKey.txt').toString();
+var captchaSecretKey = process.env.PORT ? process.env.CAPTCHA_SECRET_KEY : fs.readFileSync('./private/captchaSecretKey.txt').toString();
 
 function checkCaptcha(req, res, next) {
 	console.log('checking captcha...');

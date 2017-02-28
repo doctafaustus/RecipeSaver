@@ -239,8 +239,9 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
+// Configure MongoStore options
+// This enables users to stay logged in even if the server goes down
 var mongoStoreOptions;
-
 if (!process.env.PORT) {
 	mongoStoreOptions = {
 		url: 'mongodb://localhost/recipe-saver',
@@ -251,7 +252,6 @@ if (!process.env.PORT) {
 		ttl: 365 * 24 * 60 * 60,
 	};
 }
-
 
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
