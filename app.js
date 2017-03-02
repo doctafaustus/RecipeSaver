@@ -73,7 +73,7 @@ var sendEmail = require('./mods/sendEmail.js');
 
 var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
 var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
-var googleAppSecret = process.env.PORT ? null : fs.readFileSync('./private/googleAppSecret.txt').toString();
+var googleAppSecret = process.env.PORT ? process.env.GOOGLEAPPSECRET : fs.readFileSync('./private/googleAppSecret.txt').toString();
 
 
 // Twitter login
