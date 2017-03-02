@@ -137,7 +137,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: googleAppSecret,
-    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/google/callback',
+    callbackURL: process.env.PORT ? 'https://recipesavertest.herokuapp.com/login/google/callback' : 'http://127.0.0.1:3000/login/google/callback',
   },
 	function(token, refreshToken, profile, done) {
 		process.nextTick(function() {
