@@ -249,6 +249,19 @@ if (!process.env.PORT) {
 	};
 }
 
+app.use(function(req, res, next) {
+res.header('Access-Control-Allow-Credentials', true);
+res.header('Access-Control-Allow-Origin', req.headers.origin);
+res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+if ('OPTIONS' == req.method) {
+     res.send(200);
+ } else {
+     next();
+ }
+});
+
+
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -293,6 +306,14 @@ app.post('/delete-account', loggedIn, function(req, res) {
 	  });
   });
 });
+
+
+// Chrome Extension Testing
+app.post('/extension', function(req, res) {
+	console.log('/extension');
+	console.log(req.user);
+});
+
 
 
 /* --- ROUTES --- */
@@ -401,7 +422,6 @@ app.post('/recipe', function(req, res) {
 
 // Add or update recipe
 app.post('/recipe-update', function(req, res) {
-
 	// Favorite recipe
   if (req.body.favoriteType) {
     var favoriteValue = req.body.favoriteType === 'add' ? true : false;
