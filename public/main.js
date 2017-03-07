@@ -421,7 +421,6 @@ function resetEdit() {
 	}
 }
 
-
 function formatDates() {
 	$('.recipe-list-entry-date a').each(function() {
 		var time = +$(this).html();
@@ -429,7 +428,10 @@ function formatDates() {
 		$(this).html(moment(new Date(time)).format('M/D/YY'));
 	});
 }
+
+// Format all dates immediately
 formatDates();
+
 
 /* --- Set window object's initial stage ---*/
 window.stage = 'initial';

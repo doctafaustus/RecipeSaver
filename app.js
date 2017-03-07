@@ -361,24 +361,24 @@ app.post('/local-login', function(req, res) {
 // Login with Twitter
 app.get('/login/twitter', passport.authenticate('twitter'));
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
-  console.log('Successful Twitter authentication, redirect home.');
-	res.redirect('/account');
+  console.log('Successful Twitter authentication, redirect to recipes page.');
+	res.redirect('/recipes');
 });
 app.get('/login/facebook',
   passport.authenticate('facebook'));
 app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log('Successful Facebook authentication, redirect home.');
-    res.redirect('/account');
+    console.log('Successful Facebook authentication, redirect to recipes page.');
+    res.redirect('/recipes');
   });
 app.get('/login/google',
   passport.authenticate('google', { scope: ['profile'] }));
 app.get('/login/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log('Successful Google authentication, redirect home.');
-    res.redirect('/account');
+    console.log('Successful Google authentication, redirect to recipes page.');
+    res.redirect('/recipes');
   });
 
 app.get('/checklogin', loggedIn, function(req, res) {

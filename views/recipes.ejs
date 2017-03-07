@@ -1019,6 +1019,7 @@
 		<li class="tag-color-selection" data-color="#000000" style="background-color: #000000;">black</li>
 	</ul>
 
+	<div id="rs-id" style="display: none;"></div>
 
 	<script src="moment.js"></script>
 	<script src="main.js"></script>
@@ -1027,6 +1028,7 @@
 	<script src="jquery-ui.min.js"></script>
 	<script src="fraction.js"></script>
 	<script>
+
 		// Mark active header menu
 		document.getElementById('recipes').className = 'active-menu';
 
@@ -1035,6 +1037,9 @@
 
 		// Log the user id
 		console.log('Db user id: ' + '<%= loginId %>');
+
+		// Save user id to local storage so that it can be used in the Chrome extension
+		$('#rs-id').attr('data-rs-id', '<%= loginId %>');
 
 	</script>
 
