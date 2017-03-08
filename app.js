@@ -311,9 +311,64 @@ app.post('/delete-account', loggedIn, function(req, res) {
 // Chrome Extension Testing
 app.post('/extension', function(req, res) {
 	console.log('/extension');
-	console.log(req.user);
+	console.log(req.body);
+
+	var recipe = new Recipe({
+		user_id: req.body.rs_id,
+		recipeName: req.body.recipeName,
+		ingredients: req.body.ingredients,
+		description: req.body.description,
+		url: req.body.url,
+		tags: [],
+		servings: '',
+		readyIn: '0',
+		cals: '',
+		favorite: false,
+	});
+  if (req.body.tags) {
+    handleTagsAndSave(req.body.rs_id, req.body.tags, recipe, res);
+  } else {
+		recipe.save(function(err, recipe) {
+		  if (err) throw err;
+		  console.log(recipe.recipeName + ' saved!');
+		  res.json(recipe);
+		});
+    return;
+  }
 });
 
+function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
+  // Set default new color
+  var color = '#808080';
+  Recipe.find({user_id: userId}, function(err, recipes) {
+  	if (err) throw err;
+
+  	if (isEdit) {
+  		recipe.tags = [];
+  	}
+
+	  requestTags.forEach(function(el, pos) {
+	    for (var i = 0; i < recipes.length; i++) {
+	      for (var j = 0; j < recipes[i].tags.length; j++) {
+	        if (requestTags[pos].name === recipes[i].tags[j].name) {
+	          color = recipes[i].tags[j].color;
+	          break;
+	        } else if (requestTags[pos].color) {
+	          color = requestTags[pos].color;
+	        }
+	      }
+	    }
+	    recipe.tags.push({'name': requestTags[pos].name, 'color': color});
+	    // Reset color
+	    color = '#808080';
+	  });
+		recipe.save(function(err, recipe) {
+		  if (err) throw err;
+		  console.log(recipe.recipeName + ' saved with tag check!');
+		  res.json(recipe);
+		});
+  });
+}
 
 
 /* --- ROUTES --- */
@@ -501,38 +556,7 @@ app.post('/recipe-update', function(req, res) {
   }
 });
 
-function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
-  // Set default new color
-  var color = '#808080';
-  Recipe.find({user_id: userId}, function(err, recipes) {
-  	if (err) throw err;
 
-  	if (isEdit) {
-  		recipe.tags = [];
-  	}
-
-	  requestTags.forEach(function(el, pos) {
-	    for (var i = 0; i < recipes.length; i++) {
-	      for (var j = 0; j < recipes[i].tags.length; j++) {
-	        if (requestTags[pos].name === recipes[i].tags[j].name) {
-	          color = recipes[i].tags[j].color;
-	          break;
-	        } else if (requestTags[pos].color) {
-	          color = requestTags[pos].color;
-	        }
-	      }
-	    }
-	    recipe.tags.push({'name': requestTags[pos].name, 'color': color});
-	    // Reset color
-	    color = '#808080';
-	  });
-		recipe.save(function(err, recipe) {
-		  if (err) throw err;
-		  console.log(recipe.recipeName + ' saved with tag check!');
-		  res.json(recipe);
-		});
-  });
-}
 
 // Get favorite recipes
 app.get('/get-favorite-recipes', function(req, res) {

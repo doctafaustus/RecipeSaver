@@ -243,6 +243,7 @@ function populatePanelSuccess(data) {
 	$('#original-yield').html(data.servings);
 
 	// Ready In
+	console.info(data.readyIn);
 	$('#mins').html(window.convertMinsToHours(data.readyIn));
 	$('#portion-num').val('');
 
