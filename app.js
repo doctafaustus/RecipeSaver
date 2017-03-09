@@ -11,7 +11,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
-var async = require('async');
+
 
 
 
@@ -305,6 +305,27 @@ app.post('/delete-account', loggedIn, function(req, res) {
 			res.sendStatus(200);
 	  });
   });
+});
+
+
+// Account Recovery
+app.get('/account-recovery', function(req, res) {
+	console.log('/account-recovery');
+	res.render('account-recovery.ejs');
+});
+
+app.post('/account-recovery', checkCaptcha, sendEmail(null, 'forgotPassword'), function(req, res) {
+	console.log(req.body);
+	User.findOne({ email: req.body.email }, function(err, user) {
+		if (!user) {
+			console.log('No such user registered');
+			res.sendStatus(401); // No such user
+			return;
+		} else {
+			console.log('yes')
+			res.sendStatus(200);
+		}
+	});
 });
 
 

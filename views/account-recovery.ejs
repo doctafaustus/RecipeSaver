@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Recipe Saver | Account Recovery</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	<style>
+		html {
+			height: 100%;
+		}
+	</style>
+</head>
+<body class="reg-login">
+	<div class="reg-login-wrapper">
+
+		<div id="reg-login-logo">
+			<a class="logo" href="/">
+				<img src="/images/home-logo.png">
+				<div class="reg-login-logo-text">Recipe Saver</div>
+			</a>
+		</div>
+
+		<div class="reg-login-form">
+			<h2>Account Recovery</h2>
+
+			<form id="forgot-password-form">
+				<label>Send account recovery email to:</label>
+				<input type="email" id="forgot-email-address" placeholder="Your email address">
+				<!-- Using same id as on the register page but that's ok -->
+				<div id="register-recaptcha" style="margin-top: 8px;"></div>
+				<input type="submit" value="Send">
+			</form>
+
+			<div id="reg-login-error"></div>
+
+		</div>
+
+		<div class="reg-login-outer">
+			<ul>
+				<li class="first-link"><a href="/">Home</a></li>
+				<li><a href="#">Chrome Extension</a></li>
+				<li><a href="/blog">Blog</a></li>
+				<li class="last-link"><a id="reg-login-support" href="#">Support</a></li>
+			</ul>
+
+			<div id="right-pull">
+				<div id="right-pull-text">Need an account?</div>
+				<a class="right-pull-cta" href="/register">Register</a>
+			</div>
+		</div>
+
+	</div>
+	
+	<script src="/js/jquery.min.js"></script>
+	<!-- Support Form -->
+	<% include ./partials/support-form %>
+
+	<script>
+		var $error = $('#reg-login-error');
+
+		$('#forgot-password-form').submit(function(e) {
+			e.preventDefault();
+
+
+			function showError(msg) {
+				$error.html(msg).show();
+				return msg;
+			}
+
+
+			// Hide any lingering error message
+			var $error = $('#reg-login-error');
+			$error.html('').hide();
+
+			var data = {
+				email: $('#forgot-email-address').val().trim().toLowerCase(),
+				gRecaptchaResponse: grecaptcha.getResponse(1),
+			};
+
+			$.ajax({
+				type: 'POST',
+			  url: '/account-recovery',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: data,
+			  success: function(data) {
+			  	console.log('sent!');
+			  	
+			  },
+			  error: function(jqXHR) {
+			  	grecaptcha.reset(window.registerRecaptchaId);
+			  	if (jqXHR.status === 401) {
+			  		console.log(showError('No such email registered - please create an account to continue.'));
+			  	}  else if (jqXHR.status === 403) {
+			  		console.log(showError('Captcha vaildation failed'));
+			  	} else if (jqXHR.status === 404) {
+			  		console.log(showError('Oops! Something went terribly wrong - please email contact@recipesaver.net for help'));
+			  	}
+			  }
+			});
+		});
+	</script>
+
+</body>
+</html>
+
+

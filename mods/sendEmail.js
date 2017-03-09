@@ -1,4 +1,6 @@
 var transporter = require('./transporter.js');
+var crypto = require('crypto');
+
 
 function sendEmail(emailMsg, type) {
 	return function(req, res, next) {
@@ -35,7 +37,6 @@ function sendEmail(emailMsg, type) {
 			});
 
 		} else if (type === 'registration') {
-			console.log('asfasdf');
 	    // Send registration email
 			transporter.sendMail({
 				from: '"Recipe Saver" <contact@recipesaver.net>',
@@ -52,7 +53,33 @@ function sendEmail(emailMsg, type) {
 				next();
 	      return;
 			});
-		}
+		
+		} else if (type === 'forgotPassword') {
+			console.log('Sending forgot password email');
+			var token;
+      crypto.randomBytes(20, function(err, buf) {
+        token = buf.toString('hex');
+
+				transporter.sendMail({
+					from: '"Recipe Saver" <contact@recipesaver.net>',
+					to: req.body.email,
+					subject: 'Recipe Saver Password Reset',
+					text: 'You are receiving this because you (or someone else) have requested the reset of your account password.\n\n' +
+				          'Please click the following link to reset your Recipe Saver password:\n\n' +
+				          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+				          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+				}, function(error, info){
+				  if (error) {
+		        console.log(error);
+		        res.sendStatus(404);
+		        return;
+				  }
+				  console.log('Password reset email sent successfully to ' + req.body.email);
+					next();
+		      return;
+				});
+      });
+		}   
 	}
 }
 
