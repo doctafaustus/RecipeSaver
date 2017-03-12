@@ -82,6 +82,16 @@ window.fadeSuccessBox = function() {
 		window.successBoxTimer--;
 	}, 1000);
 };
+window.showErrorBox = function(message) {
+	var errorMessage;
+	var $errorBox = $('#error-box');
+	$errorBox.find('#error-messages').html('Error ' + message);
+	$errorBox.find('.error-message').addClass('no-wrap');
+	$errorBox.hide().animate({width:'show'}, 425);
+}
+
+
+
 
 window.resetRecipeState = function() {
 	$('#detail-description, #detail-name').attr('contenteditable', false);
@@ -425,6 +435,10 @@ function resetEdit() {
 function formatDates() {
 	$('.recipe-list-entry-date a').each(function() {
 		var time = +$(this).html();
+
+		// Save time to data attribute that can be used to sort instead of the moment.js date format
+		$(this).attr('data-date', time);
+
 		moment(new Date(time)).format('M/D/YY')
 		$(this).html(moment(new Date(time)).format('M/D/YY'));
 	});
@@ -818,13 +832,13 @@ $('#profile').on('click', '.sort-option', function() {
 		switch($(this).attr('id')) {
 			case 'sort-newest':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-					return moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+					return $(b).find('.recipe-list-entry-date a').attr('data-date') - $(a).find('.recipe-list-entry-date a').attr('data-date');
 				});
 				$listPanelList.append(sortedList);
 				break;
 			case 'sort-oldest':
 				var sortedList = $('#list-panel .recipe-list-entry').sort(function(a, b) {
-					return moment($(a).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf() - moment($(b).find('.recipe-list-entry-date a').text(), 'M/D/YYYY').valueOf();
+					return $(a).find('.recipe-list-entry-date a').attr('data-date') - $(b).find('.recipe-list-entry-date a').attr('data-date');
 				});
 				$listPanelList.append(sortedList);
 				break;

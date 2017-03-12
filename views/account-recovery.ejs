@@ -15,6 +15,8 @@
 			height: 100%;
 		}
 	</style>
+	<!-- Analytics -->
+	<% include ./partials/analytics %>
 </head>
 <body class="reg-login">
 	<div class="reg-login-wrapper">
@@ -27,7 +29,18 @@
 		</div>
 
 		<div class="reg-login-form">
+			<% if (locals.message) { %>
+				<div class="message">
+					<%= message %>
+				</div>
+			<% } %>
 			<h2>Account Recovery</h2>
+
+			<div class="message" id="email-sent" style="display: none;">
+				Please check your email and click the link to reset your password.
+				<br>
+				If you don't see our email, check your spam folder.
+			</div>
 
 			<form id="forgot-password-form">
 				<label>Send account recovery email to:</label>
@@ -89,8 +102,9 @@
 			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			  data: data,
 			  success: function(data) {
-			  	console.log('sent!');
-			  	
+			  	console.log('Password reset email sent!');
+			  	$('#forgot-password-form').hide();
+			  	$('#email-sent').show();
 			  },
 			  error: function(jqXHR) {
 			  	grecaptcha.reset(window.registerRecaptchaId);

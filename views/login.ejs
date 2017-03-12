@@ -15,6 +15,9 @@
 			height: 100%;
 		}
 	</style>
+
+		<!-- Analytics -->
+	<% include ./partials/analytics %>
 </head>
 <body class="reg-login">
 	<div class="reg-login-wrapper">
@@ -28,7 +31,7 @@
 
 		<div class="reg-login-form">
 			<% if (locals.message) { %>
-				<div id="message">
+				<div class="message">
 					<%= message %>
 				</div>
 			<% } %>
@@ -59,7 +62,7 @@
 
 				<div id="reg-login-error"></div>
 
-				<a id="forgot-password" href="#">Forgot Password?</a><div style="clear: both"></div>
+				<a id="forgot-password" href="/account-recovery">Forgot Password?</a><div style="clear: both"></div>
 			</div>
 
 

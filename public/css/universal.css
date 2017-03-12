@@ -658,10 +658,11 @@ footer {
 	margin-top: 12px;
 	color: red;
 }
-#message {
+.message {
 	text-align: center;
 	margin-bottom: 20px;
 	padding: 7px;
 	border: solid 1px #089de3;
 	color: #089de3;
+	line-height: 20px;
 }

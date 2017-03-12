@@ -49,6 +49,8 @@ var User = mongoose.model('User', new Schema({
 	googleId: String,
 	subscription: String,
   creationDate: {type: Date, default: Date.now},
+  resetPasswordToken: String,
+  resetPasswordExpires: String,
 }));
 
 var Recipe = mongoose.model('Recipe', new Schema({
@@ -255,9 +257,9 @@ res.header('Access-Control-Allow-Origin', req.headers.origin);
 res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
 res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 if ('OPTIONS' == req.method) {
-     res.send(200);
+  res.send(200);
  } else {
-     next();
+  next();
  }
 });
 
@@ -265,11 +267,12 @@ if ('OPTIONS' == req.method) {
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
+app.use(bodyParser.json({limit: '1mb'}));
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
+//app.use(require('body-parser').urlencoded({ extended: true, limit: 100 }));
+
 
 // Listen
 app.listen(process.env.PORT || 3000, function() {
@@ -308,25 +311,74 @@ app.post('/delete-account', loggedIn, function(req, res) {
 });
 
 
-// Account Recovery
+// Account Recovery Page
 app.get('/account-recovery', function(req, res) {
 	console.log('/account-recovery');
 	res.render('account-recovery.ejs');
 });
 
+// Request password reset token to email
 app.post('/account-recovery', checkCaptcha, sendEmail(null, 'forgotPassword'), function(req, res) {
-	console.log(req.body);
+	console.log('Finding user for password recovery token assignment');
 	User.findOne({ email: req.body.email }, function(err, user) {
 		if (!user) {
 			console.log('No such user registered');
 			res.sendStatus(401); // No such user
 			return;
 		} else {
-			console.log('yes')
-			res.sendStatus(200);
+			console.log('Saving password reset token');
+      user.resetPasswordToken = req.rsToken;
+      user.resetPasswordExpires = Date.now() + 7200000; // 2 hours
+      user.save(function(err) {
+        res.sendStatus(200);
+      });
 		}
 	});
 });
+
+
+// Validate Password Reset Token
+app.get('/reset/:token', function(req, res) {
+	console.log('/reset/:token (GET)');
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      console.log('Password reset token is invalid or has expired (GET)');
+      res.render('account-recovery.ejs', { message: 'Your password reset token is invalid or has expired.'});
+    } else {
+    	console.log('Preparing new password form');
+    	res.render('reset.ejs', {email: user.email, token: req.params.token});
+    }
+  });
+});
+
+// Change Password
+app.post('/reset/:token', function(req, res) {
+	console.log('/reset/:token (POST)');
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+    	console.log('Password reset token is invalid or has expired (POST)');
+    	res.sendStatus(401);
+    } else {
+	    var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+	    user.password = hash;
+	    user.resetPasswordToken = null;
+	    user.resetPasswordExpires = null;
+
+	    user.save(function(err) {
+	    	sendEmail(null, 'reset')();
+	    	console.log('Password successfully changed!');
+	    	res.sendStatus(200);
+	    });
+    }
+  });
+});
+
+// Login (After Password Reset)
+app.get('/login/from-reset', function(req, res) {
+	console.log('/login/from-reset');
+	res.render('login.ejs', {message: 'Password successfully changed! Please login to continue.'});
+});
+
 
 
 // Chrome Extension Testing
@@ -415,24 +467,6 @@ app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');
 });
 
-
-// Local login
-app.post('/local-login', function(req, res) {
-	User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
-		if (!user) {
-			res.render('login.ejs', {error: 'Invalid email or password.'});
-		} else {
-			if (bcrypt.compareSync(req.body.password, user.password)) {
-				req.session.user = user;
-				console.log(req.session.user);
-				res.redirect('/profile');
-			} else {
-				console.log(req.body.email.toLowerCase() + ' entered an incorrect password or username');
-				//res.render('login.ejs', { reset: 'none', error: 'Invalid email or password.'});				
-			}
-		}
-	});
-});
 
 // Login with Twitter
 app.get('/login/twitter', passport.authenticate('twitter'));

@@ -191,6 +191,13 @@ $('#profile').on('click', '#save-recipe', function(e) {
 
 		  	window.showSuccessBox($('#detail-name').text(), ' has been updated!');
 		  	window.refreshRecipeList();
+		  },
+		  error: function(jqXHR) {
+				if (jqXHR.status === 413) {
+					window.showErrorBox('Recipe is too large');
+				} else {
+					window.showErrorBox('');
+				}
 		  }
 		});
 	} else if (window.stage === 'Add recipe') {
@@ -214,6 +221,13 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	window.showSuccessBox($('#detail-name').text(), ' has been added to your collection!');
 		  	window.refreshRecipeList();
 		  	$('.detail-recipe').removeClass('from-new');
+		  },
+		  error: function(jqXHR) {
+				if (jqXHR.status === 413) {
+					window.showErrorBox('Recipe is too large');
+				} else {
+					window.showErrorBox('');
+				}
 		  }
 		});
 	}

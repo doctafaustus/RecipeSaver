@@ -75,11 +75,15 @@ function sendEmail(emailMsg, type) {
 		        return;
 				  }
 				  console.log('Password reset email sent successfully to ' + req.body.email);
+				  req.rsToken = token;
 					next();
 		      return;
 				});
       });
-		}   
+		} else if (type === 'reset') {
+			// NOTE: This module will not be used as middleware in this case
+			console.log('Sending password reset email');
+		}  
 	}
 }
 

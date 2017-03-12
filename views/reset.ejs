@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Recipe Saver | Sign Up</title>
+	<title>Recipe Saver | Password Reset</title>
 
 	<!-- Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
@@ -29,18 +29,13 @@
 		</div>
 
 		<div class="reg-login-form">
-			<h1>Sign Up via Email</h1>
-			<form id="register-form">
-				<label>Name:</label>
-				<input type="text" name="name" id="name"><br>
-				<label>Email:</label>
-				<input type="email" name="email" id="emailReg"><br>
-				<label>Password:</label>
+			<h2>Password reset for <%= email %></h2>
+			<form id="reset-form">
+				<label>New Password:</label>
 				<input type="password" name="password" id="password"><br>
-				<label>Confirm Password:</label>
-				<input type="password" name="passwordConfirm" id="passwordConfirm">
-				<div id="register-recaptcha" style="margin-top: 8px;"></div>
-				<input type="submit" id="submit" value="Register">
+				<label>Confirm New Password:</label>
+				<input type="password" name="passwordConfirm" id="passwordConfirm"><br>
+				<input type="submit" id="submit" value="Reset Password">
 			</form>
 			<div id="reg-login-error"></div>
 		</div>
@@ -72,47 +67,33 @@
 			$error.html(msg).show();
 		}
 
-		$('#register-form').submit(function(e) {
+		$('#reset-form').submit(function(e) {
 			e.preventDefault();
 
 			// Hide any lingering error message
 			$error.html('').hide();
 
 			var data = {
-				reqType: 'register',
-				name: $('#name').val().trim(),
-				email: $('#emailReg').val().trim().toLowerCase(),
 				password: $('#password').val(),
-				gRecaptchaResponse: grecaptcha.getResponse(1),
 			};
 
 			// Validate form
-			if (!$('#name').val().length || !$('#emailReg').val().length || !$('#password').val().length || !$('#passwordConfirm').val().length) {
-				return errorMessage('Please complete all fields');
-			} 
 			if ($('#password').val() !== $('#passwordConfirm').val()) {
 				return errorMessage('Password and Password Confirm must match');
 			}
 
-
-
 			$.ajax({
 				type: 'POST',
-			  url: '/register',
+			  url: '/reset/' + '<%= token %>',
 			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			  data: data,
 			  success: function(data) {
-			  	console.log('registered!');
-			  	window.location.href = '/account';
+			  	console.log('Password reset!');
+			  	window.location.href = '/login/from-reset';
 			  },
 			  error: function(jqXHR) {
-			  	grecaptcha.reset(window.registerRecaptchaId);
 			  	if (jqXHR.status === 401) {
-			  		errorMessage('That email address is already registered');
-			  	} else if (jqXHR.status === 403) {
-			  		errorMessage('Captcha vaildation failed');
-			  	} else if (jqXHR.status === 404) {
-			  		errorMessage('Oops! Something went terribly wrong - please email contact@recipesaver.net for help');
+			  		window.location.href = '/reset/' + '<%= token %>';
 			  	}
 			  }
 			});
