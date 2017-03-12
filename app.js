@@ -381,11 +381,9 @@ app.get('/login/from-reset', function(req, res) {
 
 
 
-// Chrome Extension Testing
+// Chrome Extension Post
 app.post('/extension', function(req, res) {
 	console.log('/extension');
-	console.log(req.body);
-
 	var recipe = new Recipe({
 		user_id: req.body.rs_id,
 		recipeName: req.body.recipeName,
@@ -420,14 +418,20 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
   		recipe.tags = [];
   	}
 
+
+
+
 	  requestTags.forEach(function(el, pos) {
+	  	console.log('Checking for: ' + el.name);
+	  	// Loop through all recipes
 	    for (var i = 0; i < recipes.length; i++) {
+	    	// Loop through all tags of the current recipe
 	      for (var j = 0; j < recipes[i].tags.length; j++) {
 	        if (requestTags[pos].name === recipes[i].tags[j].name) {
 	          color = recipes[i].tags[j].color;
+	          console.log(recipes[i].tags[j].color);
+
 	          break;
-	        } else if (requestTags[pos].color) {
-	          color = requestTags[pos].color;
 	        }
 	      }
 	    }
@@ -438,6 +442,7 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 		recipe.save(function(err, recipe) {
 		  if (err) throw err;
 		  console.log(recipe.recipeName + ' saved with tag check!');
+		  console.log(recipe);
 		  res.json(recipe);
 		});
   });
@@ -543,12 +548,13 @@ app.post('/recipe-update', function(req, res) {
 			  if (err) throw err;
 			  console.log(recipe.recipeName + ' favorited!');
     		res.json(recipe);
+    		return;
 			});
   	});
   }
 
 	// Save new recipe
-  if (req.body.isNew) {
+  else if (req.body.isNew) {
 		var recipe = new Recipe({
 			user_id: req.user._id,
 			recipeName: req.body.recipeName,

@@ -51,6 +51,7 @@ table {
 #nav {
 	border-bottom: 1px solid #B9BCC0;
 	height: 49px;
+	min-width: 775px;
 }
 #nav li {
 	line-height: 46px;
@@ -609,7 +610,7 @@ footer {
 	color: white;
 	text-decoration: none;
 	line-height: 54px;
-	padding-left: 70px;
+	padding-left: 65px;
 }
 #twitter-reg {
 	background: url(/images/twitter-reg-sprite.png) no-repeat;

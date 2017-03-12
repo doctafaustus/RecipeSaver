@@ -965,7 +965,6 @@ $('#profile').on('mousedown', '#detail-link', function() {
 });
 
 
-
 // Success box close
 $('#success-box .close').click(function() {
 	$('#success-box').hide().removeClass('temp-height');
@@ -980,4 +979,20 @@ $('#success-box').mouseenter(function(e) {
 	window.successHover = false;
 	window.successBoxTimer = 3;
 	window.fadeSuccessBox();
+});
+
+
+
+// Show tooltip if there are no recipes on page load
+if ($('.recipe-list-entry').length === 0) {
+	if (!sessionStorage.seenTooltip) {
+		$('.tooltip').show();
+	}
+}
+
+
+// Close tooltip
+$('.tooltip .close').click(function() {
+	$('.tooltip').hide();
+	sessionStorage.seenTooltip = true;
 });

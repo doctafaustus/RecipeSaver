@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
 	<title>Recipe Saver | My Recipes</title>
 
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
@@ -71,6 +72,7 @@
 			padding: 25px;
 			width: 40%;
 			max-width: 400px;
+			min-width: 220px;
 			margin-left: auto;
 			margin-right: 20px;
 		}
@@ -202,9 +204,10 @@
 			background-color: rgba(22, 22, 22, 0.95);;
 			height: 100vh;
 			box-sizing: border-box;
+			position: relative;
 		}
 		#add-recipe {
-			margin: 60px auto 60px auto;
+			margin: 62px auto 62px auto;
 		}
 		#save-recipe, #cancel-recipe, #undo-recipe {
 			display: none;
@@ -235,6 +238,7 @@
 			color: white;
 			height: 28px;
 			line-height: 28px;
+			font-size: 19px;
 		}
 		#menu li:hover {
 			background-color: #089de3;
@@ -791,6 +795,75 @@
 			white-space: nowrap;
     	overflow: hidden;
 		}
+		#share {
+			display: none;
+		}
+		.tooltip {
+			display: none;
+	    position: absolute;
+	    top: 113px;
+	    right: -364px;
+	    z-index: 10;
+	    border: solid 1px #dadada;
+	    font-size: 15px;
+	    border-radius: 4px;
+	    width: 375px;
+	    box-shadow: 2px 4px 20px 2px rgba(0, 0, 0, 0.15);
+		}
+		.tooltip-inner {
+			padding: 20px;
+			background-color: #ffffff;
+		}
+		.tooltip:before {
+			content: '';
+			height: 0;
+			position: absolute;
+			width: 0;
+			border: 10px solid transparent;
+			border-right-color: white;
+			right: 100%;
+			top: 13px;
+		}
+		.tooltip .close {
+	    position: absolute;
+	    right: 9px;
+	    top: 9px;
+		}
+		.tooltip-top {
+			overflow: auto;
+			margin-bottom: 15px;
+		}
+		.tooltip-top img, .tooltip-title {
+			float: left;
+		}
+		.tooltip-top img {
+			width: 49px;
+		}
+		.tooltip-title {
+	    font-size: 24px;
+	    margin-left: 15px;
+	    color: #089de3;
+	    line-height: 34px;
+		}
+		.tooltip-text {
+			clear: both;
+			float: none;
+			font-size: 17px;
+			line-height: 23px;
+		}
+		#tooltip-extension-link {
+			color: #23d82f;
+		}
+		#tooltip-extension-link:hover {
+			color: white;
+		}
+		.tooltip-bottom {
+			background-color: #089de3;
+			padding: 8px 15px;
+			color: white;
+			line-height: 18px;
+		}
+
 		@media screen and (max-width: 1464px) {
 /*	    #list-panel {
 	    	margin-left: 20px;
@@ -807,10 +880,6 @@
 				margin-bottom: 7px;
 			}
 		}
-
-		#share {
-			display: none;
-		}
  	</style>
 	<!-- Analytics -->
 	<% include ./partials/analytics %>
@@ -825,6 +894,24 @@
 			</a>
 		</div>
 		<div id="add-recipe" class="button">Add New Recipe</div>
+
+		<div class="tooltip">
+			<div class="tooltip-inner">
+			  <svg class="close" viewBox="0 0 32 32">
+			  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+			  </svg>
+				<div class="tooltip-top">
+					<img src="/images/tooltip-icon.png">
+					<div class="tooltip-title">Give it a try</div>
+				</div>
+				<div class="tooltip-text">
+					To start adding recipes to you collection, click "Add New Recipe."
+				</div>
+			</div>
+			<div class="tooltip-bottom">
+				Don't forget, you can also use the <a id="tooltip-extension-link" href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai?hl=en" target="_blank">Chrome Extension</a> to automatically save recipes directly to this page.
+			</div>
+		</div>
 
 		<ul id="menu">
 			<li id='get-all-recipes'>All Recipes</li>
