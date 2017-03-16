@@ -30,28 +30,32 @@
 		</div>
 
 		<div class="reg-login-form">
-			<% if (locals.message) { %>
-				<div class="message">
-					<%= message %>
-				</div>
-			<% } %>
-			<h2>Account Recovery</h2>
-
-			<div class="message" id="email-sent" style="display: none;">
-				Please check your email and click the link to reset your password.
-				<br>
-				If you don't see our email, check your spam folder.
+			<div class="reg-login-form-header">
+				<h1>Account Recovery</h1>
 			</div>
+			<div class="reg-login-form-body">
+				<% if (locals.message) { %>
+					<div class="message">
+						<%= message %>
+					</div>
+				<% } %>
+				<h2></h2>
+				<div class="message" id="email-sent" style="display: none;">
+					Please check your email and click the link to reset your password.
+					<br>
+					If you don't see our email, check your spam folder.
+				</div>
 
-			<form id="forgot-password-form">
-				<label>Send account recovery email to:</label>
-				<input type="email" id="forgot-email-address" placeholder="Your email address">
-				<!-- Using same id as on the register page but that's ok -->
-				<div id="register-recaptcha" style="margin-top: 8px;"></div>
-				<input type="submit" value="Send">
-			</form>
+				<form id="forgot-password-form">
+					<label>Send account recovery email to:</label>
+					<input type="email" id="forgot-email-address" placeholder="Your email address">
+					<!-- Using same id as on the register page but that's ok -->
+					<div id="register-recaptcha" style="margin-top: 8px;"></div>
+					<input type="submit" value="Send">
+				</form>
 
-			<div id="reg-login-error"></div>
+				<div id="reg-login-error"></div>
+			</div>
 
 		</div>
 

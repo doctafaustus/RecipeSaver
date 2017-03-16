@@ -30,15 +30,20 @@
 		</div>
 
 		<div class="reg-login-form">
-			<h2>Password reset for <%= email %></h2>
-			<form id="reset-form">
-				<label>New Password:</label>
-				<input type="password" name="password" id="password"><br>
-				<label>Confirm New Password:</label>
-				<input type="password" name="passwordConfirm" id="passwordConfirm"><br>
-				<input type="submit" id="submit" value="Reset Password">
-			</form>
-			<div id="reg-login-error"></div>
+			<div class="reg-login-form-header">
+				<h1>Account Recovery</h1>
+			</div>
+			<div class="reg-login-form-body">
+				<h3>Password reset for <%= email %></h3>
+				<form id="reset-form">
+					<label>New Password:</label>
+					<input type="password" name="password" id="password"><br>
+					<label>Confirm New Password:</label>
+					<input type="password" name="passwordConfirm" id="passwordConfirm"><br>
+					<input type="submit" id="submit" value="Reset Password">
+				</form>
+				<div id="reg-login-error"></div>
+			</div>
 		</div>
 
 		<div class="reg-login-outer">

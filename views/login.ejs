@@ -31,39 +31,44 @@
 		</div>
 
 		<div class="reg-login-form">
-			<% if (locals.message) { %>
-				<div class="message">
-					<%= message %>
-				</div>
-			<% } %>
-			<h1>Log In With:</h1>
-			<ul id="reg-options">
-				<li id="twitter-reg"><a href="/login/twitter">Log-in with Twitter</a></li>
-				<li id="facebook-reg"><a href="/login/facebook">Log-in with Facebook</a></li>
-				<li id="gmail-reg"><a href="/login/google">Log-in with Google</a></li>
-			</ul>
-
-
-			<div id="reg-login-separator">
-				<div id="reg-login-separator-or">or</div>
+			<div class="reg-login-form-header">
+				<% if (locals.message) { %>
+					<div class="message">
+						<%= message %>
+					</div>
+				<% } %>
+				<h1>Log In</h1>
 			</div>
+			<div class="reg-login-form-body">
+				<h2>Log In With:</h2>
+				<ul id="reg-options">
+					<li id="twitter-reg"><a href="/login/twitter">Log-in with Twitter</a></li>
+					<li id="facebook-reg"><a href="/login/facebook">Log-in with Facebook</a></li>
+					<li id="gmail-reg"><a href="/login/google">Log-in with Google</a></li>
+				</ul>
 
-			<div id="email-login">
-				<div id="email-login-callout">
-					<h2>Log In Via Email Account</h2>
+
+				<div id="reg-login-separator">
+					<div id="reg-login-separator-or">or</div>
 				</div>
 
-				<form id="login-form">
-					<label>Email:</label>	
-					<input type="email" name="email" id="emailLogin">
-					<label>Password:</label>
-					<input type="password" name="password" id="password">
-					<input type="submit" value="Log In">
-				</form>
+				<div id="email-login">
+					<div id="email-login-callout">
+						<h2>Log In Via Email Account</h2>
+					</div>
 
-				<div id="reg-login-error"></div>
+					<form id="login-form">
+						<label>Email:</label>	
+						<input type="email" name="email" id="emailLogin">
+						<label>Password:</label>
+						<input type="password" name="password" id="password">
+						<input type="submit" value="Log In">
+					</form>
 
-				<a id="forgot-password" href="/account-recovery">Forgot Password?</a><div style="clear: both"></div>
+					<div id="reg-login-error"></div>
+
+					<a id="forgot-password" href="/account-recovery">Forgot Password?</a><div style="clear: both"></div>
+				</div>
 			</div>
 
 
