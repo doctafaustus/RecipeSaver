@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Recipe Saver | Plan</title>
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link href="/css/universal.css" rel="stylesheet">
+	<style>
+		html {
+			height: 100%;
+		}
+		.reg-login-wrapper {
+			width: 750px;
+		}
+		.reg-login-form {
+			padding: 0;
+			border: 0;
+		}
+		.reg-login-form h1 {
+			margin-bottom: 0;
+			color: white;
+	    margin-bottom: 0;
+	    color: white;
+	    font-size: 26px;
+	    letter-spacing: 1px;
+	    text-align: left;
+		}
+		.reg-login-form h2, .reg-login-form h3 {
+			text-align: center;
+			margin-top: 30px;
+			margin-bottom: 30px;
+		}
+		.reg-login-form h2 {
+			color: black;
+			font-size: 34px;
+		}
+		.reg-login-form h3 {
+			color: #979797;
+			font-size: 24px;
+			margin-bottom: 40px;
+		}
+		.reg-login-form-header, .reg-login-form-body {
+			padding: 20px;
+		}
+		.reg-login-form-header {
+			background-color: #089de3;
+		}
+		#plans {
+			display: flex;
+			justify-content: space-around;
+			margin-bottom: 40px;
+		}
+		.plan {
+			border: solid 1px #dadada;
+			border-radius: 5px;
+			text-align: center;
+			width: 260px;
+			cursor: pointer;
+		}
+		.plan:hover {
+			border: solid 1px #23d82f;
+			box-shadow: 0px 0px 8px #d9d9d9;
+			-moz-box-shadow: 0px 0px 8px #d9d9d9;
+			-webkit-box-shadow: 0px 0px 8px #d9d9d9;
+		}
+		.plan:hover .plan-continue {
+			background-color: #23d82f;
+		}
+		.plan-title {
+			font-weight: bold;
+			font-size: 18px;
+			margin: 15px 0 20px 0;
+		}
+		.plan-benefit {
+			font-size: 16px;
+			margin: 25px 0 25px 0;
+		}
+		.plan-price {
+			margin-bottom: 25px;
+		}
+		.plan-blue {
+			color: #0c97d9;
+		}
+		.plan-continue {
+			display: inline-block;
+			background-color: #089de3;
+			color: white;
+			padding: 10px 14px;
+			margin-bottom: 20px;
+		}
+	</style>
+
+		<!-- Analytics -->
+	<% include ./partials/analytics %>
+</head>
+<body class="reg-login">
+	<div class="reg-login-wrapper">
+
+		<div id="reg-login-logo">
+			<a class="logo" href="/">
+				<img src="/images/home-logo.png">
+				<div class="reg-login-logo-text">Recipe Saver</div>
+			</a>
+		</div>
+
+		<div class="reg-login-form">
+			<div class="reg-login-form-header">
+				<h1>SELECT PLAN</h1>
+			</div>
+			<div class="reg-login-form-body">
+				<h2>Get the most from Recipe Saver</h2>
+				<h3>Select the option that fits you best</h3>
+
+				<div id="plans">
+					<div class="plan">
+						<div class="plan-title">Basic Version</div>
+						<img class="plan-image" src="/images/apple-free.png">
+						<div class="plan-benefit">Save up 50 recipes</div>
+						<div class="plan-price plan-blue">FREE</div>
+						<div class="plan-continue">Continue</div>
+					</div>
+					<div class="plan">
+						<div class="plan-title">Full Version</div>
+						<img class="plan-image" src="/images/apple-paid.png">
+						<div class="plan-benefit">Save <span class="plan-blue">unlimited</span> recipes</div>
+						<div class="plan-price plan-blue">$7.99 / month <span class="plan-small">(cancel anytime)</span></div>
+						<div class="plan-continue">Continue</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<div class="reg-login-outer">
+			<ul>
+				<li class="first-link"><a href="/">Home</a></li>
+				<li><a href="#">Chrome Extension</a></li>
+				<li><a href="/blog">Blog</a></li>
+				<li class="last-link"><a id="reg-login-support" href="#">Support</a></li>
+			</ul>
+
+			<div id="right-pull">
+				<div id="right-pull-text">Already have an account?</div>
+				<a class="right-pull-cta" href="/login">Log In</a>
+			</div>
+		</div>
+
+	</div>
+	
+	<script src="/js/jquery.min.js"></script>
+	<!-- Support Form -->
+	<% include ./partials/support-form %>
+
+	<script>
+		$('#login-form').submit(function(e) {
+			e.preventDefault();
+
+			// Hide any lingering error message
+			var $error = $('#reg-login-error');
+			$error.html('').hide();
+
+			var data = {
+				reqType: 'login',
+				email: $('#emailLogin').val().trim().toLowerCase(),
+				password: $('#password').val(),
+			};
+
+			$.ajax({
+				type: 'POST',
+			  url: '/login',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: data,
+			  success: function(data) {
+			  	console.log('logged in!');
+			  	window.location.href = '/recipes';
+			  },
+			  error: function(jqXHR) {
+			  	if (jqXHR.status === 401) {
+			  		var errorMessage = 'Incorrect username and/or password';
+			  		console.log(errorMessage);
+			  		$error.html(errorMessage).show();
+			  	} else if (jqXHR.status === 404) {
+			  		var errorMessage = 'Oops! Something went terribly wrong - please email contact@recipesaver.net for help';
+			  		console.log(errorMessage);
+			  		$error.html(errorMessage).show();
+			  	}
+			  }
+			});
+		});
+	</script>
+
+</body>
+</html>
+
+

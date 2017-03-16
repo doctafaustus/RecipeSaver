@@ -471,6 +471,11 @@ app.post('/support', checkCaptcha, sendEmail(require('./mods/supportEmail.js'), 
 app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');
 });
+// Plan
+app.get('/plan', function(req, res) {
+	console.log('/plan');
+	res.render('plan.ejs');
+});
 
 
 // Login with Twitter
