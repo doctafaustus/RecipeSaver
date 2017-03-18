@@ -75,6 +75,12 @@
 			min-width: 220px;
 			margin-left: auto;
 			margin-right: 20px;
+		  -webkit-touch-callout: none; 
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none; 
+			-ms-user-select: none; 
+			user-select: none; 
 		}
 		#list-panel-heading {
 			margin: 0;
@@ -238,7 +244,7 @@
 			color: white;
 			height: 28px;
 			line-height: 28px;
-			font-size: 19px;
+			font-size: 17px;
 		}
 		#menu li:hover {
 			background-color: #089de3;
@@ -751,10 +757,6 @@
 	    border-top: solid 5px #23d82f;
 	    line-height: 20px;
 		}
-		#error-box {
-			white-space: nowrap;
-			z-index: 99;
-		}
 		#success-box.temp-height {
 			height: 66px;
 			overflow-y: hidden;
@@ -778,6 +780,8 @@
 		#error-box {
 			display: none;
 			border-top: solid 5px red;
+			white-space: nowrap;
+			z-index: 99;
 		}
 		#error-box #error-box-inner {
 			display: flex;
@@ -787,6 +791,13 @@
 		}
 		#error-messages {
 			align-self: flex-start;
+		}
+		#error-messages a {
+	    color: #089de3;
+	    font-weight: bold;
+		}
+		#error-messages a:hover {
+			color: #23d82f;
 		}
 		.error-message {
 			margin-bottom: 4px;

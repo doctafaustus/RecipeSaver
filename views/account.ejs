@@ -94,6 +94,12 @@
 		.info-data {
 			margin-bottom: 12px;
 		}
+		.info-data a {
+			color: #0093ff;
+		}
+		.info-data a:hover {
+			color: #23d82f;
+		}
 		#member-since {
 			visibility: hidden; /* Shown with jQuery to prevent flashing */
 		}
@@ -104,8 +110,51 @@
 		#delete-row a:hover {
 			color: black;
 		}
-
-
+		#account-err-suc-message {
+			display: none;
+		}
+		.confirm-modal {
+			display: none;
+			position: fixed;
+			width: 500px;
+			top: 50%;
+			transform: translateY(-50%);
+			left: 0;
+			right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			padding: 35px;
+			z-index: 6;
+			background-color: white;
+			border-radius: 3px 3px 3px 3px;
+			border: 1px solid #B9BCC0;
+			box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+			max-height: calc(100vh - 203px);
+			overflow-y: auto;
+			font-family: 'Source Sans Pro', sans-serif;
+		}
+		.confirm-modal .close {
+			fill: black;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+		}
+		.confirm-modal .close:hover {
+			fill: #23d82f;
+		}
+		.confirm-modal-inner {
+	    font-size: 17px;
+	    line-height: 19px;
+	    margin-bottom: 20px;
+		}
+		.confirm-modal .button {
+			background-color: red;
+			margin: 0 auto;
+			padding: 0 10px;
+		}
+		.confirm-modal .button:hover {
+			background-color: #23d82f;
+		}
 	</style>
 	<!-- Analytics -->
 	<% include ./partials/analytics %>
@@ -129,9 +178,10 @@
 				</div>
 			</div>
 			<div id="right-rail">
+				<div id="account-err-suc-message" class="message"></div>
 				<h2>Account Information</h2>
 				<div class="info-row-title">Account Type</div>
-				<div class="info-data">
+				<div class="info-data" id="account-type-text">
 					<%= accountInfo.subscription %>
 				</div>
 				<div class="info-row-title">You Log-in Via</div>
@@ -152,11 +202,34 @@
 				</div>
 
 				<div class="info-row-title">Account Actions</div>
-				<div class="info-data">
-					<a href="#">Upgrade Account</a>
+				<div class="info-data" id="account-action">
+					<% if (accountInfo.subscription === 'Basic') { %>
+						<a href="/plans">Upgrade Account</a>
+					<% } else if (accountInfo.subscription === 'Full') { %>
+						<a id="cancel-sub" href="#">Cancel Subscription</a>
+					<% } %>
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div id="cancel-confirm-modal" class="confirm-modal">
+	  <svg class="close" viewBox="0 0 32 32">
+	  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+	  </svg>
+	  <div class="confirm-modal-inner">
+	  	Canceling will end your Full Plan subscription immediately and all recipes added after the 50 recipe limit will be deleted permanently. Are you sure you wish to cancel?
+	  </div>
+	  <div class="button" id="cancel-confirm-btn">Cancel Subscription</div>
+	</div>
+	<div id="delete-confirm-modal" class="confirm-modal">
+	  <svg class="close" viewBox="0 0 32 32">
+	  	<polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+	  </svg>
+	  <div class="confirm-modal-inner">
+	  	Deleting your account will permanently erase all your recipes forever. Any subscriptions will also be canceled.
+	  </div>
+	  <div class="button" id="delete-confirm-btn">Delete Account</div>
 	</div>
 
 	<!-- Footer -->
@@ -173,20 +246,74 @@
 		$creationDateDiv.text(moment(new Date(creationDate).getTime()).format('M/D/YY'));
 		$creationDateDiv.attr('style', 'visibility: visible;');
 
+
+		var $message = $('#account-err-suc-message');
+		function showMessage(msg) {
+			console.log(msg);
+			$message.html(msg).show();
+		}
+
+		// Cancel subscription
+		$('#cancel-sub').click(function(e) {
+			e.preventDefault();
+			$('#cancel-confirm-modal, #support-overlay').show();
+			$message.html('').hide();
+		});
+		$('#cancel-confirm-btn').click(function(e) {
+			e.preventDefault();
+			$('#cancel-confirm-modal, #support-overlay').hide();
+			$.ajax({
+				type: 'POST',
+			  url: '/cancel-subscription',
+			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			  data: { info: null},
+			  success: function() {
+			  	// Artificially change page text (will be hardcoded on next refresh)
+			  	$('#account-type-text').text('Basic');
+			  	$('#account-action').html('<a href="/plans">Upgrade Account</a>');
+			  	showMessage('Subscription successfully canceled');
+			  },
+			  error: function() {
+			  	showMessage('Oops! Something went wrong. Please contact support for assistance.');
+			  },
+			});
+		});
+
+
 		// Delete account
 		$('#delete-account').click(function(e) {
 			e.preventDefault();
+			$('#delete-confirm-modal, #support-overlay').show();
+			$message.html('').hide();
+		});
+		$('#delete-confirm-btn').click(function(e) {
+			e.preventDefault();
+			$('#delete-confirm-modal, #support-overlay').hide();
 			$.ajax({
 				type: 'POST',
 			  url: '/delete-account',
 			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 			  data: { info: null},
 			  success: function() {
-			  	console.log('Account successfully deleted');
-			  	window.location.href = '/';
+			  	$('.info-data').attr('style', 'visibility: hidden');
+			  	showMessage('Account/Subscription successfully deleted');
 			  },
+			  error: function() {
+			  	showMessage('Oops! Something went wrong. Please contact support for assistance.');
+			  },
+			  complete: function() {
+			  	delete sessionStorage.seenTooltip;
+			  }
 			});
 		});
+
+
+		// Cancel modal close
+		$('.confirm-modal .close').click(function(e) {
+			e.preventDefault();
+			$('.confirm-modal, #support-overlay').hide();
+		});
+
 	</script>
 </body>
 </html>

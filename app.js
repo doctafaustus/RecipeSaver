@@ -11,9 +11,13 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
-var stripe = require("stripe")('sk_test_GXH0D9rz0oppmTndw8Dyn2Hx');
 
 
+// Stripe
+var stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
+var stripe = require("stripe")(stripeSK);
+
+var RECIPE_LIMIT = 5;
 
 
 // DATABASE
@@ -49,6 +53,7 @@ var User = mongoose.model('User', new Schema({
 	facebookId: String,
 	googleId: String,
 	subscription: String,
+	stripeSubId: String,
   creationDate: {type: Date, default: Date.now},
   resetPasswordToken: String,
   resetPasswordExpires: String,
@@ -297,24 +302,7 @@ app.post('/login', passport.authenticate('local', { session: true }), function(r
   	res.sendStatus(200);
 });
 
-// Account page
-app.get('/account', loggedIn, function(req, res) {
-	console.log('/account');
-	console.log(req.user);
-	res.render('account.ejs', {accountInfo: req.user});
-});
-app.post('/delete-account', loggedIn, function(req, res) {
-	console.log('/delete-account');
-  Recipe.remove({user_id: req.user._id}, function(err, recipe) {
-  	if (err) throw err;
-  	console.log(req.user._id + '\'s recipes deleted!');
-	  User.remove({_id: req.user._id}, function(err, recipe) {
-	  	if (err) throw err;
-			console.log(req.user._id + ' deleted from db!');
-			res.sendStatus(200);
-	  });
-  });
-});
+
 
 
 // Account Recovery Page
@@ -387,9 +375,10 @@ app.get('/login/from-reset', function(req, res) {
 
 
 
-// Chrome Extension Post
-app.post('/extension', function(req, res) {
-	console.log('/extension');
+
+
+
+function addExtensionRecipe(req, res) {
 	var recipe = new Recipe({
 		user_id: req.body.rs_id,
 		recipeName: req.body.recipeName,
@@ -412,6 +401,29 @@ app.post('/extension', function(req, res) {
 		});
     return;
   }
+}
+
+// Chrome Extension Post
+app.post('/extension', function(req, res) {
+	console.log('/extension');
+	// Limit check
+	User.findOne({ '_id':  req.body.rs_id }, function(err, user) {
+    if (err) throw err;
+		if (user.subscription === 'Basic') {
+		  Recipe.find({user_id: req.body.rs_id}, function(err, recipes) {
+		  	if (err) throw err;
+		  	console.log(recipes.length);
+		  	if (recipes.length < RECIPE_LIMIT) {
+		  		addExtensionRecipe(req, res);
+		  	} else {
+		  		console.log('Reached limit!');
+		  		res.sendStatus(403);
+		  	}
+		  });
+		} else {
+			addExtensionRecipe(req, res);
+		}
+  });
 });
 
 function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
@@ -423,9 +435,6 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
   	if (isEdit) {
   		recipe.tags = [];
   	}
-
-
-
 
 	  requestTags.forEach(function(el, pos) {
 	  	console.log('Checking for: ' + el.name);
@@ -483,7 +492,15 @@ app.get('/plans', loggedIn, function(req, res) {
 	console.log(req.user)
 	res.render('plans.ejs');
 });
-// Test CC: 4242424242424242
+
+// Account page
+app.get('/account', loggedIn, function(req, res) {
+	console.log('/account');
+	console.log(req.user);
+	res.render('account.ejs', {accountInfo: req.user});
+});
+
+// Subscribe to Full Plan
 app.post('/charge', loggedIn, function(req, res) {
 	console.log('/charge');
 
@@ -498,22 +515,89 @@ app.post('/charge', loggedIn, function(req, res) {
 		}, function(err, customer) {
 			console.log(customer);
 			stripe.subscriptions.create({
-			  	customer: customer.id,
-			  	plan: 'recipesaver'
-				}, 
-				function(err, subscription) {
-					User.findOne({ '_id':  req.user._id }, function(err, user) {
-			      if (err) throw err;
-		      	user.subscription = 'Full';
-						user.save(function(err) {
-		          if (err) throw err;
-							console.log('Subscription created for ' + req.user._id);
-							res.sendStatus(200);
-		        });
-			    });
-			  });
+		  	customer: customer.id,
+		  	plan: 'recipesaver'
+			}, 
+			function(err, subscription) {
+				User.findOne({ '_id':  req.user._id }, function(err, user) {
+		      if (err) throw err;
+	      	user.subscription = 'Full';
+	      	user.stripeSubId = subscription.id;
+					user.save(function(err) {
+	          if (err) throw err;
+						console.log('Subscription created for ' + req.user._id);
+						res.sendStatus(200);
+	        });
+		    });
+		  });
 		});
   }
+});
+
+// Cancel Subscription
+app.post('/cancel-subscription', loggedIn, function(req, res) {
+	console.log('/cancel-subscription');
+	User.findOne({ '_id':  req.user._id }, function(err, user) {
+    if (err) throw err;
+		stripe.subscriptions.del(
+		  user.stripeSubId,
+		  function(err, confirmation) {
+		  	user.stripeSubId = null;
+		  	user.subscription = 'Basic';
+		  	user.save(function(err) {
+		  		if (err) throw err;
+		  		console.log('Subscription canceled for ' + user._id);
+		  		// Delete all recipes after the users first fifty
+					// Note - Mongo "remove" does not support limit or skip options so we need to make the query first, save the ids in an array, and then do the remove using the ids from the array
+					Recipe.find({user_id: req.user._id}).sort({'creationDate': 1}).skip(1).exec(function (err, docs) {
+				      var recordsToDelete = docs.map(function(doc) { return doc._id; });
+				      Recipe.remove({_id: {$in: recordsToDelete}}, function (err, x) {
+				      	res.sendStatus(200);
+				      }); 
+				    }
+					);
+		  	});
+		  }
+		);
+  });
+});
+
+// Delete Account
+app.post('/delete-account', loggedIn, function(req, res) {
+	console.log('/delete-account');
+  Recipe.remove({user_id: req.user._id}, function(err, recipe) {
+  	if (err) throw err;
+  	console.log(req.user._id + '\'s recipes deleted!');
+
+		User.findOne({ '_id':  req.user._id }, function(err, user) {
+	  	if (err) throw err;
+
+	  	// If user has a subscription then cancel it
+	  	if (user.subscription === 'Full') {
+				stripe.subscriptions.del(
+				  user.stripeSubId,
+				  function(err, confirmation) {
+				  	user.stripeSubId = null;
+				  	user.subscription = 'Basic';
+				  	user.save(function(err) {
+				  		if (err) throw err;
+						  User.remove({_id: req.user._id}, function(err) {
+						  	if (err) throw err;
+				  			console.log('Subscription canceled & all recipes deleted for ' + user._id);
+								res.sendStatus(200);
+						  });
+				  	});
+				  }
+				);
+	  	} else {
+			  User.remove({_id: req.user._id}, function(err, user) {
+			  	if (err) throw err;
+					console.log(req.user._id + ' deleted from db!');
+					res.sendStatus(200);
+			  });
+	  	}
+  	});
+  });
 });
 
 
@@ -593,6 +677,31 @@ app.post('/recipe', function(req, res) {
   });
 });
 
+
+function addRecipe(req, res) {
+	var recipe = new Recipe({
+		user_id: req.user._id,
+		recipeName: req.body.recipeName,
+		ingredients: req.body.ingredients,
+		description: req.body.description,
+		url: req.body.url,
+		tags: [],
+		servings: req.body.servings,
+		readyIn: req.body.readyIn,
+		cals: req.body.cals,
+		favorite: false,
+	});
+  if (req.body.tags) {
+    handleTagsAndSave(req.user._id, req.body.tags, recipe, res);
+  } else {
+		recipe.save(function(err, recipe) {
+		  if (err) throw err;
+		  console.log(recipe.recipeName + ' saved!');
+		  res.json(recipe);
+		});
+    return;
+  }
+}
 // Add or update recipe
 app.post('/recipe-update', function(req, res) {
 	// Favorite recipe
@@ -613,28 +722,23 @@ app.post('/recipe-update', function(req, res) {
 
 	// Save new recipe
   else if (req.body.isNew) {
-		var recipe = new Recipe({
-			user_id: req.user._id,
-			recipeName: req.body.recipeName,
-			ingredients: req.body.ingredients,
-			description: req.body.description,
-			url: req.body.url,
-			tags: [],
-			servings: req.body.servings,
-			readyIn: req.body.readyIn,
-			cals: req.body.cals,
-			favorite: false,
-		});
-    if (req.body.tags) {
-      handleTagsAndSave(req.user._id, req.body.tags, recipe, res);
-    } else {
-			recipe.save(function(err, recipe) {
-			  if (err) throw err;
-			  console.log(recipe.recipeName + ' saved!');
-			  res.json(recipe);
-			});
-	    return;
-    }
+
+  	// Limit check
+  	if (req.user.subscription === 'Basic') {
+		  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+		  	if (err) throw err;
+		  	console.log(recipes.length);
+		  	if (recipes.length < RECIPE_LIMIT) {
+		  		addRecipe(req, res);
+		  	} else {
+		  		console.log('Reached limit!');
+		  		res.sendStatus(403);
+		  	}
+		  });
+  	} else {
+  		addRecipe(req, res);
+  	}
+
   } else {
 	  // Edit recipe
 		Recipe.findOne({user_id: req.user._id, _id: req.body.id}, function(err, recipe) {

@@ -225,6 +225,8 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  error: function(jqXHR) {
 				if (jqXHR.status === 413) {
 					window.showErrorBox('Recipe is too large');
+				} else if (jqXHR.status === 403) {
+					window.showErrorBox('- You\'ve reached your maximum storage limit.<br>Please <a href="/plans">upgrade</a> your account to store more recipes.');
 				} else {
 					window.showErrorBox('');
 				}

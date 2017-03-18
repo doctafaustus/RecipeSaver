@@ -105,10 +105,10 @@
 			$error.html(msg).show();
 		}
 
-		// Test Publishable Key: pk_test_KmQZh5RXWtu0bnCzyOoFBn5A
-		// Live Publishable Key: pk_live_ladU88gOOTUS87vjvXepHlUY
+
 		var handler = StripeCheckout.configure({
 			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
+			//key: 'pk_live_ladU88gOOTUS87vjvXepHlUY',
 			image: 'images/stripe-logo.png',
 			locale: 'auto',
 			token: function(token) {
@@ -143,7 +143,7 @@
 				name: 'Recipe Saver',
 				email: email,
 				description: 'Full Plan Subscription',
-				amount: 799,
+				amount: 499,
 				allowRememberMe: false,
 			});
 			delete sessionStorage.rs_email;

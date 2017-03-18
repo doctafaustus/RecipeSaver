@@ -112,12 +112,12 @@ li.static {
 .article-text {
 	margin-top: 40px;
 	clear: both;
-	font-family: 'Roboto Slab', serif;
+	font-family: 'Source Sans Pro', serif;
 	line-height: 28px;
 	font-size: 28px;
-	font-size: 16px;
+	font-size: 18px;
 }
-#article-text ul {
+.article-text ul {
 	padding-left: 31px;
 	margin-bottom: 16px;
 	list-style-type: disc;
@@ -128,6 +128,14 @@ li.static {
   font-size: 26px;
   font-family: 'Source Sans Pro';
   margin: 20px 0;
+}
+.subheadline {
+	text-align: center;
+  color: #066b9a;
+  font-weight: bold;
+  font-size: 26px;
+  font-family: 'Source Sans Pro';
+  margin: 40px 0 10px 0;
 }
 article p.double-break {
 	margin-bottom: 40px;
@@ -145,5 +153,4 @@ article p.top-margin {
 	width: 610px;
 	margin: 0 auto;
 }
-
 

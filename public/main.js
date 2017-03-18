@@ -992,7 +992,7 @@ if ($('.recipe-list-entry').length === 0) {
 
 
 // Close tooltip
-$('.tooltip .close').click(function() {
+$('.tooltip .close, #add-recipe').click(function() {
 	$('.tooltip').hide();
 	sessionStorage.seenTooltip = true;
 });
