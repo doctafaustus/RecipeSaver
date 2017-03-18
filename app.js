@@ -11,6 +11,7 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
+var stripe = require("stripe")('sk_test_GXH0D9rz0oppmTndw8Dyn2Hx');
 
 
 
@@ -83,21 +84,21 @@ passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
     consumerSecret: twitterAppSecret,
     callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/twitter/return',
+    passReqToCallback: true
   },
-  function(token, tokenSecret, profile, done) {
-  	console.log('-------------------------------------');
-  	console.log(profile);
+  function(req, token, tokenSecret, profile, done) {
 	  process.nextTick(function() {
 	    User.findOne({ 'twitterId': profile.id }, function(err, user) {
 	      if (err) return done(err);
 	      if (user) {
-	      	console.log('Twitter user found, yo!');
 	        return done(null, user); // User found, return that user
 	      } else { // User not found, create new user
 	      	console.log('Creating new Twitter user');
+	      	req.body.isNew = true;
 	        var newUser = new User();
 	        newUser.name = profile.displayName;
 	        newUser.twitterId = profile.id;
+					newUser.subscription = 'Basic';
 	        newUser.save(function(err) {
 	          if (err) {
 	            throw err;
@@ -114,8 +115,9 @@ passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
     callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/facebook/callback',
+    passReqToCallback: true
   },
-	function(token, refreshToken, profile, done) {
+	function(req, token, refreshToken, profile, done) {
 		process.nextTick(function() {
 			User.findOne({ 'facebookId': profile.id }, function(err, user) {
 				if (err) return done(err);
@@ -123,9 +125,11 @@ passport.use(new FacebookStrategy({
 					return done(null, user);
 				} else {
 					console.log('Creating new Facebook user');
+					req.body.isNew = true;
 					var newUser = new User();
 					newUser.name = profile.displayName;
 					newUser.facebookId = profile.id;
+					newUser.subscription = 'Basic';
 					newUser.save(function(err) {
 						if (err) throw err;
 						return done(null, newUser);
@@ -140,20 +144,21 @@ passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: googleAppSecret,
     callbackURL: process.env.PORT ? 'https://recipesavertest.herokuapp.com/login/google/callback' : 'http://127.0.0.1:3000/login/google/callback',
+    passReqToCallback: true
   },
-	function(token, refreshToken, profile, done) {
+	function(req, token, refreshToken, profile, done) {
 		process.nextTick(function() {
 			User.findOne({ 'googleId': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
-					console.log('FOUND Google user, logging in...');
 					return done(null, user);
 				} else {
 					console.log('Creating new Google user');
+					req.body.isNew = true;
 					var newUser = new User();
 					newUser.name = profile.displayName;
 					newUser.googleId = profile.id;
-					newUser.subscription = 'Free',
+					newUser.subscription = 'Basic';
 					newUser.save(function(err) {
 						if (err) throw err;
 						return done(null, newUser);
@@ -163,7 +168,6 @@ passport.use(new GoogleStrategy({
 		});
 	}
 ));
-
 // Local login
 passport.use(new LocalStrategy({
 		usernameField : 'email',
@@ -180,11 +184,13 @@ passport.use(new LocalStrategy({
 		        console.log(req.body.email + ' is already registered');
 		        return done(null, false); // A 401 error will be returned
 		      } else { // Otherwise, save new user
+		      	req.body.isNew = true;
 		      	var hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
 						var newUser = new User();
 						newUser.name = req.body.name;
 						newUser.email = req.body.email;
 						newUser.password = hash;
+						newUser.subscription = 'Basic';
 						newUser.save(function(err) {
 		          if (err) throw err;
 		          console.log('Saving ' + req.body.email);
@@ -471,26 +477,69 @@ app.post('/support', checkCaptcha, sendEmail(require('./mods/supportEmail.js'), 
 app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');
 });
-// Plan
-app.get('/plan', function(req, res) {
-	console.log('/plan');
-	res.render('plan.ejs');
+// Plans
+app.get('/plans', loggedIn, function(req, res) {
+	console.log('/plans');
+	console.log(req.user)
+	res.render('plans.ejs');
 });
+// Test CC: 4242424242424242
+app.post('/charge', loggedIn, function(req, res) {
+	console.log('/charge');
+
+  if (req.user.subscription === 'Full') {
+  	console.log('User already has Full Plan');
+  	res.sendStatus(401);
+  } else {
+	  stripe.customers.create({
+		  description: 'Customer for ' + req.body.stripeEmail,
+		  source: req.body.stripeToken,
+		  email: req.body.stripeEmail,
+		}, function(err, customer) {
+			console.log(customer);
+			stripe.subscriptions.create({
+			  	customer: customer.id,
+			  	plan: 'recipesaver'
+				}, 
+				function(err, subscription) {
+					User.findOne({ '_id':  req.user._id }, function(err, user) {
+			      if (err) throw err;
+		      	user.subscription = 'Full';
+						user.save(function(err) {
+		          if (err) throw err;
+							console.log('Subscription created for ' + req.user._id);
+							res.sendStatus(200);
+		        });
+			    });
+			  });
+		});
+  }
+});
+
 
 
 // Login with Twitter
 app.get('/login/twitter', passport.authenticate('twitter'));
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('Successful Twitter authentication, redirect to recipes page.');
-	res.redirect('/recipes');
+  if (req.body && req.body.isNew) {
+		res.redirect('/plans');
+  } else {
+		res.redirect('/recipes');
+  }
 });
+
 app.get('/login/facebook',
   passport.authenticate('facebook'));
 app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Facebook authentication, redirect to recipes page.');
-    res.redirect('/recipes');
+	  if (req.body && req.body.isNew) {
+			res.redirect('/plans');
+	  } else {
+			res.redirect('/recipes');
+	  }
   });
 app.get('/login/google',
   passport.authenticate('google', { scope: ['profile'] }));
@@ -498,7 +547,11 @@ app.get('/login/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Google authentication, redirect to recipes page.');
-    res.redirect('/recipes');
+	  if (req.body && req.body.isNew) {
+			res.redirect('/plans');
+	  } else {
+			res.redirect('/recipes');
+	  }
   });
 
 app.get('/checklogin', loggedIn, function(req, res) {

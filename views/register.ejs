@@ -46,6 +46,22 @@
 					<input type="password" name="passwordConfirm" id="passwordConfirm">
 					<div id="register-recaptcha" style="margin-top: 8px;"></div>
 					<input type="submit" id="submit" value="Register">
+					<div class="reg-sk-circle">
+						<div class="sk-circle">
+						  <div class="sk-circle1 sk-child"></div>
+						  <div class="sk-circle2 sk-child"></div>
+						  <div class="sk-circle3 sk-child"></div>
+						  <div class="sk-circle4 sk-child"></div>
+						  <div class="sk-circle5 sk-child"></div>
+						  <div class="sk-circle6 sk-child"></div>
+						  <div class="sk-circle7 sk-child"></div>
+						  <div class="sk-circle8 sk-child"></div>
+						  <div class="sk-circle9 sk-child"></div>
+						  <div class="sk-circle10 sk-child"></div>
+						  <div class="sk-circle11 sk-child"></div>
+						  <div class="sk-circle12 sk-child"></div>
+						</div>
+					</div>
 				</form>
 				<div id="reg-login-error"></div>
 			</div>
@@ -71,6 +87,8 @@
 	<% include ./partials/support-form %>
 
 	<script>
+		var $loadingBar = $('.reg-sk-circle');
+		var $submit = $('#submit');
 		var $error = $('#reg-login-error');
 
 		function errorMessage(msg) {
@@ -100,7 +118,8 @@
 				return errorMessage('Password and Password Confirm must match');
 			}
 
-
+			$loadingBar.show();
+			$submit.hide();
 
 			$.ajax({
 				type: 'POST',
@@ -109,7 +128,11 @@
 			  data: data,
 			  success: function(data) {
 			  	console.log('registered!');
-			  	window.location.href = '/account';
+
+			  	// Save user's email so it can be prepopulated on the strip payment form
+			  	sessionStorage.rs_email = $('#emailReg').val().trim().toLowerCase();
+
+			  	window.location.href = '/plans';
 			  },
 			  error: function(jqXHR) {
 			  	grecaptcha.reset(window.registerRecaptchaId);
@@ -120,7 +143,11 @@
 			  	} else if (jqXHR.status === 404) {
 			  		errorMessage('Oops! Something went terribly wrong - please email contact@recipesaver.net for help');
 			  	}
-			  }
+			  },
+				complete: function() {
+					$loadingBar.hide();
+					$submit.show();
+				}
 			});
 		});
 	</script>

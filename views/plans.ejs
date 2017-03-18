@@ -42,25 +42,37 @@
 				<h3>Select the option that fits you best.</h3>
 
 				<div id="plans">
-					<div class="plan">
+					<a href="/recipes" class="plan">
 						<div class="plan-title">Basic Version</div>
 						<img class="plan-image" src="/images/apple-free.png">
 						<div class="plan-benefit">Save up 50 recipes</div>
 						<div class="plan-price plan-blue">FREE</div>
 						<div class="plan-continue">Continue</div>
-					</div>
-					<div class="plan">
+					</a>
+					<a href="#" id="full-version" class="plan">
 						<div class="plan-title">Full Version</div>
 						<img class="plan-image" src="/images/apple-paid.png">
 						<div class="plan-benefit">Save <span class="plan-blue">unlimited</span> recipes</div>
 						<div class="plan-price plan-blue">$7.99 / month <span class="plan-small">(cancel anytime)</span></div>
 						<div class="plan-continue">Continue</div>
-					</div>
+					</a>
 				</div>
-
+				<div class="sk-circle">
+				  <div class="sk-circle1 sk-child"></div>
+				  <div class="sk-circle2 sk-child"></div>
+				  <div class="sk-circle3 sk-child"></div>
+				  <div class="sk-circle4 sk-child"></div>
+				  <div class="sk-circle5 sk-child"></div>
+				  <div class="sk-circle6 sk-child"></div>
+				  <div class="sk-circle7 sk-child"></div>
+				  <div class="sk-circle8 sk-child"></div>
+				  <div class="sk-circle9 sk-child"></div>
+				  <div class="sk-circle10 sk-child"></div>
+				  <div class="sk-circle11 sk-child"></div>
+				  <div class="sk-circle12 sk-child"></div>
+				</div>
+				<div id="reg-login-error"></div>
 			</div>
-
-
 		</div>
 
 		<div class="reg-login-outer">
@@ -83,45 +95,61 @@
 	<!-- Support Form -->
 	<% include ./partials/support-form %>
 
+	<script src='https://checkout.stripe.com/checkout.js'></script>
 	<script>
-		$('#login-form').submit(function(e) {
+		var $loadingGif = $('.sk-circle');
+		var $error = $('#reg-login-error');
+
+		function errorMessage(msg) {
+			console.log(msg);
+			$error.html(msg).show();
+		}
+
+		// Test Publishable Key: pk_test_KmQZh5RXWtu0bnCzyOoFBn5A
+		// Live Publishable Key: pk_live_ladU88gOOTUS87vjvXepHlUY
+		var handler = StripeCheckout.configure({
+			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
+			image: 'images/stripe-logo.png',
+			locale: 'auto',
+			token: function(token) {
+				$error.html('').hide();
+				$loadingGif.show();
+
+				$.ajax({
+					url: '/charge',
+					type: 'POST',
+					data: {
+						stripeToken: token.id,
+						stripeEmail: token.email,
+					},
+					success: function() {
+						console.log('Success!');
+						window.location.href = '/recipes';
+					},
+					error: function(jqXHR) {
+						errorMessage('Error - Account already is already subscribed to Full Plan');
+					},
+					complete: function() {
+						$loadingGif.hide();
+					}
+				});
+			}
+		});
+
+		$('#full-version').click(function(e) {
 			e.preventDefault();
-
-			// Hide any lingering error message
-			var $error = $('#reg-login-error');
-			$error.html('').hide();
-
-			var data = {
-				reqType: 'login',
-				email: $('#emailLogin').val().trim().toLowerCase(),
-				password: $('#password').val(),
-			};
-
-			$.ajax({
-				type: 'POST',
-			  url: '/login',
-			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-			  data: data,
-			  success: function(data) {
-			  	console.log('logged in!');
-			  	window.location.href = '/recipes';
-			  },
-			  error: function(jqXHR) {
-			  	if (jqXHR.status === 401) {
-			  		var errorMessage = 'Incorrect username and/or password';
-			  		console.log(errorMessage);
-			  		$error.html(errorMessage).show();
-			  	} else if (jqXHR.status === 404) {
-			  		var errorMessage = 'Oops! Something went terribly wrong - please email contact@recipesaver.net for help';
-			  		console.log(errorMessage);
-			  		$error.html(errorMessage).show();
-			  	}
-			  }
+			var email = sessionStorage.rs_email ? sessionStorage.rs_email : '';
+			handler.open({
+				name: 'Recipe Saver',
+				email: email,
+				description: 'Full Plan Subscription',
+				amount: 799,
+				allowRememberMe: false,
 			});
+			delete sessionStorage.rs_email;
 		});
 	</script>
 
 </body>
 </html>
-
 
