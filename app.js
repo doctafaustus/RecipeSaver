@@ -559,7 +559,7 @@ app.post('/cancel-subscription', loggedIn, function(req, res) {
 		  		console.log('Subscription canceled for ' + user._id);
 		  		// Delete all recipes after the users first fifty
 					// Note - Mongo "remove" does not support limit or skip options so we need to make the query first, save the ids in an array, and then do the remove using the ids from the array
-					Recipe.find({user_id: req.user._id}).sort({'creationDate': 1}).skip(1).exec(function (err, docs) {
+					Recipe.find({user_id: req.user._id}).sort({'creationDate': 1}).skip(RECIPE_LIMIT).exec(function (err, docs) {
 				      var recordsToDelete = docs.map(function(doc) { return doc._id; });
 				      Recipe.remove({_id: {$in: recordsToDelete}}, function (err, x) {
 				      	res.sendStatus(200);
