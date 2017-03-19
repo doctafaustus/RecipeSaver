@@ -1,3 +1,8 @@
+/* 
+	--- DEBUG NOTES --- 
+	STRIPE: To debug stripe payments on Heroku, you'll need to use the Stripe TEST secret key (other it will throw an error)
+*/
+
 var express = require('express');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
@@ -18,6 +23,7 @@ var RECIPE_LIMIT = 5;
 
 // STRIPE
 var stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
+/* HEROKU DEBUG */ stripeSK = fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
 var stripe = require("stripe")(stripeSK);
 
 
