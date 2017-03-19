@@ -594,7 +594,6 @@ $('body').on('click', '.tag:not(.new-tag) .tag-name, .tag-list-name .tag-name', 
 
 	  success: function(data) {
 	  	console.log('Got recipes by tag!');
-	  	console.log(data);
 	  	var recipes = data.recipesToSend;
 	  	var color = data.tagColor;
 

@@ -16,7 +16,9 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
+var ip = require('ip');
 
+console.dir(ip.address());
 
 // CONSTANTS
 var RECIPE_LIMIT = 5;
