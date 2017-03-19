@@ -28,6 +28,13 @@ $(document).ready(function() {
 
 	$('body').on('submit', '#support-form', function(e) {
 		e.preventDefault();
+
+		// Validate form
+		if (!$('#support-name').val().length || !$('#support-email').val().length || !$('#support-subject').val().length || !$('#support-message').val().length) {
+			$('#support-recaptcha-error').show().text('Please complete all fields');
+			return;
+		} 
+
 		var data = {
 			name: $('#support-name').val(),
 			email: $('#support-email').val(),
