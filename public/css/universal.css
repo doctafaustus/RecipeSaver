@@ -454,6 +454,7 @@ footer {
 	background: -moz-linear-gradient(45deg,  #23d82f 0%, #1685ba 100%);
 	background: -webkit-linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
 	background: linear-gradient(45deg,  #23d82f 0%,#1685ba 100%);
+	background-attachment: fixed;
 }
 .reg-login-wrapper {
   width: 585px;
@@ -567,6 +568,7 @@ footer {
 .reg-login-outer {
 	color: white;
 	margin-top: 20px;
+	margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
 }
