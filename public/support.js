@@ -44,6 +44,8 @@ $(document).ready(function() {
 		  	$('#support-init').hide();
 		  	$('#support-sucess').show();
 		  	$('#support-recaptcha-error').hide();
+		  	// Clear form
+		  	$('#support-name, #support-email, #support-subject, #support-message').val('');
 			},
 			error: function(xhr) {
 				if (xhr.status === 403) {

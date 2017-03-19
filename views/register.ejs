@@ -114,9 +114,13 @@
 			if (!$('#name').val().length || !$('#emailReg').val().length || !$('#password').val().length || !$('#passwordConfirm').val().length) {
 				return errorMessage('Please complete all fields');
 			} 
+			if ($('#password').val() < 6) {
+				return errorMessage('Password length must	be greater than 5 charaters');
+			}
 			if ($('#password').val() !== $('#passwordConfirm').val()) {
 				return errorMessage('Password and Password Confirm must match');
 			}
+
 
 			$loadingBar.show();
 			$submit.hide();
