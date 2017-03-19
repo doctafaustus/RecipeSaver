@@ -80,7 +80,7 @@ var checkCaptcha = require('./mods/checkCaptcha.js');
 var sendEmail = require('./mods/sendEmail.js');
 
 var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
-var facebookAppSecret = process.env.PORT ? null : fs.readFileSync('./private/facebookAppSecret.txt').toString();
+var facebookAppSecret = process.env.PORT ? process.env.FACEBOOKAPPSECRET : fs.readFileSync('./private/facebookAppSecret.txt').toString();
 var googleAppSecret = process.env.PORT ? process.env.GOOGLEAPPSECRET : fs.readFileSync('./private/googleAppSecret.txt').toString();
 
 
@@ -119,7 +119,7 @@ passport.use(new TwitterStrategy({
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
-    callbackURL: process.env.PORT ? null : 'http://127.0.0.1:3000/login/facebook/callback',
+    callbackURL: process.env.PORT ? 'https://recipesaver.herokuapp.com/login/facebook/callback' : 'http://127.0.0.1:3000/login/facebook/callback',
     passReqToCallback: true
   },
 	function(req, token, refreshToken, profile, done) {
