@@ -46,7 +46,6 @@ if (!process.env.PORT) {
 	console.log("Application running in Heroku!");
 	var mongodbUri = process.env.MONGODB_URI; // A Heroku config variable
 	var mongooseUri = uriUtil.formatMongoose(mongodbUri);
-	console.log('mongodbUri: ' + mongodbUri);
 	mongoose.connect(mongooseUri, dbOptions);
 }
 
@@ -481,11 +480,22 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 }
 
 
+app.enable('trust proxy');
+app.get('*', function(req, res, next) {
+	console.log('IP ADDRESS: ' + req.ip);
+	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
+		console.log('Safety');
+		return next();
+	} else {
+		console.log('Not me');
+		return next();
+	}
+});
+
+
 /* --- ROUTES --- */
 // Home page
-app.enable('trust proxy');
 app.get('/', function(req, res) {
-	console.log(req.ip);
 	res.render('index.ejs', {regMessage: 'none'});
 });
 app.get('/home', function(req, res) {
