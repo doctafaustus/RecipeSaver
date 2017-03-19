@@ -517,6 +517,7 @@ app.post('/charge', loggedIn, function(req, res) {
 		  source: req.body.stripeToken,
 		  email: req.body.stripeEmail,
 		}, function(err, customer) {
+			if (err) console.log(err);
 			console.log(customer);
 			stripe.subscriptions.create({
 		  	customer: customer.id,
