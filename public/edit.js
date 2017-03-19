@@ -42,10 +42,12 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	} else if (editOrAdd === 'add-recipe') {
 		console.log('Setting up for new recipe');
 		$('.detail-recipe').addClass('from-new');
-		window.urlSizeFix();
 		window.clearDetailPanel();
 		$('#cancel-recipe').show(); // Note that this should NOT appear for editing
 	}
+
+	// Resize URL input
+	window.urlSizeFix();
 
 	// Add class to top icons so that they can be editable
 	$('.icons').addClass('editable');
@@ -181,7 +183,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  data: data,
 		  success: function(data) {
 		  	console.log('Updated recipe!');
-		  	console.info(data);
 		  	window.populatePanel(data._id, true);
 		  	window.resetRecipeState();
 		  	$('.editable').removeClass('editable');

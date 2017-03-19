@@ -227,9 +227,7 @@ window.populatePanel = function(id, fromDatabase) {
 		  success: populatePanelSuccess,
 		});
 	} else {
-		console.warn(id);
 		var data = getRecipe(id);
-		console.info(data);
 		populatePanelSuccess(data);
 	}
 	window.resetPortionAdjustment();
@@ -255,7 +253,6 @@ function populatePanelSuccess(data) {
 	$('#original-yield').html(data.servings);
 
 	// Ready In
-	console.info(data.readyIn);
 	$('#mins').html(window.convertMinsToHours(data.readyIn));
 	$('#portion-num').val('');
 
@@ -1008,7 +1005,6 @@ $('.tooltip .close, #add-recipe').click(function() {
 $(document).on('paste', '#detail-description', function(e) {
 	console.log('Clearing formatting');
 	setTimeout(function() {
-		console.log($('#detail-description').html());
 		$('#detail-description').html($('#detail-description').text());
 	}, 100);
 

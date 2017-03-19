@@ -767,9 +767,9 @@ app.post('/recipe-update', function(req, res) {
 			if (req.body.description) {
 				recipe.description = req.body.description;
 			}
-			if (req.body.ingredients) {
+			//if (req.body.ingredients) {
 				recipe.ingredients = req.body.ingredients
-			}
+			//}
 		  if (req.body.url === '' || req.body.url) {
 		  	recipe.url = req.body.url;
 		  }
