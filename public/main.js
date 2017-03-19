@@ -1002,3 +1002,14 @@ $('.tooltip .close, #add-recipe').click(function() {
 	$('.tooltip').hide();
 	sessionStorage.seenTooltip = true;
 });
+
+
+// Clear formatting on paste
+$(document).on('paste', '#detail-description', function(e) {
+	console.log('Clearing formatting');
+	setTimeout(function() {
+		console.log($('#detail-description').html());
+		$('#detail-description').html($('#detail-description').text());
+	}, 100);
+
+});

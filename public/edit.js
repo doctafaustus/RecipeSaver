@@ -89,7 +89,7 @@ $('#profile').on('keydown', '#detail-name, .ingredient', function(e) {
 // Add new ingredient input when editing
 $('#profile').on('keydown', '#detail-new-ingredient-input', function(e) {
   if (e.which == 13) {
-    event.preventDefault();
+    e.preventDefault();
     console.log('Dupliciating ingredient input');
 
     // If there's no text then return
