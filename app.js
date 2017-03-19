@@ -23,7 +23,7 @@ var RECIPE_LIMIT = 5;
 
 // STRIPE
 var stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
-/* HEROKU DEBUG */ stripeSK = fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
+/* HEROKU DEBUG */ stripeSK = process.env.HEROKU_DEBUG_STRIPE_LIVE_SK;
 var stripe = require("stripe")(stripeSK);
 
 
