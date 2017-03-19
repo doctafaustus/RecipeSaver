@@ -174,12 +174,15 @@ table {
 		margin-right: 15px;
 	}
 }
-@media screen and (max-width: 1175px) {
+@media screen and (max-width: 1186px) {
 	#search-form {
 		width: 257px;
 	}
 	#search-form-input {
 		width: 209px;
+	}
+	#search-suggestions {
+		right: 0;
 	}
 }
 @media screen and (max-width: 1045px) {
@@ -187,7 +190,7 @@ table {
 		margin-left: 20px;
 	}
 }
-@media screen and (max-width: 1032px) {
+@media screen and (max-width: 1040px) {
 	#nav li#search-row {
 		display: none !important;
 	}

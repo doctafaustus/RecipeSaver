@@ -291,6 +291,19 @@
 			font-size: 15px;
 			line-height: 18px;
 		}
+		#detail-tag-label {
+			display: none;
+			color: darkgray;
+			font-size: 14px;
+			margin-top: 20px;
+			margin-bottom: 3px;
+		}
+		.edit-recipe 	#detail-tag-label, .add-recipe #detail-tag-label {
+			display: block;
+		}
+		.edit-recipe #detail-tags, .add-recipe #detail-tags {
+			margin-top: 0;
+		}
 		#detail-tags {
 			margin-top: 20px;
 			display: flex;
@@ -1055,6 +1068,8 @@
 					<input type="test" id="detail-link-editable" placeholder="URL">
 				</div>
 
+				<!-- Tag Label -->
+				<div id="detail-tag-label">Tags (Press Enter to Add More)</div>
 				<!-- Recipe Tags -->
 				<div id="detail-tags">
 					<!-- Tag Icon -->

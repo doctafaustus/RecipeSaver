@@ -148,62 +148,62 @@ window.validateRecipe = function() {
 	} else {
 		errorMessages.push('Recipe must have a name');
 	}
-	if ($('#serving-input').val().length < 4) {
-		servingsIsValid = true;
-	} else {
-		errorMessages.push('Servings must be less than 3 characters');
-	}
-	if ($('#mins-input').val().length < 6) {
-		servingsIsValid = true;
-	} else {
-		errorMessages.push('Ready In: must be less than 6 characters');
-	}
-	if ($('#cals-input').val().length < 9) {
-		calsIsValid = true;
-	} else {
-		errorMessages.push('Calories must be less than 9 characters');
-	}
-	if ($('#detail-name').text().length < textLimit) {
-		nameIsValid = true;
-	} else {
-		errorMessages.push('Recipe Name must be less than ' + textLimit + ' characters');
-	}
-	var ingErrorPushed = false;
-	$('.temp-ing-input').each(function() {
-		if ($(this).val().length >= textLimit && !ingErrorPushed) {
-			ingredientNamesAreValid = false;
-			errorMessages.push('Ingredient Names must be less than ' + textLimit + ' characters');
-			ingErrorPushed = true;;
-		}
-	});
-	if ($('#detail-tag-list .tag').length < ing_tagAmount) {
-		ingredientAmountIsValid = true;
-	} else {
-		errorMessages.push('Number of ingredients must be less than ' + ing_tagAmount);
-	}
-	if ($('#detail-description').html().length < descriptionLimit) {
-		descriptionIsValid = true;
-	} else {
-		errorMessages.push('Description must be less than ' + descriptionLimit + ' characters');
-	}
-	if ($('#detail-link-editable').val().length < textLimit) {
-		urlIsValid = true;
-	} else {
-		errorMessages.push('URL length must be less than ' + textLimit);
-	}
-	var tagErrorPushed = false;
-	$('.new-tag').each(function() {
-		if ($(this).text().length >= textLimit && !tagErrorPushed) {
-			tagNamesAreValid = false;
-			errorMessages.push('Tag Names must be less than ' + textLimit + ' characters');
-			tagErrorPushed = true;
-		}
-	});
-	if ($('.new-tag').length < ing_tagAmount) {
-		tagAmountIsValid = true;
-	} else {
-		errorMessages.push('Number of tags must be less than ' + ing_tagAmount);
-	}
+	// if ($('#serving-input').val().length < 4) {
+	// 	servingsIsValid = true;
+	// } else {
+	// 	errorMessages.push('Servings must be less than 3 characters');
+	// }
+	// if ($('#mins-input').val().length < 6) {
+	// 	servingsIsValid = true;
+	// } else {
+	// 	errorMessages.push('Ready In: must be less than 6 characters');
+	// }
+	// if ($('#cals-input').val().length < 9) {
+	// 	calsIsValid = true;
+	// } else {
+	// 	errorMessages.push('Calories must be less than 9 characters');
+	// }
+	// if ($('#detail-name').text().length < textLimit) {
+	// 	nameIsValid = true;
+	// } else {
+	// 	errorMessages.push('Recipe Name must be less than ' + textLimit + ' characters');
+	// }
+	// var ingErrorPushed = false;
+	// $('.temp-ing-input').each(function() {
+	// 	if ($(this).val().length >= textLimit && !ingErrorPushed) {
+	// 		ingredientNamesAreValid = false;
+	// 		errorMessages.push('Ingredient Names must be less than ' + textLimit + ' characters');
+	// 		ingErrorPushed = true;;
+	// 	}
+	// });
+	// if ($('#detail-tag-list .tag').length < ing_tagAmount) {
+	// 	ingredientAmountIsValid = true;
+	// } else {
+	// 	errorMessages.push('Number of ingredients must be less than ' + ing_tagAmount);
+	// }
+	// if ($('#detail-description').html().length < descriptionLimit) {
+	// 	descriptionIsValid = true;
+	// } else {
+	// 	errorMessages.push('Description must be less than ' + descriptionLimit + ' characters');
+	// }
+	// if ($('#detail-link-editable').val().length < textLimit) {
+	// 	urlIsValid = true;
+	// } else {
+	// 	errorMessages.push('URL length must be less than ' + textLimit);
+	// }
+	// var tagErrorPushed = false;
+	// $('.new-tag').each(function() {
+	// 	if ($(this).text().length >= textLimit && !tagErrorPushed) {
+	// 		tagNamesAreValid = false;
+	// 		errorMessages.push('Tag Names must be less than ' + textLimit + ' characters');
+	// 		tagErrorPushed = true;
+	// 	}
+	// });
+	// if ($('.new-tag').length < ing_tagAmount) {
+	// 	tagAmountIsValid = true;
+	// } else {
+	// 	errorMessages.push('Number of tags must be less than ' + ing_tagAmount);
+	// }
 
 	console.log(errorMessages);
 	return errorMessages;
