@@ -127,7 +127,11 @@
 						window.location.href = '/recipes';
 					},
 					error: function(jqXHR) {
-						errorMessage('Error - Account already is already subscribed to Full Plan');
+						if (jqXHR.status === 401) {
+							errorMessage('Error - Account already is already subscribed to Full Plan');
+						} else {
+							errorMessage('Error');
+						}
 					},
 					complete: function() {
 						$loadingGif.hide();

@@ -608,6 +608,7 @@ app.post('/delete-account', loggedIn, function(req, res) {
 
 // Login with Twitter
 // NOTE: Twitter only allows one Callback URL (https://apps.twitter.com/app/13411148/settings) so we can't use Twitter login locally
+// UPDATE: This may not be true since I seem to be able to login with Twitter both locally and on Heroku
 app.get('/login/twitter', passport.authenticate('twitter'));
 app.get('/login/twitter/return', passport.authenticate('twitter', { session: true, failureRedirect: '/login' }), function(req, res) {
   console.log('Successful Twitter authentication, redirect to recipes page.');
