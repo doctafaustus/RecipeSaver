@@ -418,6 +418,11 @@ app.post('/extension', function(req, res) {
 	// Limit check
 	User.findOne({ '_id':  req.body.rs_id }, function(err, user) {
     if (err) throw err;
+    if (!user) {
+    	console.log('[Extension] - User not found');
+    	res.sendStatus(401);
+    	return;
+    } 
 		if (user.subscription === 'Basic') {
 		  Recipe.find({user_id: req.body.rs_id}, function(err, recipes) {
 		  	if (err) throw err;
@@ -425,7 +430,7 @@ app.post('/extension', function(req, res) {
 		  	if (recipes.length < RECIPE_LIMIT) {
 		  		addExtensionRecipe(req, res);
 		  	} else {
-		  		console.log('Reached limit!');
+		  		console.log('[Extension] - Reached limit');
 		  		res.sendStatus(403);
 		  	}
 		  });
