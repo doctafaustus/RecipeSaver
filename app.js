@@ -80,7 +80,7 @@ var Recipe = mongoose.model('Recipe', new Schema({
 var checkCaptcha = require('./mods/checkCaptcha.js');
 var sendEmail = require('./mods/sendEmail.js');
 
-var twitterAppSecret = process.env.PORT ? null : fs.readFileSync('./private/twitterAppSecret.txt').toString();
+var twitterAppSecret = process.env.PORT ? process.env.TWITTERAPPSECRET : fs.readFileSync('./private/twitterAppSecret.txt').toString();
 var facebookAppSecret = process.env.PORT ? process.env.FACEBOOKAPPSECRET : fs.readFileSync('./private/facebookAppSecret.txt').toString();
 var googleAppSecret = process.env.PORT ? process.env.GOOGLEAPPSECRET : fs.readFileSync('./private/googleAppSecret.txt').toString();
 
