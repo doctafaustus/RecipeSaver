@@ -16,9 +16,8 @@ var fs = require('fs');
 var favicon = require('serve-favicon');
 var request = require('request');
 var bcrypt = require('bcryptjs');
-var ip = require('ip');
 
-console.dir(ip.address());
+
 
 // CONSTANTS
 var RECIPE_LIMIT = 5;
@@ -256,6 +255,8 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
+
+
 // Configure MongoStore options
 // This enables users to stay logged in even if the server goes down
 var mongoStoreOptions;
@@ -482,7 +483,9 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 
 /* --- ROUTES --- */
 // Home page
+app.enable('trust proxy');
 app.get('/', function(req, res) {
+	console.log(req.ip);
 	res.render('index.ejs', {regMessage: 'none'});
 });
 app.get('/home', function(req, res) {
