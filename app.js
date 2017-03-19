@@ -488,7 +488,7 @@ app.get('*', function(req, res, next) {
 		return next();
 	} else {
 		console.log('Not me');
-		return next();
+		res.render('hold-message.ejs');
 	}
 });
 
