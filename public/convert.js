@@ -78,7 +78,7 @@ window.convert = function(multiplier, originalMultiplier) {
 	$('.ingredient').each(function() {
 
 		var originalText = $(this).text();
-		var ingredientRegEx = /[^\d\s].*/;
+		var ingredientRegEx = /[^\d\s\/].*/;
 		var wholeNumberWithFractionRegEx = /^\d+[-\s]?\d\/\d/;
 		var singleDigitOrFractionRegEx = /^\s*([\.\/\d-]+)\s*\w/;
 

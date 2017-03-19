@@ -36,12 +36,6 @@ window.urlSizeFix = function() {
 $(window).resize(urlSizeFix);
 window.urlSizeFix();
 
-window.resetPortionAdjustment = function() {
-	$('#converted-message').hide();
-	$('.converted, .converted-text, .original').remove();
-	$('.ingredient').show();
-}
-
 // Convert minutes to h + m
 window.convertMinsToHours = function(m) {
 	if (m == 0 || +m < 0) {
@@ -216,6 +210,12 @@ window.validateRecipe = function() {
 
 };
 
+window.resetPortionAdjustment = function() {
+	$('#converted-message').hide();
+	$('.converted, .converted-text, .original').remove();
+	$('.ingredient').show();
+}
+
 window.populatePanel = function(id, fromDatabase) {
 	if (fromDatabase) {
 		console.log('fromDatabase: ' + fromDatabase);
@@ -232,7 +232,9 @@ window.populatePanel = function(id, fromDatabase) {
 		console.info(data);
 		populatePanelSuccess(data);
 	}
+	window.resetPortionAdjustment();
 };
+
 
 function populatePanelSuccess(data) {
 	// Rehide everything first
@@ -907,9 +909,13 @@ $('#profile')
 	var currentSize = +$('#servings').html();
 	var originalMultiplier = multiplier;
 
+	if (currentSize === 0) {
+		window.showErrorBox('- Unable to convert<br>Please edit recipe and enter a serving size');
+		return;
+	}
+
 	// Validation
 	if (multiplier < 1 || multiplier > 8) {
-		console.log('YES');
 		$('#portion-validation').slideDown();
 		return;
 	}

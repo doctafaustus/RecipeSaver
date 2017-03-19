@@ -59,7 +59,6 @@ function sendEmail(emailMsg, type) {
 			var token;
       crypto.randomBytes(20, function(err, buf) {
         token = buf.toString('hex');
-
 				transporter.sendMail({
 					from: '"Recipe Saver" <contact@recipesaver.net>',
 					to: req.body.email,

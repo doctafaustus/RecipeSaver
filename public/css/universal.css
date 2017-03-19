@@ -182,6 +182,11 @@ table {
 		width: 209px;
 	}
 }
+@media screen and (max-width: 1045px) {
+	#search-row {
+		margin-left: 20px;
+	}
+}
 @media screen and (max-width: 1032px) {
 	#nav li#search-row {
 		display: none !important;

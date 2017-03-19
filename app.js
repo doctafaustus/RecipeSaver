@@ -391,6 +391,9 @@ function addExtensionRecipe(req, res) {
 		cals: '',
 		favorite: false,
 	});
+	if (req.body.ingredients.length && req.body.ingredients[0] === '') {
+		recipe.ingredients = [];
+	}
   if (req.body.tags) {
     handleTagsAndSave(req.body.rs_id, req.body.tags, recipe, res);
   } else {
@@ -768,6 +771,7 @@ app.post('/recipe-update', function(req, res) {
 		  if (req.body.tags) {
 	      handleTagsAndSave(req.user._id, req.body.tags, recipe, res, true);
 		  } else {
+		  	recipe.tags = [];
 				recipe.save(function(err, recipe) {
 				  if (err) throw err;
 				  console.log(recipe.recipeName + ' saved!');
