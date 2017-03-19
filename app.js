@@ -13,11 +13,12 @@ var request = require('request');
 var bcrypt = require('bcryptjs');
 
 
-// Stripe
+// CONSTANTS
+var RECIPE_LIMIT = 5;
+
+// STRIPE
 var stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync('./private/stripeTestSecretKey.txt').toString();
 var stripe = require("stripe")(stripeSK);
-
-var RECIPE_LIMIT = 5;
 
 
 // DATABASE
@@ -257,7 +258,7 @@ if (!process.env.PORT) {
 	};
 } else {
 	mongoStoreOptions = {
-		url: 'mongodb://heroku_72l62tzb:9clcc3c57hc5j3jruvca8btah@ds127399.mlab.com:27399/heroku_72l62tzb',
+		url: process.env.MONGODB_URI,
 		ttl: 365 * 24 * 60 * 60,
 	};
 }
