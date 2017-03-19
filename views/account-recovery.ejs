@@ -93,10 +93,15 @@
 				return msg;
 			}
 
-
 			// Hide any lingering error message
 			var $error = $('#reg-login-error');
 			$error.html('').hide();
+
+			// Validate form
+			if ($('#forgot-email-address').val().length < 1) {
+				return showError('Please complete all fields');
+			} 
+
 
 			var data = {
 				email: $('#forgot-email-address').val().trim().toLowerCase(),
