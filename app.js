@@ -30,7 +30,7 @@ var stripe = require("stripe")(stripeSK);
 // DATABASE
 var mongoose = require('mongoose');
 var uriUtil = require('mongodb-uri');
-var Schema = mongoose.Schema; //allows use to define our schema
+var Schema = mongoose.Schema; // Allows us to define our schema
 var ObjectId = Schema.ObjectId;
 var dbOptions = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } };
 var MongoStore = require('connect-mongo')(session);
@@ -46,7 +46,6 @@ if (!process.env.PORT) {
 	var mongodbUri = process.env.MONGODB_URI; // A Heroku config variable
 	var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 	console.log('mongodbUri: ' + mongodbUri);
-	console.log(mongooseUri);
 	mongoose.connect(mongooseUri, dbOptions);
 }
 
