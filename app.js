@@ -481,17 +481,17 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 
 
 // Perform maitenance by only allow my IP to pass middleware
-// app.enable('trust proxy');
-// app.get('*', function(req, res, next) {
-// 	console.log('IP ADDRESS: ' + req.ip);
-// 	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
-// 		console.log('Safety');
-// 		return next();
-// 	} else {
-// 		console.log('Not me');
-// 		res.render('hold-message.ejs');
-// 	}
-// });
+app.enable('trust proxy');
+app.get('*', function(req, res, next) {
+	console.log('IP ADDRESS: ' + req.ip);
+	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
+		console.log('Safety');
+		return next();
+	} else {
+		console.log('Not me');
+		res.render('hold-message.ejs');
+	}
+});
 
 
 /* --- ROUTES --- */
