@@ -684,7 +684,7 @@ app.get('/logout', function(req, res) {
 
 // Recipes page
 app.get('/recipes', loggedIn, function(req, res) {
-	Recipe.find({user_id: req.user._id}).sort({_id: 1}).exec(function (err, recipes) {
+	Recipe.find({user_id: req.user._id}).sort({creationDate: -1}).exec(function (err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
   	res.render('recipes.ejs', {recipes: recipes, loginId: req.user._id.toString()});
@@ -694,7 +694,7 @@ app.get('/recipes', loggedIn, function(req, res) {
 // Get all recipes
 app.get('/get-all-recipes', function(req, res) {
   console.log('/get-all-recipes');
-  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+	Recipe.find({user_id: req.user._id}).sort({creationDate: -1}).exec(function (err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
   	res.json(recipes);
