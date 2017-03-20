@@ -15,6 +15,9 @@ users.forEach(function(user) {
 
 /* --- RECIPES --- */
 // Then loop through recipes and change every user_id to the id found in the key
+var dateFromObjectId = function (objectId) {
+	return new Date(parseInt(objectId.substring(0, 8), 16) * 1000).toISOString();
+};
 recipes.forEach(function(recipe) {
 	var newID = key[recipe.user_id];
 	recipe.user_id = newID;
@@ -28,14 +31,15 @@ recipes.forEach(function(recipe) {
 	recipe.cals = '';
 	recipe.favorite = false;
 	var newTags = [];
-	if (recipe.tags.length) {
+	if (recipe.tags && recipe.tags.length) {
 		recipe.tags.forEach(function(tag) {
-			console.log(tag);
-			newTags.push({ name: tag, color: '#ff0000'});
+			newTags.push({ name: tag, color: '#808080'});
 		});
 		recipe.tags = newTags
 	} else {
 		recipe.tags = [];
 	}
-
+	recipe.creationDate = dateFromObjectId(recipe._id.$oid);
 });
+
+copy(JSON.stringify(recipes));
