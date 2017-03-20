@@ -684,7 +684,7 @@ app.get('/logout', function(req, res) {
 
 // Recipes page
 app.get('/recipes', loggedIn, function(req, res) {
-	Recipe.find({user_id: req.user._id}).sort({_id: 1}).exec(function (err, records) {
+	Recipe.find({user_id: req.user._id}).sort({_id: 1}).exec(function (err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
   	res.render('recipes.ejs', {recipes: recipes, loginId: req.user._id.toString()});
