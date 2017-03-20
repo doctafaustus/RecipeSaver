@@ -202,13 +202,15 @@
 				</div>
 
 				<div class="info-row-title">Account Actions</div>
-				<div class="info-data" id="account-action">
-					<% if (accountInfo.subscription === 'Basic') { %>
-						<a href="/plans">Upgrade Account</a>
-					<% } else if (accountInfo.subscription === 'Full') { %>
-						<a id="cancel-sub" href="#">Cancel Subscription</a>
-					<% } %>
-				</div>
+				<% if (accountInfo.subscription !== 'Full (Legacy)') { %>
+					<div class="info-data" id="account-action">
+						<% if (accountInfo.subscription === 'Basic') { %>
+							<a href="/plans">Upgrade Account</a>
+						<% } else if (accountInfo.subscription === 'Full') { %>
+							<a id="cancel-sub" href="#">Cancel Subscription</a>
+						<% } %>
+					</div>
+				<% } %>
 			</div>
 		</div>
 	</div>
