@@ -479,18 +479,19 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
   });
 }
 
-
 // If running through Heroku/live then redirect to HTTPS on all routes
-if (process.env.PORT) {
-	app.get('*', function(req, res, next) {
+function requireHTTPS(req, res, next) {
+	if (process.env.PORT) {
 		console.log('IS SECURE');
 		console.log(req.secure);
 		return res.redirect('https://' + req.get('host') + req.url);
+	} else {
+		console.log('Carry on');
 		next();
-	});
-} else {
-	console.log('Carry on');
+	}
 }
+
+
 
 
 // Perform maitenance by only allow my IP to pass middleware
@@ -508,7 +509,7 @@ app.get('*', function(req, res, next) {
 
 /* --- ROUTES --- */
 // Home page
-app.get('/', function(req, res) {
+app.get('/', requireHTTPS, function(req, res) {
 	res.render('index.ejs', {regMessage: 'none'});
 });
 app.get('/home', function(req, res) {
