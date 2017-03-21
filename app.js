@@ -282,7 +282,7 @@ if ('OPTIONS' == req.method) {
  }
 });
 
-
+app.enable('trust proxy');
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -481,7 +481,6 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 
 
 // Perform maitenance by only allow my IP to pass middleware
-app.enable('trust proxy');
 // app.get('*', function(req, res, next) {
 // 	console.log('IP ADDRESS: ' + req.ip);
 // 	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
