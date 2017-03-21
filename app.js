@@ -314,7 +314,7 @@ app.post('/login', passport.authenticate('local', { session: true }), function(r
 
 
 // Account Recovery Page
-app.get('/account-recovery', function(req, res) {
+app.get('/account-recovery', requireHTTPS, function(req, res) {
 	console.log('/account-recovery');
 	res.render('account-recovery.ejs');
 });
@@ -340,7 +340,7 @@ app.post('/account-recovery', checkCaptcha, sendEmail(null, 'forgotPassword'), f
 
 
 // Validate Password Reset Token
-app.get('/reset/:token', function(req, res) {
+app.get('/reset/:token', requireHTTPS, function(req, res) {
 	console.log('/reset/:token (GET)');
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
@@ -376,7 +376,7 @@ app.post('/reset/:token', function(req, res) {
 });
 
 // Login (After Password Reset)
-app.get('/login/from-reset', function(req, res) {
+app.get('/login/from-reset', requireHTTPS, function(req, res) {
 	console.log('/login/from-reset');
 	res.render('login.ejs', {message: 'Password successfully changed! Please login to continue.'});
 });
@@ -482,11 +482,8 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 // If running through Heroku/live then redirect to HTTPS on all routes
 function requireHTTPS(req, res, next) {
 	if (process.env.PORT && !req.secure) {
-		console.log('IS SECURE');
-		console.log(req.secure);
 		return res.redirect('https://' + req.get('host') + req.url);
 	} else {
-		console.log('Carry on');
 		next();
 	}
 }
@@ -512,13 +509,10 @@ app.get('*', function(req, res, next) {
 app.get('/', requireHTTPS, function(req, res) {
 	res.render('index.ejs', {regMessage: 'none'});
 });
-app.get('/home', function(req, res) {
-	res.render('home.ejs');
-});
-app.get('/register', function(req, res) {
+app.get('/register', requireHTTPS, function(req, res) {
 	res.render('register.ejs');
 });
-app.get('/login', function(req, res) {
+app.get('/login', requireHTTPS, function(req, res) {
 	res.render('login.ejs');
 });
 // Blog routes
@@ -530,14 +524,14 @@ app.get('/privacy-policy', function(req, res) {
 	res.render('privacy-policy.ejs');
 });
 // Plans
-app.get('/plans', loggedIn, function(req, res) {
+app.get('/plans', requireHTTPS, loggedIn, function(req, res) {
 	console.log('/plans');
 	console.log(req.user)
 	res.render('plans.ejs');
 });
 
 // Account page
-app.get('/account', loggedIn, function(req, res) {
+app.get('/account', requireHTTPS, loggedIn, function(req, res) {
 	console.log('/account');
 	console.log(req.user);
 	res.render('account.ejs', {accountInfo: req.user});
@@ -696,7 +690,7 @@ app.get('/logout', function(req, res) {
 
 
 // Recipes page
-app.get('/recipes', loggedIn, function(req, res) {
+app.get('/recipes', requireHTTPS, loggedIn, function(req, res) {
 	Recipe.find({user_id: req.user._id}).sort({creationDate: -1}).exec(function (err, recipes) {
   	if (err) throw err;
   	console.log(req.user._id + '\'s recipes retrieved!');
