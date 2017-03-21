@@ -481,7 +481,7 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 
 // If running through Heroku/live then redirect to HTTPS on all routes
 function requireHTTPS(req, res, next) {
-	if (process.env.PORT) {
+	if (process.env.PORT && !req.secure) {
 		console.log('IS SECURE');
 		console.log(req.secure);
 		return res.redirect('https://' + req.get('host') + req.url);
