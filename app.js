@@ -125,7 +125,7 @@ passport.use(new TwitterStrategy({
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
-    callbackURL: process.env.PORT ? 'https://recipesaver.net/login/facebook/callback' : 'http://127.0.0.1:3000/login/facebook/callback',
+    callbackURL: process.env.PORT ? 'http://www.recipesaver.net/login/facebook/callback' : 'http://127.0.0.1:3000/login/facebook/callback',
     passReqToCallback: true
   },
 	function(req, token, refreshToken, profile, done) {
