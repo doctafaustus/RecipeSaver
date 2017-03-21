@@ -480,11 +480,18 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 }
 
 
-app.get('*', function(req, res, next) {
-	console.log('IS SECURE');
-	console.log(req.secure);
-	next();
-});
+// If running through Heroku/live then redirect to HTTPS on all routes
+if (process.env.PORT) {
+	app.get('*', function(req, res, next) {
+		console.log('IS SECURE');
+		console.log(req.secure);
+		return res.redirect('https://' + req.get('host') + req.url);
+		next();
+	});
+} else {
+	console.log('Carry on');
+}
+
 
 // Perform maitenance by only allow my IP to pass middleware
 app.enable('trust proxy');
