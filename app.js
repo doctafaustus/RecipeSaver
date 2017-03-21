@@ -94,7 +94,7 @@ var googleAppSecret = process.env.PORT ? process.env.GOOGLEAPPSECRET : fs.readFi
 passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
     consumerSecret: twitterAppSecret,
-    callbackURL: process.env.PORT ? 'https://recipesaver.net/login/twitter/return' : 'http://127.0.0.1:3000/login/twitter/return',
+    callbackURL: process.env.PORT ? 'http://www.recipesaver.net/login/twitter/return' : 'http://127.0.0.1:3000/login/twitter/return',
     passReqToCallback: true
   },
   function(req, token, tokenSecret, profile, done) {
