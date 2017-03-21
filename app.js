@@ -492,7 +492,7 @@ function requireHTTPS(req, res, next) {
 
 
 
-Perform maitenance by only allow my IP to pass middleware
+//Perform maitenance by only allow my IP to pass middleware
 app.enable('trust proxy');
 app.get('*', function(req, res, next) {
 	console.log('IP ADDRESS: ' + req.ip);
