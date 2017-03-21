@@ -480,6 +480,12 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 }
 
 
+app.get('*', function(req, res, next) {
+	console.log('IS SECURE');
+	console.log(req.secure);
+	next();
+});
+
 // Perform maitenance by only allow my IP to pass middleware
 app.enable('trust proxy');
 app.get('*', function(req, res, next) {
@@ -492,7 +498,6 @@ app.get('*', function(req, res, next) {
 		res.render('hold-message.ejs');
 	}
 });
-
 
 /* --- ROUTES --- */
 // Home page
