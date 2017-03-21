@@ -94,7 +94,7 @@ var googleAppSecret = process.env.PORT ? process.env.GOOGLEAPPSECRET : fs.readFi
 passport.use(new TwitterStrategy({
     consumerKey: 'YjrR2EFz03kHgnTElEsKB6jcC',
     consumerSecret: twitterAppSecret,
-    callbackURL: process.env.PORT ? 'https://recipesaver.herokuapp.com/login/twitter/return' : 'http://127.0.0.1:3000/login/twitter/return',
+    callbackURL: process.env.PORT ? 'https://recipesaver.net/login/twitter/return' : 'http://127.0.0.1:3000/login/twitter/return',
     passReqToCallback: true
   },
   function(req, token, tokenSecret, profile, done) {
@@ -125,7 +125,7 @@ passport.use(new TwitterStrategy({
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: facebookAppSecret,
-    callbackURL: process.env.PORT ? 'https://recipesaver.herokuapp.com/login/facebook/callback' : 'http://127.0.0.1:3000/login/facebook/callback',
+    callbackURL: process.env.PORT ? 'https://recipesaver.net/login/facebook/callback' : 'http://127.0.0.1:3000/login/facebook/callback',
     passReqToCallback: true
   },
 	function(req, token, refreshToken, profile, done) {
@@ -154,7 +154,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: googleAppSecret,
-    callbackURL: process.env.PORT ? 'https://recipesaver.herokuapp.com/login/google/callback' : 'http://127.0.0.1:3000/login/google/callback',
+    callbackURL: process.env.PORT ? 'https://recipesaver.net/login/google/callback' : 'http://127.0.0.1:3000/login/google/callback',
     passReqToCallback: true
   },
 	function(req, token, refreshToken, profile, done) {
