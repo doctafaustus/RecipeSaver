@@ -14,11 +14,11 @@
 	<link href="/css/blog.css" rel="stylesheet">
 
 	<!-- Meta information -->
-	<meta property="og:url" content="https://recipesaver.herokuapp.com/blog/cookbook-review-fast-fooduts">
+	<meta property="og:url" content="http://recipesaver.net/blog/cookbook-review-fast-fooduts">
 	<meta property="og:type" content="article">
 	<meta property="og:title" content="Cookbook Review: Gordon Ramsay's Fast Food">
 	<meta property="og:description" content="Gordon Ramsay's Fast Food">
-	<meta property="og:image" content="https://recipesaver.herokuapp.com/images/blog/fast-food-cover.jpg">
+	<meta property="og:image" content="http://recipesaver.net/images/blog/fast-food-cover.jpg">
 	<!-- Analytics -->
 	<% include ./partials/analytics %>
 </head>
@@ -143,7 +143,7 @@
 			  method: 'share_open_graph',
 			  action_type: 'og.likes',
 			  action_properties: JSON.stringify({
-				  object: 'https://recipesaver.herokuapp.com' + window.location.pathname,
+				  object: 'http://recipesaver.net' + window.location.pathname,
 			  })
 			}, function(response){});
 		});
