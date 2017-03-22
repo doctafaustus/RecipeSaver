@@ -35,7 +35,11 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 		changeStage('Edit recipe');
 		// Reset any portions adjustments
 		window.resetPortionAdjustment();
-		var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
+		//var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
+
+		var urlValue = $('#detail-link').attr('href');
+
+
 			$('#detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
 
