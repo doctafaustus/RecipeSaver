@@ -39,6 +39,10 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 		var urlValue = $('#detail-link').attr('href');
 
+		if (urlValue === '#') {
+			urlValue = '';
+		}
+
 
 			$('#detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
