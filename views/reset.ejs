@@ -87,6 +87,11 @@
 			if ($('#password').val() !== $('#passwordConfirm').val()) {
 				return errorMessage('Password and Password Confirm must match');
 			}
+			if ($('#password').val().length < 6) {
+				return errorMessage('Password length must	be greater than 5 charaters');
+			}
+
+
 
 			$.ajax({
 				type: 'POST',
