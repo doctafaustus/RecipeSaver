@@ -399,11 +399,10 @@
 			background-repeat: no-repeat;
 			padding-right: 5px;
 		}
-		.edit-recipe #detail-add-tag-button:hover, .add-recipe #detail-add-tag-button:hover {
+/*		.edit-recipe #detail-add-tag-button:hover, .add-recipe #detail-add-tag-button:hover {
 			background: url(images/tag-sprite.png) 0 -22px;
 			background-repeat: no-repeat;
-			cursor: pointer;
-		}
+		}*/
 		#detail-add-tag-button img {
 			width: 21px;
 		}
@@ -453,8 +452,11 @@
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 		}
+		.edit-recipe #detail-new-tag-input, .add-recipe #detail-new-tag-input {
+			display: inline-block !important;
+		}
 		#new-tag {
-			width: 60px;
+			width: 80px;
 		}
 		#recipe-list-by-tag .tag-category {
 			margin-bottom:  10px;
@@ -1087,7 +1089,7 @@
 
 						<!-- New Tag Input -->
 						<li id="detail-new-tag-input">
-							<input type="text" id="new-tag" autofocus>
+							<input type="text" id="new-tag">
 						</li>
 					</ul>
 				</div>
