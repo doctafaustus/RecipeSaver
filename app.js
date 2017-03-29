@@ -130,6 +130,15 @@ passport.use(new FacebookStrategy({
   },
 	function(req, token, refreshToken, profile, done) {
 		process.nextTick(function() {
+
+			// Special handling for app authentication request
+			console.log(req.session.fromApp);
+			if (req.session.fromApp) {
+				console.log('fromApp: ' + req.session.fromApp);
+				delete req.session.fromApp;
+				console.log('fromApp (again): ' + req.session.fromApp);
+			}
+
 			User.findOne({ 'facebookId': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
@@ -652,8 +661,14 @@ app.get('/login/twitter/return', passport.authenticate('twitter', { session: tru
   }
 });
 
-app.get('/login/facebook',
+
+app.get('/login/facebook-app', function(req, res, next) {
+		req.session.fromApp = true;
+		next();
+	},
   passport.authenticate('facebook'));
+
+app.get('/login/facebook', passport.authenticate('facebook'));
 app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
