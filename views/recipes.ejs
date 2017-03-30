@@ -294,6 +294,9 @@
 			font-size: 15px;
 			line-height: 18px;
 		}
+		#mceu_0 {
+			margin-top: 20px;
+		}
 		#detail-tag-label {
 			display: none;
 			color: darkgray;
@@ -1068,8 +1071,7 @@
 				<div id="detail-new-ingredient-input" contenteditable="true" placeholder="New Ingredient (Press Enter to Add)"></div>
 
 				<!-- Recipe Description -->
-				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description">
-				</div>
+				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description"></div>
 
 				<div id="detail-link-container" class="init-hide">
 					<a id="detail-link" href="#" target="_blank"></a>
@@ -1150,12 +1152,14 @@
 
 	<div id="rs-id" style="display: none;"></div>
 
+	<script src="js/tinymce.min.js"></script>
 	<script src="moment.js"></script>
 	<script src="main.js"></script>
 	<script src="edit.js"></script>
 	<script src="convert.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<script src="fraction.js"></script>
+
 	<script>
 
 		// Mark active header menu

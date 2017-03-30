@@ -236,7 +236,7 @@ window.populatePanel = function(id, fromDatabase) {
 
 function populatePanelSuccess(data) {
 	// Rehide everything first
-	$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
+	$('#detail-ingredients, #detail-description, #mceu_0, #detail-link-container').addClass('init-hide');
 	// Remove and converted value divs and conversion message
 	$('.converted, #converted-message').remove();
 	// Designate recipe as a non-favorite at first
@@ -326,7 +326,7 @@ function showPopulatedInputs(data) {
 		$('#detail-ingredients').removeClass('init-hide');
 	}
 	if (data.description.length) {
-		$('#detail-description').removeClass('init-hide');
+		$('#detail-description, #mceu_0').removeClass('init-hide');
 	}
 	if (data.url.length) {
 		$('#detail-link-container').removeClass('init-hide');
@@ -1000,11 +1000,28 @@ $('.tooltip .close, #add-recipe').click(function() {
 });
 
 
-// Clear formatting on paste
-$(document).on('paste', '#detail-description', function(e) {
-	console.log('Clearing formatting');
-	setTimeout(function() {
-		$('#detail-description').html($('#detail-description').text());
-	}, 100);
+// // Clear formatting on paste
+// $(document).on('paste', '#detail-description', function(e) {
+// 	console.log('Clearing formatting');
+// 	setTimeout(function() {
+// 		$('#detail-description').html($('#detail-description').text());
+// 	}, 100);
 
+// });
+/* --- Description / tinyMCE --- */
+tinymce.init({
+	selector: '#detail-description',
+	autoresize_min_height: 100,
+	plugins: [
+		'paste',
+		'autoresize',
+	],
+	menubar: false,
+	toolbar: false,
+	statusbar: false,
+	image_advtab: false,
+	readonly: true,
 });
+function useTinyMCE() {
+	tinymce.activeEditor.setMode('code');
+}

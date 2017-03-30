@@ -44,7 +44,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 		}
 
 
-			$('#detail-new-ingredient-input').html('');
+		$('#detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
 
 	} else if (editOrAdd === 'add-recipe') {
@@ -64,10 +64,11 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	$('#save-recipe').show();
 
 	// Show all inputs
-	$('#detail-ingredients, #detail-description, #detail-link-container').removeClass('init-hide');
+	$('#detail-ingredients, #detail-description, #mceu_0, #detail-link-container').removeClass('init-hide');
 
 	// Handle details
-	$('#detail-description, #detail-name').attr('contenteditable', true);
+	$('#detail-name').attr('contenteditable', true);
+	useTinyMCE();
 
 	// Show new ingredient input
 	$('#detail-new-ingredient-input').show();
