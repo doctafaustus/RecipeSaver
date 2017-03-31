@@ -1,15 +1,4 @@
 /* --- Helper Functions --- */
-function createIngredientInputs() {
-	$('.ingredient').each(function() {
-		$(this).html('<input class="temp-ing-input" type="text" value="' + $(this).html() + '">');
-	});
-}
-
-function sortableIngredients() {
-	$('#detail-ingredients').sortable({containment: '#detail-ingredients', scroll: false});
-	$('#detail-ingredients').sortable('refresh');
-}
-
 function checkUniqueTag(tagName) {
 	var tagUnique = true;
 	$('.detail-recipe .tag-name').each(function() {
@@ -43,8 +32,6 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 			urlValue = '';
 		}
 
-
-		$('#detail-new-ingredient-input').html('');
 		$('#detail-link-editable').show().val(urlValue);
 
 	} else if (editOrAdd === 'add-recipe') {
@@ -64,24 +51,18 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 	$('#save-recipe').show();
 
 	// Show all inputs
-	$('#detail-ingredients, #detail-description, #mceu_0, #detail-link-container').removeClass('init-hide');
+	$('#detail-description, #mceu_0, #detail-link-container').removeClass('init-hide');
 
 	// Handle details
 	$('#detail-name').attr('contenteditable', true);
 	useTinyMCE();
 
-	// Show new ingredient input
-	$('#detail-new-ingredient-input').show();
+
 
 	// Show url input
 	$('#detail-link-container').show();
 	// Hide url link
 	$('#detail-link').hide();
-
-	createIngredientInputs();
-
-	// Make ingredients list sortable
-	sortableIngredients();
 
 	// Focus on name at first
 	$('#detail-name').focus();
@@ -89,7 +70,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 });
 
 // Prevent carriage return on Recipe Name input
-$('#profile').on('keydown', '#detail-name, .ingredient', function(e) {
+$('#profile').on('keydown', '#detail-name,', function(e) {
   if (e.which == 13) {
     event.preventDefault();
     console.log('Preventing carriage return');
@@ -97,33 +78,7 @@ $('#profile').on('keydown', '#detail-name, .ingredient', function(e) {
 	}
 });
 
-// Add new ingredient input when editing
-$('#profile').on('keydown', '#detail-new-ingredient-input', function(e) {
-  if (e.which == 13) {
-    e.preventDefault();
-    console.log('Dupliciating ingredient input');
 
-    // If there's no text then return
-    if ($(this).text().trim() === '') {
-    	return;
-    }
-
-    var ingTextToDuplicate = $(this).text();
-    $('#detail-ingredients').append('<li class="ingredient ui-sortable-handle"><input type="text" class="temp-ing-input" value="' + ingTextToDuplicate + '"></li>');
-    $(this).text('');
-    sortableIngredients();
-    return false;
-	}
-});
-
-// Recipe empty ingredients
-$('#profile').on('keyup', '.ingredient', function(e) {
-  if (e.which == 46 || e.which == 8) {
-  	if ($(this).find('input').val().trim() === '') {
-  		$(this).remove();
-		}
-	}
-});
 
 
 // Save recipe
@@ -147,20 +102,15 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	$('#error-box').hide();
 
 	var recipeName = $('#detail-name').text().trim();
-	var ingredients = [];
-	$('.ingredient').each(function() {
-		ingredients.push($(this).find('input').val().trim());
-	});
 
 	var url = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
 
 	var description = $(tinymce.get('detail-description').getBody()).html().trim();
 
-	if (description === '<br data-mce-bogus="1">') {
+	if (description === '<p><br data-mce-bogus="1"></p>' || description === '<br data-mce-bogus="1">') {
 		description = '';
 	}
 
-	console.warn(description);
 
 	var servings = $('#serving-input').val();
 	var readyIn = $('#mins-input').val();
@@ -175,19 +125,13 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	});
 
 
-	// If there is any text in the new ingredient input then add it to the ingredients array
-	var ingInputText = $('#detail-new-ingredient-input').text().trim();
-	if (ingInputText.length > 0) {
-		ingredients.push(ingInputText);
-	}
-
 	// If there is any text in the new tag input then add it to the tags array
 	var tagInputText = $('#new-tag').val().trim().toLowerCase();
 	if (tagInputText.length > 0) {
 		tags.push({name: tagInputText, color: null});
 	}
 	
-	var data = { description: description, recipeName: recipeName, ingredients: ingredients, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
+	var data = { description: description, recipeName: recipeName, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
 
 	if (window.stage === 'Edit recipe') {
 		data.id = $('#detail-id').text();
@@ -205,7 +149,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
 		  	$('#detail-options-dropdown').hide();
-		  	$('#detail-new-ingredient-input').html('');
 
 		  	window.showSuccessBox($('#detail-name').text(), ' has been updated!');
 		  	window.refreshRecipeList();
@@ -234,7 +177,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	$('.editable').removeClass('editable');
 		  	changeStage('View recipe');
 		  	$('#detail-options-dropdown').hide();
-		  	$('#detail-new-ingredient-input').html('');
 		  	
 		  	window.showSuccessBox($('#detail-name').text(), ' has been added to your collection!');
 		  	window.refreshRecipeList();

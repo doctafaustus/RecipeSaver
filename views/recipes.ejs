@@ -269,22 +269,7 @@
 		.add-recipe #detail-lower {
 			padding-top: 15px;
 		}
-		#detail-ingredients {
-			padding: 15px 0 5px 0;
-		}
-		#detail-new-ingredient-input {
-			display: none;
-			height: 26px;
-			line-height: 26px;
-			font-size: 16px;
-			box-sizing: border-box;
-			border-bottom: solid 1px #78bcff;
-		}
-		.ingredient, .converted, .original {
-			margin-bottom: 4px;
-			font-size: 15px;
-			line-height: 20px
-		}
+
 		#detail-description {
 	    box-sizing: border-box;
 	    padding: 10px;
@@ -586,31 +571,6 @@
 		}
 		.init-hide {
 			display: none;
-		}
-		.edit-recipe #detail-ingredients {
-			border-bottom: transparent;
-		}
-		.ingredient.ui-sortable-handle:before {
-			width: 40px;
-			height: 40px;
-			content: url('images/drag-icon.png');
-			position: relative;
-			top: 3px;
-		}
-		.ingredient input {
-			border-bottom: 0;
-			border-top: 0;
-    	border-left: 0;
-    	border-right: 0;
-	    padding-left: 3px;
-	    margin-left: 5px;
-	    height: 22px;
-	    width: calc(100% - 29px);
-	    font-size: 14px;
-	    font-family: 'Source Sans Pro', sans-serif;
-		}
-		.edit-recipe .ingredient {
-			margin-bottom: 0;
 		}
 		#detail-top {
 			border-bottom: solid 1px #dadada;
@@ -1063,13 +1023,6 @@
 				<!-- Recipe Name -->
 				<h2 id="detail-name" contenteditable="false" placeholder="Recipe Name"></h2>
 
-				<!-- Recipe Ingredients -->
-				<ul id="detail-ingredients" class="init-hide">
-					<!-- Recipe Ingredients will be added here -->
-				</ul>
-				<!-- New Ingredient Input -->
-				<div id="detail-new-ingredient-input" contenteditable="true" placeholder="New Ingredient (Press Enter to Add)"></div>
-
 				<!-- Recipe Description -->
 				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description"></div>
 
@@ -1157,7 +1110,6 @@
 	<script src="main.js"></script>
 	<script src="edit.js"></script>
 	<script src="convert.js"></script>
-	<script src="jquery-ui.min.js"></script>
 	<script src="fraction.js"></script>
 
 	<script>

@@ -69,7 +69,6 @@ var Recipe = mongoose.model('Recipe', new Schema({
 	id: ObjectId,
 	user_id: String,
 	recipeName: String,
-	ingredients: [String],
 	description: String,
 	url: String,
 	tags: { type : Array , "default" : [] },
@@ -736,7 +735,6 @@ function addRecipe(req, res) {
 	var recipe = new Recipe({
 		user_id: req.user._id,
 		recipeName: req.body.recipeName,
-		ingredients: req.body.ingredients,
 		description: req.body.description,
 		url: req.body.url,
 		tags: [],
@@ -804,9 +802,6 @@ app.post('/recipe-update', function(req, res) {
 
 			recipe.description = req.body.description;
 
-			//if (req.body.ingredients) {
-				recipe.ingredients = req.body.ingredients
-			//}
 		  if (req.body.url === '' || req.body.url) {
 		  	recipe.url = req.body.url;
 		  }
