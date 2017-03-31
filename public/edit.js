@@ -153,7 +153,15 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	});
 
 	var url = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
-	var description = $('#detail-description').html();
+
+	var description = $(tinymce.get('detail-description').getBody()).html().trim();
+
+	if (description === '<br data-mce-bogus="1">') {
+		description = '';
+	}
+
+	console.warn(description);
+
 	var servings = $('#serving-input').val();
 	var readyIn = $('#mins-input').val();
 	var cals = $('#cals-input').val();

@@ -88,7 +88,8 @@ window.showErrorBox = function(message) {
 
 
 window.resetRecipeState = function() {
-	$('#detail-description, #detail-name').attr('contenteditable', false);
+	$('#detail-name').attr('contenteditable', false);
+	tinymce.activeEditor.setMode('readonly');
 	$('#save-recipe, #cancel-recipe').hide();
 	$('#detail-ingredients').sortable('destroy');
 	$('#detail-new-ingredient-input').html('').hide();
@@ -291,7 +292,8 @@ function populatePanelSuccess(data) {
 
 
 	// Recipe Description
-	$('#detail-description').html(data.description);
+	//$('#detail-description').html(data.description);
+	$(tinymce.get('detail-description').getBody()).html(data.description);
 
 	// Recipe ID
 	$('#detail-id').text(data._id);
@@ -322,6 +324,7 @@ function getRecipe(id) {
 }
 
 function showPopulatedInputs(data) {
+	console.info(data);
 	if (data.ingredients && data.ingredients.length) {
 		$('#detail-ingredients').removeClass('init-hide');
 	}
@@ -1021,6 +1024,7 @@ tinymce.init({
 	statusbar: false,
 	image_advtab: false,
 	readonly: true,
+	forced_root_block: false,
 });
 function useTinyMCE() {
 	tinymce.activeEditor.setMode('code');

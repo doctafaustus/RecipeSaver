@@ -801,9 +801,9 @@ app.post('/recipe-update', function(req, res) {
 			if (req.body.recipeName) {
 				recipe.recipeName = req.body.recipeName;
 			}
-			if (req.body.description) {
-				recipe.description = req.body.description;
-			}
+
+			recipe.description = req.body.description;
+
 			//if (req.body.ingredients) {
 				recipe.ingredients = req.body.ingredients
 			//}
