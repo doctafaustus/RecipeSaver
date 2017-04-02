@@ -399,7 +399,6 @@ function addExtensionRecipe(req, res) {
 	var recipe = new Recipe({
 		user_id: req.body.rs_id,
 		recipeName: req.body.recipeName,
-		ingredients: req.body.ingredients,
 		description: req.body.description,
 		url: req.body.url,
 		tags: [],
@@ -408,9 +407,6 @@ function addExtensionRecipe(req, res) {
 		cals: '',
 		favorite: false,
 	});
-	if (req.body.ingredients.length && req.body.ingredients[0] === '') {
-		recipe.ingredients = [];
-	}
   if (req.body.tags) {
     handleTagsAndSave(req.body.rs_id, req.body.tags, recipe, res);
   } else {
