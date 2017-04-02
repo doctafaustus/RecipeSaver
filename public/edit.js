@@ -54,6 +54,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	// Handle details
 	$('#detail-name').attr('contenteditable', true);
+	tinymce.activeEditor.setContent('');
 	tinymce.activeEditor.setMode('code');
 
 
