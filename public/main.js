@@ -88,9 +88,9 @@ window.showErrorBox = function(message) {
 
 
 window.resetRecipeState = function() {
-	$('#detail-description, #detail-name').attr('contenteditable', false);
+	$('#detail-name').attr('contenteditable', false);
+	tinymce.activeEditor.setMode('readonly');
 	$('#save-recipe, #cancel-recipe').hide();
-	$('#detail-ingredients').sortable('destroy');
 	$('#detail-new-ingredient-input').html('').hide();
 };
 
@@ -103,15 +103,12 @@ window.reloadRightPanel = function() {
 };
 
 window.clearDetailPanel = function() {
-	$('#detail-name, #detail-description, #detail-ingredients, #detail-id, #detail-new-ingredient-input').html('');
-	$('#detail-link-editable, #serving-input, #mins-input, #cals-input, #new-tag').val('');
+	$('#detail-name, #detail-description, #detail-id, #detail-new-ingredient-input').html('');
+	$('#detail-link-editable, #new-tag').val('');
 	$('#detail-new-ingredient-input').show().html('');
 	$('#detail-tag-list li:not(#detail-new-tag-input)').remove();
 	$('#detail-new-tag-input').hide();
 	$('#detail-link').attr('href', '#').html('');
-	$('#servings').html('1');
-	$('#mins').html('1m');
-	$('#cals').html('0 cals');
 };
 
 window.singleLeftPanel = function() {
@@ -126,9 +123,6 @@ window.singleRightPanel = function() {
 
 window.validateRecipe = function() {
 	var hasName = false;
-	var servingsIsValid = false;
-	var readyInIsValid = false;
-	var calsIsValid = false;
 	var nameIsValid = false;
 	var ingredientNamesAreValid = true; // Note - easier to set true initially
 	var ingredientAmountIsValid = false;
@@ -148,73 +142,9 @@ window.validateRecipe = function() {
 	} else {
 		errorMessages.push('Recipe must have a name');
 	}
-	// if ($('#serving-input').val().length < 4) {
-	// 	servingsIsValid = true;
-	// } else {
-	// 	errorMessages.push('Servings must be less than 3 characters');
-	// }
-	// if ($('#mins-input').val().length < 6) {
-	// 	servingsIsValid = true;
-	// } else {
-	// 	errorMessages.push('Ready In: must be less than 6 characters');
-	// }
-	// if ($('#cals-input').val().length < 9) {
-	// 	calsIsValid = true;
-	// } else {
-	// 	errorMessages.push('Calories must be less than 9 characters');
-	// }
-	// if ($('#detail-name').text().length < textLimit) {
-	// 	nameIsValid = true;
-	// } else {
-	// 	errorMessages.push('Recipe Name must be less than ' + textLimit + ' characters');
-	// }
-	// var ingErrorPushed = false;
-	// $('.temp-ing-input').each(function() {
-	// 	if ($(this).val().length >= textLimit && !ingErrorPushed) {
-	// 		ingredientNamesAreValid = false;
-	// 		errorMessages.push('Ingredient Names must be less than ' + textLimit + ' characters');
-	// 		ingErrorPushed = true;;
-	// 	}
-	// });
-	// if ($('#detail-tag-list .tag').length < ing_tagAmount) {
-	// 	ingredientAmountIsValid = true;
-	// } else {
-	// 	errorMessages.push('Number of ingredients must be less than ' + ing_tagAmount);
-	// }
-	// if ($('#detail-description').html().length < descriptionLimit) {
-	// 	descriptionIsValid = true;
-	// } else {
-	// 	errorMessages.push('Description must be less than ' + descriptionLimit + ' characters');
-	// }
-	// if ($('#detail-link-editable').val().length < textLimit) {
-	// 	urlIsValid = true;
-	// } else {
-	// 	errorMessages.push('URL length must be less than ' + textLimit);
-	// }
-	// var tagErrorPushed = false;
-	// $('.new-tag').each(function() {
-	// 	if ($(this).text().length >= textLimit && !tagErrorPushed) {
-	// 		tagNamesAreValid = false;
-	// 		errorMessages.push('Tag Names must be less than ' + textLimit + ' characters');
-	// 		tagErrorPushed = true;
-	// 	}
-	// });
-	// if ($('.new-tag').length < ing_tagAmount) {
-	// 	tagAmountIsValid = true;
-	// } else {
-	// 	errorMessages.push('Number of tags must be less than ' + ing_tagAmount);
-	// }
-
 	console.log(errorMessages);
 	return errorMessages;
-
 };
-
-window.resetPortionAdjustment = function() {
-	$('#converted-message').hide();
-	$('.converted, .converted-text, .original').remove();
-	$('.ingredient').show();
-}
 
 window.populatePanel = function(id, fromDatabase) {
 	if (fromDatabase) {
@@ -230,13 +160,12 @@ window.populatePanel = function(id, fromDatabase) {
 		var data = getRecipe(id);
 		populatePanelSuccess(data);
 	}
-	window.resetPortionAdjustment();
 };
 
 
 function populatePanelSuccess(data) {
 	// Rehide everything first
-	$('#detail-ingredients, #detail-description, #detail-link-container').addClass('init-hide');
+	$('#detail-description, #mceu_0, #detail-link-container').addClass('init-hide');
 	// Remove and converted value divs and conversion message
 	$('.converted, #converted-message').remove();
 	// Designate recipe as a non-favorite at first
@@ -247,18 +176,6 @@ function populatePanelSuccess(data) {
 	if (data.favorite) {
 		$('#favorite').addClass('favorited').find('span').first().text('Favorited');
 	}
-
-	// Servings
-	$('#servings').html(data.servings);
-	$('#original-yield').html(data.servings);
-
-	// Ready In
-	$('#mins').html(window.convertMinsToHours(data.readyIn));
-	$('#portion-num').val('');
-
-	// Calories
-	$('#cals').html(data.cals + ' cals');
-	$('#cals-input').val('');
 
 	// Tags
 	$('.tag').remove();
@@ -278,20 +195,15 @@ function populatePanelSuccess(data) {
 	// Recipe Name
 	$('#detail-name').text(data.recipeName);
 
-	// Recipe Ingredients
-	$('.ingredient').remove();
-	if (data.ingredients && data.ingredients.length) {
-		var ingredients = data.ingredients;
-		var ingredientsList = '';
-		for (var i = 0; i < ingredients.length; i++) {
-			ingredientsList += '<li class="ingredient">' + ingredients[i] + '</li>';
-		}
-		$('#detail-ingredients').prepend(ingredientsList);
-	}
-
-
 	// Recipe Description
-	$('#detail-description').html(data.description);
+	tinymce.activeEditor.setContent(data.description);
+	// Bug fix for IE to resize editor height
+	// if (!!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g)) {
+		setTimeout(function() {
+			tinymce.activeEditor.setContent(data.description);
+		}, 50)
+	//}
+
 
 	// Recipe ID
 	$('#detail-id').text(data._id);
@@ -309,9 +221,6 @@ function populatePanelSuccess(data) {
 	showPopulatedInputs(data);
 
 	urlSizeFix();
-
-	// Clear top info vals
-	$('#serving-input, #mins-input, #cals-input').val('');
 }
 
 
@@ -322,11 +231,8 @@ function getRecipe(id) {
 }
 
 function showPopulatedInputs(data) {
-	if (data.ingredients && data.ingredients.length) {
-		$('#detail-ingredients').removeClass('init-hide');
-	}
 	if (data.description.length) {
-		$('#detail-description').removeClass('init-hide');
+		$('#detail-description, #mceu_0').removeClass('init-hide');
 	}
 	if (data.url.length) {
 		$('#detail-link-container').removeClass('init-hide');
@@ -426,9 +332,6 @@ function resetEdit() {
 	$('#save-recipe, #cancel-recipe').hide();
 	$('#detail-description, #detail-name').attr('contenteditable', false);
 	$('#detail-new-ingredient-input').hide();
-	if ($('.ui-sortable').length) {
-		$('#detail-ingredients').sortable('destroy');
-	}
 }
 
 function formatDates() {
@@ -671,12 +574,9 @@ $('#profile').on('click', '#detail-options', function(e) {
 	$el.addClass('active');
 	$('#detail-options-dropdown').slideDown('fast', function() {
 		$('body').on('click.dd', function(e) {
-			var $portionDropdown = $('#portion-dropdown-1');
-
 			var container = $('#detail-options-dropdown');
-  		if ((!container.is(e.target) && container.has(e.target).length === 0) && !Boolean($portionDropdown.is(e.target) || $(e.target).parents('#portion-dropdown-1').length) || ($('#adjust-portions').is(e.target) && +$('#portion-num').val() >=1 && +$('#portion-num').val() < 9 )) {
+  		if (!container.is(e.target) && container.has(e.target).length === 0) {
       	$('#detail-options-dropdown').slideUp('fast');
-      	$portionDropdown.hide();
       	$('body').unbind('click.dd');
       	$el.removeClass('active');
       	$('.main-active').removeClass('main-active');
@@ -887,55 +787,6 @@ $('#profile').on('click', '.sort-option', function() {
 
 
 
-/* --- Adjust Portions (from recipe dropdown menu) -- */
-$('#profile')
-.on('click', '#portion', function() {
-	$(this).addClass('main-active');
-	$('#portion-dropdown-1').show();
-	$('#portion-validation').hide();
-})
-.on('click', '#adjust-portions', function() {
-	// Reshow original ingredient entries
-	$('.ingredient').show();
-
-	// Remove any existing converted value divs or conversion message
-	$('.converted, #converted-message, .converted-text').remove();
-
-	var multiplier = +$('#portion-num').val();
-	var currentSize = +$('#servings').html();
-	var originalMultiplier = multiplier;
-
-	if (currentSize === 0) {
-		window.showErrorBox('- Unable to convert<br>Please edit recipe and enter a serving size');
-		return;
-	}
-
-	// Validation
-	if (multiplier < 1 || multiplier > 8) {
-		$('#portion-validation').slideDown();
-		return;
-	}
-
-	// If the multiplier was the same as the current serving size then do nothing
-	if (multiplier === currentSize) {
-		return;
-	}
-
-	// If no multiplier was entered then do nothing
-	if (!multiplier) {
-		return;
-	}
-
-	multiplier = multiplier / currentSize;
-	
-	window.convert(multiplier, originalMultiplier);
-})
-// Reset portion adjustment
-.on('click', '#converted-message-close', function() {
-	resetPortionAdjustment();
-});
-
-
 /* --- Fullscreen Mode --- */
 $('#profile').on('click', '#full-screen', function() {
 	// If already in fullscreeen mode then go back to 2 panels
@@ -1000,11 +851,27 @@ $('.tooltip .close, #add-recipe').click(function() {
 });
 
 
-// Clear formatting on paste
-$(document).on('paste', '#detail-description', function(e) {
-	console.log('Clearing formatting');
-	setTimeout(function() {
-		$('#detail-description').html($('#detail-description').text());
-	}, 100);
+// // Clear formatting on paste
+// $(document).on('paste', '#detail-description', function(e) {
+// 	console.log('Clearing formatting');
+// 	setTimeout(function() {
+// 		$('#detail-description').html($('#detail-description').text());
+// 	}, 100);
 
+// });
+/* --- Description / tinyMCE --- */
+tinymce.init({
+	selector: '#detail-description',
+	//autoresize_min_height: 100,
+	plugins: [
+		'paste',
+		'autoresize',
+	],
+	menubar: false,
+	toolbar: false,
+	statusbar: false,
+	image_advtab: false,
+	readonly: true,
+	forced_root_block: false,
+	invalid_elements: 'h1,h2,h3,h4,h5,h6,a,code,pre,svg,img',
 });
