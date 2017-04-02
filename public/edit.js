@@ -22,8 +22,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 			return;
 		}
 		changeStage('Edit recipe');
-		// Reset any portions adjustments
-		window.resetPortionAdjustment();
+
 		//var urlValue = $('#detail-link-editable').val() === '#' ? '' : $('#detail-link-editable').val();
 
 		var urlValue = $('#detail-link').attr('href');
@@ -55,7 +54,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	// Handle details
 	$('#detail-name').attr('contenteditable', true);
-	useTinyMCE();
+	tinymce.activeEditor.setMode('code');
 
 
 
@@ -70,9 +69,9 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 });
 
 // Prevent carriage return on Recipe Name input
-$('#profile').on('keydown', '#detail-name,', function(e) {
+$('#profile').on('keydown', '#detail-name', function(e) {
   if (e.which == 13) {
-    event.preventDefault();
+    e.preventDefault();
     console.log('Preventing carriage return');
     return false;
 	}
@@ -112,9 +111,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	}
 
 
-	var servings = $('#serving-input').val();
-	var readyIn = $('#mins-input').val();
-	var cals = $('#cals-input').val();
 	var tags = [];
 	$('.tag').each(function() {
 		var newTag = {
@@ -131,7 +127,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		tags.push({name: tagInputText, color: null});
 	}
 	
-	var data = { description: description, recipeName: recipeName, url: url, tags: tags, servings: servings, readyIn: readyIn, cals: cals };
+	var data = { description: description, recipeName: recipeName, url: url, tags: tags };
 
 	if (window.stage === 'Edit recipe') {
 		data.id = $('#detail-id').text();
@@ -238,131 +234,10 @@ $newTag.on('keypress', function(e) {
 });
 
 
-
-// Show new tag input
-// $('#profile').on('click', '#detail-add-tag-button', function(e) {
-// 	e.preventDefault();
-
-// 	if (!$('html').hasClass('edit-recipe') && !$('html').hasClass('add-recipe')) {
-// 		return;
-// 	}
-
-// 	// Show new tag input
-// 	$('#detail-new-tag-input').attr('style', 'display: inline-block;');
-
-// 	var $newTag = $('#new-tag');
-// 	$newTag.focus();
-
-//   // Submit new tag if enter key pressed
-//   $newTag.on('keypress', function(e) {
-// 	    if (e.which == 13) {
-// 	    	var tagName = $('#new-tag').val().trim();
-
-// 	    	if (tagName.length === 0) {
-// 	    		return;
-// 	    	}
-
-// 	    	var id = $('#detail-id').text();
-
-// 	    	// Check to see if this tag exists on the recipe already
-// 				var tagUnique = checkUniqueTag(tagName);
-
-// 				if (tagUnique) {
-// 					$('#detail-new-tag-input').before('<li class="tag new-tag"><div class="tag-name">' + tagName + '</div><div class="tag-close"></div></li>');
-// 					$('#new-tag').val('');
-// 				} else {
-// 					alert('Tag already being used');
-// 				}
-
-// 	    }
-//   });
-  
-// });
-
-
-
 // Remove tag
 $('#profile').on('click', '.tag-close', function(e) {
 	$(this).closest('.tag').remove();
 });
-
-
-
-/* --- Artificially change values for Servings, Time, and Calories --- */
-$('#profile').on('click', '.icons', function() {
-	var $el = $(this);
-	var $dropdown;
-	var servingsInputChanged = false;
-	var timeInputChanged = false;
-	var calInputChanged = false;
-
-	if (!$el.hasClass('editable')) {
-		return;
-	}
-
-	switch($el.attr('id')) {
-		case 'portion-icon':
-			$dropdown = $('#portion-dropdown-2');
-			break;
-		case 'clock-icon':
-			$dropdown = $('#clock-dropdown');
-			break;
-		case 'cal-icon':
-		  $dropdown = $('#cal-dropdown');
-		  break;
-	}
-
-	$el.addClass('active');
-
-	$('#serving-input').one('keyup change', function() {
-		servingsInputChanged = true;
-	});
-	$('#mins-input').one('keyup change', function() {
-		timeInputChanged = true; 
-	});
-	$('#cals-input').one('keyup change', function() {
-		calInputChanged = true; 
-	});
-
-	$('#serving-input, #mins-input, #cals-input').on('keyup.temp', function(e) {
-	  if (e.which == 13) {
-	    $(this).off('keyup.temp');
-	    // Let the proceeding slideDown function take care of populating the values
-	    $('body').trigger('click');
-	    return false;
-		}
-	});
-
-
-	$dropdown.slideDown('fast', function() {
-		$('body').on('click.id', function(e) {
-			var container = $dropdown;
-  		if (!container.is(e.target) && container.has(e.target).length === 0) {
-      	container.hide();
-      	$('#portion-num').val('');
-      	$('body').unbind('click.id');
-      	$el.removeClass('active');
-
-      	if (servingsInputChanged) {
-					var value = $('#serving-input').val().length ? $('#serving-input').val() : $('#servings').html().match(/\d/)[0];
-					$('#servings').html(value);
-      	}
-      	if (timeInputChanged) {
-      		var value = $('#mins-input').val().length ? $('#mins-input').val() : 0;
-      		$('#mins').html(window.convertMinsToHours(value));
-      		// var value = $('#mins-input').val().length ? convertMinsToHours($('#mins-input').val()) : 0;
-      		// $('#mins').html(value);
-      	}
-      	if (calInputChanged) {
-      		var value = $('#cals-input').val().length ? $('#cals-input').val() : 0;
-      		$('#cals').html(value + ' cals');
-      	}
-  		}
-		});
-	});
-
-});
-
 
 
 // Delete recipe
