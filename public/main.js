@@ -46,7 +46,7 @@ window.urlSizeFix = function() {
 $(window).resize(function() {
 	urlSizeFix();
 	var descHeight = $("#detail-description_ifr").contents().find("body").height();
-	$('#detail-description_ifr').attr('style', 'height:' + descHeight + 'px;');
+	$('#detail-description_ifr').attr('style', 'height:' + (descHeight + 16) + 'px;');
 });
 
 
