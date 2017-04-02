@@ -38,6 +38,7 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 		$('.detail-recipe').addClass('from-new');
 		window.clearDetailPanel();
 		$('#cancel-recipe').show(); // Note that this should NOT appear for editing
+		tinymce.activeEditor.setContent('');
 	}
 
 	// Resize URL input
@@ -54,7 +55,6 @@ $('body').on('click', '#edit-recipe, #add-recipe', function(e) {
 
 	// Handle details
 	$('#detail-name').attr('contenteditable', true);
-	tinymce.activeEditor.setContent('');
 	tinymce.activeEditor.setMode('code');
 
 
