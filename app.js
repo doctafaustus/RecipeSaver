@@ -479,16 +479,16 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 
 
 // Perform maitenance by only allow my IP to pass middleware
-// app.get('*', function(req, res, next) {
-// 	console.log('IP ADDRESS: ' + req.ip);
-// 	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
-// 		console.log('Safety');
-// 		return next();
-// 	} else {
-// 		console.log('Not me');
-// 		res.render('hold-message.ejs');
-// 	}
-// });
+app.get('*', function(req, res, next) {
+	console.log('IP ADDRESS: ' + req.ip);
+	if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
+		console.log('Safety');
+		return next();
+	} else {
+		console.log('Not me');
+		res.render('hold-message.ejs');
+	}
+});
 
 // If running through Heroku/live then redirect to HTTPS on all routes
 function requireHTTPS(req, res, next) {
@@ -788,7 +788,7 @@ app.post('/recipe-update', function(req, res) {
 			}
 
 			recipe.description = req.body.description;
-
+      
 		  if (req.body.url === '' || req.body.url) {
 		  	recipe.url = req.body.url;
 		  }
