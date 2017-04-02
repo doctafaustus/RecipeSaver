@@ -1,4 +1,14 @@
 /* --- Helper Functions --- */
+function triggerResize() {
+	setTimeout(function() {
+		window.dispatchEvent(new Event('resize'));
+		var evt = document.createEvent('UIEvents');
+		evt.initUIEvent('resize', true, false, window, 0);
+		window.dispatchEvent(evt);
+	}, 190);
+}
+
+
 window.refreshRecipeList = function() {
 	$.ajax({
 		type: 'GET',
@@ -33,7 +43,13 @@ window.urlSizeFix = function() {
 	var newWidth = $('.detail-recipe').width() - 42;
 	$linkContainer.attr('style',' max-width: ' + newWidth + 'px;' + showStyle);
 }
-$(window).resize(urlSizeFix);
+$(window).resize(function() {
+	urlSizeFix();
+	var descHeight = $("#detail-description_ifr").contents().find("body").height();
+	$('#detail-description_ifr').attr('style', 'height:' + descHeight + 'px;');
+});
+
+
 window.urlSizeFix();
 
 // Convert minutes to h + m
@@ -197,12 +213,11 @@ function populatePanelSuccess(data) {
 
 	// Recipe Description
 	tinymce.activeEditor.setContent(data.description);
-	// Bug fix for IE to resize editor height
-	// if (!!navigator.userAgent.match(/Trident/g) || !!navigator.userAgent.match(/MSIE/g)) {
-		setTimeout(function() {
-			tinymce.activeEditor.setContent(data.description);
-		}, 50)
-	//}
+	// Makes height auto adjust:
+	setTimeout(function() {
+		tinymce.activeEditor.setContent(data.description);
+	}, 50)
+
 
 
 	// Recipe ID
@@ -252,12 +267,14 @@ function adjustPanels(forScreenSize) {
 		$detailPanel.removeClass('singular');
 		$listPanel.animate({width: 'show'}, 190);
 		$fullScreenMenuItem.html('Full Screen').removeClass('exit');
+		triggerResize();
 		return;
 	} else if (forScreenSize === '1-panel') {
 		$listPanel.animate({width: 'hide'}, 190, function() {
 			$detailPanel.addClass('singular');
 		});
 		$fullScreenMenuItem.html('Exit Full Screen').addClass('exit');
+		triggerResize();
 		return;
 	}
 
