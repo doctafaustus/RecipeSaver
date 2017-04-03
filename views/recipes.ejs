@@ -275,7 +275,7 @@
 			color: #898e95;
 			font-size: 14px;
 		}
-		#detail-description {
+		#detail-description-dummy {
 	    box-sizing: border-box;
 	    padding: 10px;
 			margin-top: 20px;
@@ -283,6 +283,13 @@
 			min-height: 100px;
 			font-size: 15px;
 			line-height: 18px;
+/*			border: solid 1px red;*/
+		}
+		.edit-recipe #detail-description-dummy, .add-recipe #detail-description-dummy {
+			display: none !important;
+		}
+		.edit-recipe #mceu_0, .add-recipe #mceu_0 {
+			display: block !important;
 		}
 		#detail-tag-label {
 			display: none;
@@ -741,6 +748,8 @@
 			line-height: 18px;
 		}
 
+
+
 		@media screen and (max-width: 1464px) {
 /*	    #list-panel {
 	    	margin-left: 20px;
@@ -869,6 +878,7 @@
 				<!-- Recipe Description -->
 				<div id="description-title">Description:</div>
 				<div contenteditable="false" id="detail-description" class="init-hide" placeholder="Recipe description"></div>
+				<div id="detail-description-dummy"></div>
 
 				<div id="detail-link-container" class="init-hide">
 					<a id="detail-link" href="#" target="_blank"></a>

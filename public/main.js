@@ -1,14 +1,4 @@
 /* --- Helper Functions --- */
-function triggerResize() {
-	setTimeout(function() {
-		window.dispatchEvent(new Event('resize'));
-		var evt = document.createEvent('UIEvents');
-		evt.initUIEvent('resize', true, false, window, 0);
-		window.dispatchEvent(evt);
-	}, 200);
-}
-
-
 window.refreshRecipeList = function() {
 	$.ajax({
 		type: 'GET',
@@ -45,8 +35,6 @@ window.urlSizeFix = function() {
 }
 $(window).resize(function() {
 	urlSizeFix();
-	var descHeight = $("#detail-description_ifr").contents().find("body").height();
-	$('#detail-description_ifr').attr('style', 'height:' + (descHeight + 16) + 'px;');
 });
 
 
@@ -119,7 +107,7 @@ window.reloadRightPanel = function() {
 };
 
 window.clearDetailPanel = function() {
-	$('#detail-name, #detail-description, #detail-id, #detail-new-ingredient-input').html('');
+	$('#detail-name, #detail-description, #detail-description-dummy, #detail-id, #detail-new-ingredient-input').html('');
 	$('#detail-link-editable, #new-tag').val('');
 	$('#detail-new-ingredient-input').show().html('');
 	$('#detail-tag-list li:not(#detail-new-tag-input)').remove();
@@ -181,7 +169,7 @@ window.populatePanel = function(id, fromDatabase) {
 
 function populatePanelSuccess(data) {
 	// Rehide everything first
-	$('#detail-description, #mceu_0, #detail-link-container').addClass('init-hide');
+	$('#detail-description, #detail-description-dummy, #mceu_0, #detail-link-container').addClass('init-hide');
 	// Remove and converted value divs and conversion message
 	$('.converted, #converted-message').remove();
 	// Designate recipe as a non-favorite at first
@@ -213,10 +201,11 @@ function populatePanelSuccess(data) {
 
 	// Recipe Description
 	tinymce.activeEditor.setContent(data.description);
-	// Makes height auto adjust:
-	setTimeout(function() {
-		tinymce.activeEditor.setContent(data.description);
-	}, 50)
+	$('#detail-description-dummy').html(data.description);
+	// // Makes height auto adjust:
+	// setTimeout(function() {
+	// 	tinymce.activeEditor.setContent(data.description);
+	// }, 50)
 
 
 
@@ -247,7 +236,7 @@ function getRecipe(id) {
 
 function showPopulatedInputs(data) {
 	if (data.description.length) {
-		$('#detail-description, #mceu_0').removeClass('init-hide');
+		$('#detail-description, #mceu_0, #detail-description-dummy').removeClass('init-hide');
 	}
 	if (data.url.length) {
 		$('#detail-link-container').removeClass('init-hide');
@@ -267,14 +256,12 @@ function adjustPanels(forScreenSize) {
 		$detailPanel.removeClass('singular');
 		$listPanel.animate({width: 'show'}, 190);
 		$fullScreenMenuItem.html('Full Screen').removeClass('exit');
-		triggerResize();
 		return;
 	} else if (forScreenSize === '1-panel') {
 		$listPanel.animate({width: 'hide'}, 190, function() {
 			$detailPanel.addClass('singular');
 		});
 		$fullScreenMenuItem.html('Exit Full Screen').addClass('exit');
-		triggerResize();
 		return;
 	}
 
@@ -867,19 +854,14 @@ $('.tooltip .close, #add-recipe').click(function() {
 	sessionStorage.seenTooltip = true;
 });
 
-
-// // Clear formatting on paste
-// $(document).on('paste', '#detail-description', function(e) {
-// 	console.log('Clearing formatting');
-// 	setTimeout(function() {
-// 		$('#detail-description').html($('#detail-description').text());
-// 	}, 100);
-
-// });
 /* --- Description / tinyMCE --- */
+// NOTE: There's some strange height bug if I initially hide tinyMCE with CSS
+function hideTinyMCE() {
+	$('#mceu_0').hide();
+}
 tinymce.init({
 	selector: '#detail-description',
-	//autoresize_min_height: 100,
+	autoresize_min_height: 100,
 	plugins: [
 		'paste',
 		'autoresize',
@@ -890,5 +872,6 @@ tinymce.init({
 	image_advtab: false,
 	readonly: true,
 	forced_root_block: false,
-	invalid_elements: 'h1,h2,h3,h4,h5,h6,a,code,pre,svg,img',
+	invalid_elements: 'h1,h2,h3,h4,h5,h6,a,code,pre,svg,img,blockquote,table,th,tr,td,tbody,caption,aside,article',
+	init_instance_callback: 'hideTinyMCE'
 });
