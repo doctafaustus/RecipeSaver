@@ -142,8 +142,8 @@ passport.use(new FacebookStrategy({
 						req.body.app_rs_id = user._id;
 						return done(null, user);
 					} else {
-						req.body.app_rs_id_not_found = true;
 						console.log('[app] Facebook user not found.');
+						// If user is not found then the native in-app browser will just take them to the login page
 						return done(null, false);
 					}
 				});
@@ -328,12 +328,6 @@ app.get('/app-interstitial', function(req, res) {
 	delete req.session.app_rs_id;
 	res.render('app-interstitial.ejs', { app_rs_id: app_rs_id });
 });
-
-app.get('/app-id-not-found', function(req, res) {
-	console.log('/app-id-not-found');
-	res.sendStatus(200);
-});
-
 
 app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), sendEmail(require('./mods/registrationEmail.js'), 'registration'), function(req, res){
   	console.log('done registering!');
@@ -694,8 +688,6 @@ app.get('/login/facebook/callback',
     if (req.body.app_rs_id) {
     	req.session.app_rs_id = req.body.app_rs_id;
     	res.redirect('/app-interstitial');
-    } else if (req.body.app_rs_id_not_found) {
-    	res.redirect('/app-id-not-found');
     } else if (req.body && req.body.isNew) {
 			res.redirect('/plans');
 	  } else {
