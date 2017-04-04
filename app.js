@@ -117,6 +117,9 @@ passport.use(new TwitterStrategy({
 	  });
 	}
 ));
+
+
+
 // Facebook login
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
@@ -136,12 +139,12 @@ passport.use(new FacebookStrategy({
 				User.findOne({ 'facebookId': profile.id }, function(err, user) {
 					if (err) return done(err);
 					if (user) {
-						console.log('FOUND USEER');
-						console.log(user);
 						req.body.app_rs_id = user._id;
 						return done(null, user);
 					} else {
+						req.body.app_rs_id_not_found = true;
 						console.log('[app] Facebook user not found.');
+						return done(null, null);
 					}
 				});
 
@@ -318,7 +321,7 @@ app.listen(process.env.PORT || 3000, function() {
 
 
 
-
+// App interstitial screen so that app can save rs_id
 app.get('/app-interstitial', function(req, res) {
 	console.log('/app-interstitial');
 	var app_rs_id = req.session.app_rs_id;
@@ -686,6 +689,8 @@ app.get('/login/facebook/callback',
     if (req.body.app_rs_id) {
     	req.session.app_rs_id = req.body.app_rs_id;
     	res.redirect('/app-interstitial');
+    } else if (req.body.app_rs_id_not_found) {
+    	res.redirect('/app-id-not-found');
     } else if (req.body && req.body.isNew) {
 			res.redirect('/plans');
 	  } else {
