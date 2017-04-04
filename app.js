@@ -144,7 +144,7 @@ passport.use(new FacebookStrategy({
 					} else {
 						req.body.app_rs_id_not_found = true;
 						console.log('[app] Facebook user not found.');
-						return done(null, null);
+						return done(null, false);
 					}
 				});
 
@@ -327,6 +327,11 @@ app.get('/app-interstitial', function(req, res) {
 	var app_rs_id = req.session.app_rs_id;
 	delete req.session.app_rs_id;
 	res.render('app-interstitial.ejs', { app_rs_id: app_rs_id });
+});
+
+app.get('/app-id-not-found', function(req, res) {
+	console.log('/app-id-not-found');
+	res.sendStatus(200);
 });
 
 
