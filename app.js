@@ -129,29 +129,42 @@ passport.use(new FacebookStrategy({
 
 			// Special handling for app authentication request
 			console.log(req.session.fromApp);
-			if (req.session.fromApp) {
+			if (req.session && req.session.fromApp) {
 				console.log('fromApp: ' + req.session.fromApp);
 				delete req.session.fromApp;
-				console.log('fromApp (again): ' + req.session.fromApp);
+
+				User.findOne({ 'facebookId': profile.id }, function(err, user) {
+					if (err) return done(err);
+					if (user) {
+						console.log('FOUND USEER');
+						console.log(user);
+						req.body.app_rs_id = user._id;
+						return done(null, user);
+					} else {
+						console.log('[app] Facebook user not found.');
+					}
+				});
+
+			} else {
+				User.findOne({ 'facebookId': profile.id }, function(err, user) {
+					if (err) return done(err);
+					if (user) {
+						return done(null, user);
+					} else {
+						console.log('Creating new Facebook user');
+						req.body.isNew = true;
+						var newUser = new User();
+						newUser.name = profile.displayName;
+						newUser.facebookId = profile.id;
+						newUser.subscription = 'Basic';
+						newUser.save(function(err) {
+							if (err) throw err;
+							return done(null, newUser);
+						});
+					}
+				});
 			}
 
-			User.findOne({ 'facebookId': profile.id }, function(err, user) {
-				if (err) return done(err);
-				if (user) {
-					return done(null, user);
-				} else {
-					console.log('Creating new Facebook user');
-					req.body.isNew = true;
-					var newUser = new User();
-					newUser.name = profile.displayName;
-					newUser.facebookId = profile.id;
-					newUser.subscription = 'Basic';
-					newUser.save(function(err) {
-						if (err) throw err;
-						return done(null, newUser);
-					});
-				}
-			});
 		});
 	}
 ));
@@ -304,6 +317,14 @@ app.listen(process.env.PORT || 3000, function() {
 });
 
 
+
+
+app.get('/app-interstitial', function(req, res) {
+	console.log('/app-interstitial');
+	var app_rs_id = req.session.app_rs_id;
+	delete req.session.app_rs_id;
+	res.render('app-interstitial.ejs', { app_rs_id: app_rs_id });
+});
 
 
 app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), sendEmail(require('./mods/registrationEmail.js'), 'registration'), function(req, res){
@@ -662,7 +683,10 @@ app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Facebook authentication, redirect to recipes page.');
-	  if (req.body && req.body.isNew) {
+    if (req.body.app_rs_id) {
+    	req.session.app_rs_id = req.body.app_rs_id;
+    	res.redirect('/app-interstitial');
+    } else if (req.body && req.body.isNew) {
 			res.redirect('/plans');
 	  } else {
 			res.redirect('/recipes');
