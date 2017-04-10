@@ -323,11 +323,6 @@ function changeStage(state) {
 		$('#new-tag').val('');
 		resetEdit();
 	}
-
-	// Remove unneeded sort options for All tags stage
-	if (state === 'All tags') {
-		$('#sort-a-z').click();
-	}
 }
 
 // Reset changes made by clicking "Edit Recipe"
@@ -713,7 +708,6 @@ $('#profile').on('click', '#sort', function() {
 		$('body').on('click.sort', function(e) {
 			var container = $('#sort-options');
   		if (!container.is(e.target) && container.has(e.target).length === 0) {
-  			console.log('auto up')
       	$('#sort-options').slideUp('fast');
   		}
   		$('body').unbind('click.sort');
@@ -721,11 +715,13 @@ $('#profile').on('click', '#sort', function() {
 	});
 });
 $('#profile').on('click', '.sort-option', function() {
+
 	// Hide dropdown box
 	$('#sort-options').hide();
 
 	// Populate "Sort by:" with selected sort option
 	$('#sort-selection').text($(this).text());
+
 
 	var $listPanelList = $('#list-panel-inner ul');
 	// Sort list according to chosen id from dropdown list

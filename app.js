@@ -834,11 +834,10 @@ app.post('/recipe-update', function(req, res) {
 });
 
 
-
 // Get favorite recipes
 app.get('/get-favorite-recipes', function(req, res) {
   console.log('/get-favorite-recipes');
-  Recipe.find({user_id: req.user._id, favorite: true}, function(err, recipes) {
+  Recipe.find({user_id: req.user._id, favorite: true}).sort({creationDate: -1}).exec(function (err, recipes) {
   	if (err) throw err;
   	res.json(recipes);
   });
@@ -848,7 +847,7 @@ app.get('/get-favorite-recipes', function(req, res) {
 // Get uncategorized recipes
 app.get('/get-uncategorized-recipes', function(req, res) {
   console.log('/get-uncategorized-recipes');
-  Recipe.find({user_id: req.user._id, tags: {$size: 0} }, function(err, recipes) {
+  Recipe.find({user_id: req.user._id, tags: {$size: 0} }).sort({creationDate: -1}).exec(function(err, recipes) {
   	if (err) throw err;
   	res.json(recipes);
   });
@@ -880,7 +879,7 @@ app.post('/get-recipes-by-tag', function(req, res) {
   var tagColor = req.body.tagColor;
   var recipesToSend = [];
 
-  Recipe.find({user_id: req.user._id}, function(err, recipes) {
+  Recipe.find({user_id: req.user._id}).sort({creationDate: -1}).exec(function(err, recipes) {
   	if (err) throw err;
 	  for (var i = 0; i < recipes.length; i++) {
 	    for (var j = 0; j < recipes[i].tags.length; j++) {
