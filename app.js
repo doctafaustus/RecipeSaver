@@ -331,7 +331,7 @@ app.get('/app-interstitial', function(req, res) {
 app.post('/app-get-recipes', function(req, res) {
 	Recipe.find({user_id: req.body.app_rs_id}).sort({creationDate: -1}).exec(function (err, recipes) {
   	if (err) throw err;
-  	console.log(req.user._id + '\'s recipes retrieved and sent to app!');
+  	console.log('Recipes retrieved and sent to app!');
   	res.json(recipes);
   });
 });
