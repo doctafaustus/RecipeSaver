@@ -328,6 +328,15 @@ app.get('/app-interstitial', function(req, res) {
 	delete req.session.app_rs_id;
 	res.render('app-interstitial.ejs', { app_rs_id: app_rs_id });
 });
+app.post('/app-get-recipes', function(req, res) {
+	Recipe.find({user_id: req.body.app_rs_id}).sort({creationDate: -1}).exec(function (err, recipes) {
+  	if (err) throw err;
+  	console.log(req.user._id + '\'s recipes retrieved and sent to app!');
+  	res.json(recipes);
+  });
+});
+
+
 
 app.post('/register', checkCaptcha, passport.authenticate('local', { session: true }), sendEmail(require('./mods/registrationEmail.js'), 'registration'), function(req, res){
   	console.log('done registering!');
