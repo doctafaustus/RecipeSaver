@@ -1,28 +1,33 @@
 /* --- Helper Functions --- */
-window.refreshRecipeList = function() {
-	$.ajax({
-		type: 'GET',
-	  url: '/get-all-recipes',
-	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-	  success: function(data) {
-	  	console.log('Got all recipes!');
+window.refreshRecipeList = function(recipeListView, sortView) {
+	console.log(recipeListView)
+	if (recipeListView === 'favorite recipes') {
+		getFavorites(sortView);
+	} else {
+		$.ajax({
+			type: 'GET',
+		  url: '/get-all-recipes',
+		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		  success: function(data) {
+		  	console.log('Got all recipes!');
 
-			var recipes = data;
-			var recipeList = '<ul id="recipe-list">';
-			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i]._id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
-			}
-			recipeList += '</ul>';
-			$('#list-panel-inner').html(recipeList);
-			formatDates();
+				var recipes = data;
+				var recipeList = '<ul id="recipe-list">';
+				for (var i = 0; i < recipes.length; i++) {
+					recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i]._id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
+				}
+				recipeList += '</ul>';
+				$('#list-panel-inner').html(recipeList);
+				formatDates();
 
-			// Change panel title
-			$('#list-panel-heading').text('All Recipes');
+				// Change panel title
+				$('#list-panel-heading').text('All Recipes');
 
-			// Save reference to recipes in global JS so they can be retrieved with search
-			window.recipes = data;
-	  }
-	});
+				// Save reference to recipes in global JS so they can be retrieved with search
+				window.recipes = data;
+		  }
+		});
+	}
 };
 
 // Adjust width of URL container (needed to make ellipsis work)
@@ -415,25 +420,7 @@ $('body').on('click', '#get-recipes-by-tags', function(e) {
 $('#get-favorite-recipes').click(function() {
 	changeStage('Favorite recipes');
 	adjustPanels();
-	$.ajax({
-		type: 'GET',
-	  url: '/get-favorite-recipes',
-	  success: function(data) {
-	  	console.log('Got all favorite recipes!');
-
-			var recipes = data;
-			var recipeList = '<ul id="recipe-list">';
-			for (var i = 0; i < recipes.length; i++) {
-				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i]._id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
-			}
-			recipeList += '</ul>';
-			$('#list-panel-inner').html(recipeList);
-			formatDates();
-
-			// Change panel title
-			$('#list-panel-heading').text('Favorite Recipes');
-	  }
-	});
+	getFavorites();
 });
 
 // Show all uncategorized recipes
@@ -871,3 +858,51 @@ tinymce.init({
 	invalid_elements: 'h1,h2,h3,h4,h5,h6,a,code,pre,svg,img,blockquote,table,th,tr,td,tbody,caption,aside,article',
 	init_instance_callback: 'hideTinyMCE'
 });
+
+function getData() {
+	$.ajax({
+		type: 'GET',
+	  url: '/get-all-recipes',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  success: function(data) {
+	  	console.log('Saving recipe data');
+
+			// Save reference to recipes in global JS so they can be retrieved with search
+			window.recipes = data;
+	  }
+	});
+}
+
+
+
+function getFavorites(sortView) {
+	$.ajax({
+		type: 'GET',
+	  url: '/get-favorite-recipes',
+	  success: function(data) {
+	  	console.log('Got all favorite recipes!');
+
+			var recipes = data;
+			var recipeList = '<ul id="recipe-list">';
+			for (var i = 0; i < recipes.length; i++) {
+				recipeList += '<li class="recipe-list-entry" data-id="' + recipes[i]._id + '"><span class="recipe-list-entry-left"><a>' + recipes[i].recipeName + '</a></span><span class="recipe-list-entry-date"><a>' + new Date(recipes[i].creationDate).getTime() + '</a></span></li>';
+			}
+			recipeList += '</ul>';
+			$('#list-panel-inner').html(recipeList);
+			formatDates();
+
+			// Change panel title
+			$('#list-panel-heading').text('Favorite Recipes');
+
+			// Reneable sort view
+			if (sortView) {
+				console.log('Triggering click on: ' + sortView);
+				$('.sort-option').filter(function() {
+  				return $(this).text() === sortView;
+				}).trigger('click');
+			}
+
+			getData();
+	  }
+	});
+}

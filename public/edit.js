@@ -131,7 +131,13 @@ $('#profile').on('click', '#save-recipe', function(e) {
 	var data = { description: description, recipeName: recipeName, url: url, tags: tags };
 
 	if (window.stage === 'Edit recipe') {
+
 		data.id = $('#detail-id').text();
+
+		// Capture recipe list view so we can regenrate it after edit success
+		var recipeListView = $('#list-panel-heading').text().trim().toLowerCase();
+		
+
 
 		$.ajax({
 
@@ -140,6 +146,8 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		  data: data,
 		  success: function(data) {
+		  	var sortView = $('#sort-selection').text().trim();
+		  	
 		  	console.log('Updated recipe!');
 		  	window.populatePanel(data._id, true);
 		  	window.resetRecipeState();
@@ -148,7 +156,12 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	$('#detail-options-dropdown').hide();
 
 		  	window.showSuccessBox($('#detail-name').text(), ' has been updated!');
-		  	window.refreshRecipeList();
+
+		  	console.warn(sortView);
+		  	window.refreshRecipeList(recipeListView, sortView);
+
+		  	
+
 		  },
 		  error: function(jqXHR) {
 				if (jqXHR.status === 413) {
