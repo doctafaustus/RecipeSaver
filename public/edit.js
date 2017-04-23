@@ -136,8 +136,6 @@ $('#profile').on('click', '#save-recipe', function(e) {
 
 		// Capture recipe list view so we can regenrate it after edit success
 		var recipeListView = $('#list-panel-heading').text().trim().toLowerCase();
-		
-
 
 		$.ajax({
 
@@ -158,7 +156,7 @@ $('#profile').on('click', '#save-recipe', function(e) {
 		  	window.showSuccessBox($('#detail-name').text(), ' has been updated!');
 
 		  	console.warn(sortView);
-		  	window.refreshRecipeList(recipeListView, sortView);
+		  	window.refreshRecipeList(recipeListView, sortView, getFeaturedTag());
 
 		  	
 
@@ -259,6 +257,8 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	$('#detail-options').trigger('click');
 	var id = $('#detail-id').text();
 
+	var recipeListView = $('#list-panel-heading').text().trim().toLowerCase();
+
 	$.ajax({
 		type: 'POST',
 	  url: '/delete-recipe',
@@ -266,12 +266,15 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 	  data: {id: id},
 	  success: function(data) {
 	  	console.log('Recipe deleted!');
+
+		  var sortView = $('#sort-selection').text().trim();
+
 	  	// Refresh recipe list to reflect delete
-	  	window.refreshRecipeList();
+	  	window.refreshRecipeList(recipeListView, sortView, getFeaturedTag());
 
 	  	// Show success box
 	  	window.showSuccessBox($('#detail-name').text(), ' deleted');
-	  	window.singleLeftPanel()
+	  	window.singleLeftPanel();
 	  }
 	});
 });
@@ -280,3 +283,21 @@ $('#profile').on('click', '#delete-recipe', function(e) {
 $('#error-box .close').click(function() {
 	$('#error-box').hide();
 });
+
+
+
+function getFeaturedTag() {
+	var $featuredTag = $('#recipe-list-by-tag .tag-category');
+
+	if ($featuredTag.length) {
+
+		var color = $('#detail-tag-list .tag').filter(function() {
+			return $(this).text().trim() === $featuredTag.text().trim();
+		}).attr('data-tag-color');
+
+		return {
+			tagName: $featuredTag.text().trim(),
+			tagColor: color
+		};	
+	}
+}
