@@ -201,16 +201,15 @@
 					<%= accountInfo.creationDate %>
 				</div>
 
-				<% if (accountInfo.subscription !== 'Full (Legacy)') { %>
+
 					<div class="info-row-title">Account Actions</div>
 					<div class="info-data" id="account-action">
 						<% if (accountInfo.subscription === 'Basic') { %>
 							<a href="/plans">Upgrade Account</a>
-						<% } else if (accountInfo.subscription === 'Full') { %>
-							<a id="cancel-sub" href="#">Cancel Subscription</a>
+						<% } else { %>
+							None
 						<% } %>
 					</div>
-				<% } %>
 			</div>
 		</div>
 	</div>
@@ -254,32 +253,6 @@
 			console.log(msg);
 			$message.html(msg).show();
 		}
-
-		// Cancel subscription
-		$('#cancel-sub').click(function(e) {
-			e.preventDefault();
-			$('#cancel-confirm-modal, #support-overlay').show();
-			$message.html('').hide();
-		});
-		$('#cancel-confirm-btn').click(function(e) {
-			e.preventDefault();
-			$('#cancel-confirm-modal, #support-overlay').hide();
-			$.ajax({
-				type: 'POST',
-			  url: '/cancel-subscription',
-			  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-			  data: { info: null},
-			  success: function() {
-			  	// Artificially change page text (will be hardcoded on next refresh)
-			  	$('#account-type-text').text('Basic');
-			  	$('#account-action').html('<a href="/plans">Upgrade Account</a>');
-			  	showMessage('Subscription successfully canceled');
-			  },
-			  error: function() {
-			  	showMessage('Oops! Something went wrong. Please contact support for assistance.');
-			  },
-			});
-		});
 
 
 		// Delete account

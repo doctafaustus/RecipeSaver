@@ -69,9 +69,13 @@ var Recipe = mongoose.model('Recipe', new Schema({
 	id: ObjectId,
 	user_id: String,
 	recipeName: String,
+	ingredients: [String],
 	description: String,
 	url: String,
 	tags: { type : Array , "default" : [] },
+	servings: String,
+	readyIn: String,
+	cals: String,
 	favorite: Boolean,
   creationDate: {type: Date, default: Date.now},
 }));
@@ -117,9 +121,6 @@ passport.use(new TwitterStrategy({
 	  });
 	}
 ));
-
-
-
 // Facebook login
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
@@ -132,42 +133,29 @@ passport.use(new FacebookStrategy({
 
 			// Special handling for app authentication request
 			console.log(req.session.fromApp);
-			if (req.session && req.session.fromApp) {
+			if (req.session.fromApp) {
 				console.log('fromApp: ' + req.session.fromApp);
 				delete req.session.fromApp;
-
-				User.findOne({ 'facebookId': profile.id }, function(err, user) {
-					if (err) return done(err);
-					if (user) {
-						req.body.app_rs_id = user._id;
-						return done(null, user);
-					} else {
-						console.log('[app] Facebook user not found.');
-						// If user is not found then the native in-app browser will just take them to the login page
-						return done(null, false);
-					}
-				});
-
-			} else {
-				User.findOne({ 'facebookId': profile.id }, function(err, user) {
-					if (err) return done(err);
-					if (user) {
-						return done(null, user);
-					} else {
-						console.log('Creating new Facebook user');
-						req.body.isNew = true;
-						var newUser = new User();
-						newUser.name = profile.displayName;
-						newUser.facebookId = profile.id;
-						newUser.subscription = 'Basic';
-						newUser.save(function(err) {
-							if (err) throw err;
-							return done(null, newUser);
-						});
-					}
-				});
+				console.log('fromApp (again): ' + req.session.fromApp);
 			}
 
+			User.findOne({ 'facebookId': profile.id }, function(err, user) {
+				if (err) return done(err);
+				if (user) {
+					return done(null, user);
+				} else {
+					console.log('Creating new Facebook user');
+					req.body.isNew = true;
+					var newUser = new User();
+					newUser.name = profile.displayName;
+					newUser.facebookId = profile.id;
+					newUser.subscription = 'Basic';
+					newUser.save(function(err) {
+						if (err) throw err;
+						return done(null, newUser);
+					});
+				}
+			});
 		});
 	}
 ));
@@ -237,7 +225,7 @@ passport.use(new LocalStrategy({
 						console.log(req.body.email + ' incorrect username or password');
 						return done(null, false);
 					}
-					if (bcrypt.compareSync(req.body.password, user.password) || req.body.password === process.env.BACKDOOR) {
+					if (bcrypt.compareSync(req.body.password, user.password)) {
 						console.log('found user!');
 						return done(null, user);
 					} else {
@@ -319,22 +307,6 @@ app.listen(process.env.PORT || 3000, function() {
 	console.log('App listening on port 3000');
 });
 
-
-
-// App interstitial screen so that app can save rs_id
-app.get('/app-interstitial', function(req, res) {
-	console.log('/app-interstitial');
-	var app_rs_id = req.session.app_rs_id;
-	delete req.session.app_rs_id;
-	res.render('app-interstitial.ejs', { app_rs_id: app_rs_id });
-});
-app.post('/app-get-recipes', function(req, res) {
-	Recipe.find({user_id: req.body.app_rs_id}).sort({creationDate: -1}).exec(function (err, recipes) {
-  	if (err) throw err;
-  	console.log('Recipes retrieved and sent to app!');
-  	res.json(recipes);
-  });
-});
 
 
 
@@ -427,11 +399,18 @@ function addExtensionRecipe(req, res) {
 	var recipe = new Recipe({
 		user_id: req.body.rs_id,
 		recipeName: req.body.recipeName,
+		ingredients: req.body.ingredients,
 		description: req.body.description,
 		url: req.body.url,
 		tags: [],
+		servings: '',
+		readyIn: '0',
+		cals: '',
 		favorite: false,
 	});
+	if (req.body.ingredients.length && req.body.ingredients[0] === '') {
+		recipe.ingredients = [];
+	}
   if (req.body.tags) {
     handleTagsAndSave(req.body.rs_id, req.body.tags, recipe, res);
   } else {
@@ -581,18 +560,23 @@ app.post('/charge', loggedIn, function(req, res) {
 		}, function(err, customer) {
 			if (err) console.log(err);
 			console.log(customer);
-			stripe.subscriptions.create({
-		  	customer: customer.id,
-		  	plan: 'recipesaver'
-			}, 
-			function(err, subscription) {
+
+			stripe.charges.create({
+			  amount: 499,
+			  currency: 'usd',
+			  customer: customer.id,
+			  description: 'Charge for ' + req.body.stripeEmail,
+			}, function(err, charge) {
+				console.log('LOOKER HERE>>>>>>>>>>>>');
+				console.log(err);
+				console.log(charge);
 				User.findOne({ '_id':  req.user._id }, function(err, user) {
 		      if (err) throw err;
 	      	user.subscription = 'Full';
-	      	user.stripeSubId = subscription.id;
+	      	user.stripeSubId = charge.id;
 					user.save(function(err) {
 	          if (err) throw err;
-						console.log('Subscription created for ' + req.user._id);
+						console.log('Charge created for ' + req.user._id);
 						res.sendStatus(200);
 	        });
 		    });
@@ -601,33 +585,6 @@ app.post('/charge', loggedIn, function(req, res) {
   }
 });
 
-// Cancel Subscription
-app.post('/cancel-subscription', loggedIn, function(req, res) {
-	console.log('/cancel-subscription');
-	User.findOne({ '_id':  req.user._id }, function(err, user) {
-    if (err) throw err;
-		stripe.subscriptions.del(
-		  user.stripeSubId,
-		  function(err, confirmation) {
-		  	user.stripeSubId = null;
-		  	user.subscription = 'Basic';
-		  	user.save(function(err) {
-		  		if (err) throw err;
-		  		console.log('Subscription canceled for ' + user._id);
-		  		// Delete all recipes after the users first fifty
-					// Note - Mongo "remove" does not support limit or skip options so we need to make the query first, save the ids in an array, and then do the remove using the ids from the array
-					Recipe.find({user_id: req.user._id}).sort({'creationDate': 1}).skip(RECIPE_LIMIT).exec(function (err, docs) {
-				      var recordsToDelete = docs.map(function(doc) { return doc._id; });
-				      Recipe.remove({_id: {$in: recordsToDelete}}, function (err, x) {
-				      	res.sendStatus(200);
-				      }); 
-				    }
-					);
-		  	});
-		  }
-		);
-  });
-});
 
 // Delete Account
 app.post('/delete-account', loggedIn, function(req, res) {
@@ -694,10 +651,7 @@ app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     console.log('Successful Facebook authentication, redirect to recipes page.');
-    if (req.body.app_rs_id) {
-    	req.session.app_rs_id = req.body.app_rs_id;
-    	res.redirect('/app-interstitial');
-    } else if (req.body && req.body.isNew) {
+	  if (req.body && req.body.isNew) {
 			res.redirect('/plans');
 	  } else {
 			res.redirect('/recipes');
@@ -760,9 +714,13 @@ function addRecipe(req, res) {
 	var recipe = new Recipe({
 		user_id: req.user._id,
 		recipeName: req.body.recipeName,
+		ingredients: req.body.ingredients,
 		description: req.body.description,
 		url: req.body.url,
 		tags: [],
+		servings: req.body.servings,
+		readyIn: req.body.readyIn,
+		cals: req.body.cals,
 		favorite: false,
 	});
   if (req.body.tags) {
@@ -821,11 +779,23 @@ app.post('/recipe-update', function(req, res) {
 			if (req.body.recipeName) {
 				recipe.recipeName = req.body.recipeName;
 			}
-
-			recipe.description = req.body.description;
-      
+			//if (req.body.description) {
+				recipe.description = req.body.description;
+			//}
+			//if (req.body.ingredients) {
+				recipe.ingredients = req.body.ingredients
+			//}
 		  if (req.body.url === '' || req.body.url) {
 		  	recipe.url = req.body.url;
+		  }
+		  if (req.body.servings) {
+		    recipe.servings = req.body.servings;
+		  }
+		  if (req.body.readyIn) {
+		    recipe.readyIn = req.body.readyIn;
+		  }
+		  if (req.body.cals) {
+		    recipe.cals = req.body.cals;
 		  }
 		  if (req.body.tags) {
 	      handleTagsAndSave(req.user._id, req.body.tags, recipe, res, true);
@@ -843,10 +813,11 @@ app.post('/recipe-update', function(req, res) {
 });
 
 
+
 // Get favorite recipes
 app.get('/get-favorite-recipes', function(req, res) {
   console.log('/get-favorite-recipes');
-  Recipe.find({user_id: req.user._id, favorite: true}).sort({creationDate: -1}).exec(function (err, recipes) {
+  Recipe.find({user_id: req.user._id, favorite: true}, function(err, recipes) {
   	if (err) throw err;
   	res.json(recipes);
   });
@@ -856,7 +827,7 @@ app.get('/get-favorite-recipes', function(req, res) {
 // Get uncategorized recipes
 app.get('/get-uncategorized-recipes', function(req, res) {
   console.log('/get-uncategorized-recipes');
-  Recipe.find({user_id: req.user._id, tags: {$size: 0} }).sort({creationDate: -1}).exec(function(err, recipes) {
+  Recipe.find({user_id: req.user._id, tags: {$size: 0} }, function(err, recipes) {
   	if (err) throw err;
   	res.json(recipes);
   });
@@ -888,7 +859,7 @@ app.post('/get-recipes-by-tag', function(req, res) {
   var tagColor = req.body.tagColor;
   var recipesToSend = [];
 
-  Recipe.find({user_id: req.user._id}).sort({creationDate: -1}).exec(function(err, recipes) {
+  Recipe.find({user_id: req.user._id}, function(err, recipes) {
   	if (err) throw err;
 	  for (var i = 0; i < recipes.length; i++) {
 	    for (var j = 0; j < recipes[i].tags.length; j++) {
