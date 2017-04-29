@@ -435,7 +435,7 @@
 		.edit-recipe #detail-options {
 			display: none;
 		}
-		.add-recipe #detail-options {
+		.add-recipe #detail-options, .add-recipe .screen-toggle {
 			display: none;
 		}
 		#edit-messaging {
@@ -758,6 +758,24 @@
 		}
 
 
+		.screen-toggle {
+			float: right;
+			margin-top: 2px;
+			width: 25px;
+			height: 22px;
+			background-image: url(images/fullscreen-sprite.png);
+			background-repeat: no-repeat;
+			cursor: pointer;
+		}
+		.screen-toggle.exit {
+			background-image: url(images/halfscreen-sprite.png);
+		}
+		.screen-toggle:hover {
+			background-position: 0 -22px;
+		}
+
+
+
 
 		@media screen and (max-width: 1464px) {
 /*	    #list-panel {
@@ -878,6 +896,7 @@
 					<li id="spacer"></li>
 					<li id="delete-recipe">Delete Recipe</li>
 				</ul>
+				<div class="screen-toggle"></div>
 			</div>
 
 			<div id="detail-lower">

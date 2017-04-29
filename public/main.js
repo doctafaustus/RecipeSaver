@@ -1,4 +1,8 @@
 refreshTags();
+// Preload image
+var halfscreen = new Image();
+halfscreen.src = 'images/halfscreen-sprite.png';
+
 
 /* --- Helper Functions --- */
 window.refreshRecipeList = function(recipeListView, sortView, featuredTag) {
@@ -237,17 +241,21 @@ function adjustPanels(forScreenSize) {
 	var $detailPanel = $('.detail-recipe');
 	var $fullScreenMenuItem = $('#full-screen');
 
+	var $screenToggle = $('.screen-toggle');
+
 
 	if (forScreenSize === '2-panel') {
 		$detailPanel.removeClass('singular');
 		$listPanel.animate({width: 'show'}, 190);
 		$fullScreenMenuItem.html('Full Screen').removeClass('exit');
+		$screenToggle.removeClass('exit');
 		return;
 	} else if (forScreenSize === '1-panel') {
 		$listPanel.animate({width: 'hide'}, 190, function() {
 			$detailPanel.addClass('singular');
 		});
 		$fullScreenMenuItem.html('Exit Full Screen').addClass('exit');
+		$screenToggle.addClass('exit');
 		return;
 	}
 
@@ -264,12 +272,14 @@ function adjustPanels(forScreenSize) {
 			if (!$detailPanel.is(':visible')) {
 				$listPanel.removeClass('singular');
 				$fullScreenMenuItem.html('Full Screen').removeClass('exit');
+				$screenToggle.removeClass('exit');
 			}
 			break;
 		case 'Recipes by tag':
 			$detailPanel.removeClass('singular');
 			$listPanel.animate({width: 'show'}, 190);
 			$fullScreenMenuItem.html('Full Screen').removeClass('exit');
+			$screenToggle.removeClass('exit');
 			break;
 		default:
 			console.log('default');
@@ -277,6 +287,7 @@ function adjustPanels(forScreenSize) {
 			$detailPanel.removeClass('singular');
 			$listPanel.animate({width: 'show'}, 190);
 			$fullScreenMenuItem.html('Full Screen').removeClass('exit');
+			$screenToggle.removeClass('exit');
 	}
 }
 
@@ -773,7 +784,7 @@ $('#profile').on('click', '.sort-option', function() {
 
 
 /* --- Fullscreen Mode --- */
-$('#profile').on('click', '#full-screen', function() {
+$('#profile').on('click', '#full-screen, .screen-toggle', function() {
 	// If already in fullscreeen mode then go back to 2 panels
 	if ($(this).hasClass('exit')) {
 		adjustPanels('2-panel');
@@ -781,7 +792,11 @@ $('#profile').on('click', '#full-screen', function() {
 		adjustPanels('1-panel');
 	}
 
-// To slide menu up:
+	if ($(this).hasClass('screen-toggle')) {
+		return;
+	}
+
+	// To slide menu up:
 	$('#detail-options').click();
 });
 
