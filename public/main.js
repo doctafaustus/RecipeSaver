@@ -1,3 +1,5 @@
+refreshTags();
+
 /* --- Helper Functions --- */
 window.refreshRecipeList = function(recipeListView, sortView, featuredTag) {
 	console.log(recipeListView);
@@ -19,6 +21,8 @@ window.refreshRecipeList = function(recipeListView, sortView, featuredTag) {
 			console.log('Default switch condition');
 			getAllRecipes(sortView);
 	}
+
+	refreshTags();
 };
 
 // Adjust width of URL container (needed to make ellipsis work)
@@ -32,21 +36,8 @@ window.urlSizeFix = function() {
 $(window).resize(function() {
 	urlSizeFix();
 });
-
-
 window.urlSizeFix();
 
-// Convert minutes to h + m
-window.convertMinsToHours = function(m) {
-	if (m == 0 || +m < 0) {
-		return '0m';
-	}
-	var minutes = m % 60;
-	var hours = (m - minutes) / 60;
-	minutes = (m % 60 === 0 ? '' : minutes + 'm');
-	hours = (m >= 60 ? hours + 'h ' : '');
-	return hours + minutes;
-}
 
 // Show Success Box
 var $successBox = $('#success-box');
@@ -422,8 +413,16 @@ $('#get-uncategorized-recipes').click(function() {
 
 
 
+/* --- Handle search tag suggestions --- */
+
+$('#search-suggestions').on('click', '.suggestion.tag-search-item', function() {
+  console.log('test');
+});
+
+
+
 /* --- Show Recipe Details --- */
-$('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion', function(e) {
+$('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion:not(.tag-search-item)', function(e) {
 	e.preventDefault();
 	$('.detail-recipe').removeClass('from-new');
 	changeStage('View recipe');
@@ -436,7 +435,7 @@ $('#profile, #search-suggestions').on('click', '.recipe-list-entry, .suggestion'
 
 /* --- Tag Functionality --- */
 // Get recipes by tag
-$('body').on('click', '.tag:not(.new-tag) .tag-name, .tag-list-name .tag-name', function(e) {
+$('body').on('click', '.tag:not(.new-tag) .tag-name, .tag-list-name .tag-name, .suggestion.tag-search-item', function(e) {
 
 	changeStage('Recipes by tag');
 	adjustPanels();
@@ -445,6 +444,11 @@ $('body').on('click', '.tag:not(.new-tag) .tag-name, .tag-list-name .tag-name', 
 		tagName: $(this).text(),
 		tagColor: $(this).closest('.tag-list-name').attr('data-tag-color') ||  $(this).closest('.tag').attr('data-tag-color')
 	};
+
+	if ($(this).hasClass('suggestion')) {
+		tagData.tagName = $(this).find('.tag-list-name').text().trim();
+		tagData.tagColor = $(this).attr('data-tag-color');
+	}
 
 	getRecipesByTag(tagData);
 
@@ -569,7 +573,7 @@ $('#search-form-input').keyup(function() {
 	var recipes = window.recipes;
 
 	var foundRecipes = 0;
-	var limit = 10;
+	var limit = 8;
 
 	var list = '';
 
@@ -597,6 +601,10 @@ $('#search-form-input').keyup(function() {
 		}
 	}
 
+	console.log(searchTags(input));
+	list += searchTags(input);
+
+
 	// Replace the suggestion list with new suggestions
 	if (list) {
 		$('#search-suggestions').find('ul').html(list);
@@ -612,6 +620,50 @@ $('#search-form-input').keyup(function() {
 		$suggestionDiv.hide();
 	});
 });
+
+
+function searchTags(input) {
+	var tagList = '';
+
+	var foundTags = 0;
+	var limit = 5;
+
+	var tags = window.tags;
+
+	// Sort recipes by name first
+	tags = tags.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
+
+	// Get all tags that contain the input
+	for (var i = 0, tagLength = tags.length; i < tagLength; i++) {
+		if (tags[i].name.toLowerCase().indexOf(input) > -1 && foundTags < limit) {
+
+			//var firstOfType = (foundTags === 0) ? ' first-tag' : '';
+
+			if (foundTags === 0) {
+				tagList += '<li class="search-tag-spacer"></li>';
+			}
+
+			// Bold the substring that was searched for by inserting a span
+			var startPos = tags[i].name.toLowerCase().indexOf(input);
+			var endPos = startPos + input.length;
+
+			var strStart = tags[i].name.substring(0, startPos);
+			var boldPart = tags[i].name.substring(startPos, endPos);
+			var strEnd = tags[i].name.substring(endPos);
+
+			var formattedStr = strStart + '<span class="sug-bold">' + boldPart + '</span>' + strEnd;
+
+
+			tagList += '<li class="suggestion tag-search-item" data-tag-color="' + tags[i].color + '">\
+				<div class="tag-list-name" style="background-color: ' + tags[i].color + ';">' + formattedStr + '</div>\
+			</li>';
+			foundTags++;
+		}
+	}
+
+	return tagList;
+
+}
 
 	// Select the first suggestion on enter press
 $('#search-form').submit(function(e) {
@@ -943,6 +995,18 @@ function getUncategorized(sortView) {
 			triggerOldSortView(sortView);
 
 			getData();
+	  }
+	});
+}
+
+function refreshTags() {
+	// Refresh tag list
+	$.ajax({
+		type: 'GET',
+		url: '/get-all-tags',
+	  contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	  success: function(data) {
+	  	window.tags = data;
 	  }
 	});
 }

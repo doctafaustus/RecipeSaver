@@ -194,6 +194,17 @@ table {
 	cursor: pointer;
 	padding-left: 8px;
 }
+.search-tag-spacer {
+  border-bottom: solid 1px #dadada;
+  margin-bottom: 6px;
+}
+.search-tag-spacer:hover {
+	background-color: white !important;
+}
+
+.suggestion.tag-search-item .tag-list-name {
+	margin-bottom: 0
+}
 .sug-bold {
 	font-weight: bold;
 }
