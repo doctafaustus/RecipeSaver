@@ -1,0 +1,43 @@
+@media (max-width: 979px) {
+	body {
+		min-width: 0;
+	}
+	#home-header {
+		min-width: 0;
+	}
+	#nav {
+		display: none;
+	}
+	#home-cover {
+		background: url(/images/spices-bg-optimized.jpg) no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: bottom;
+	}
+	.home-wrapper {
+		width: 100%;
+	}
+	.hero-home-wrapper {
+		padding: 0;
+	}
+	#hero-left {
+		float: none;
+		width: 100%;
+		overflow: hidden;
+		box-sizing: border-box;
+    padding: 0 30px;
+	}
+	#save-any {
+		margin-top: 125px;
+		margin-bottom: 100px;
+	}
+	#hero-left p {
+		width: 100%;
+		text-align: center;
+	}
+	#hero-right {
+		display: none;
+	}
+}
