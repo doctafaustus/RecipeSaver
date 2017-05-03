@@ -31,7 +31,9 @@
 	}
 	#save-any {
 		margin-top: 125px;
-		margin-bottom: 100px;
+		margin-bottom: 80px;
+		font-size: 35px;
+		width: 240px;
 	}
 	#hero-left p {
 		width: 100%;
@@ -39,5 +41,40 @@
 	}
 	#hero-right {
 		display: none;
+	}
+	#home-banner {
+		display: none;
+	}
+	#home-laptop-section {
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+	#laptop-left {
+		float: none;
+		width: 100%;
+		padding-left: 0;
+	}
+	#laptop-left img {
+		width: 100%;
+	}
+	#laptop-right {
+    float: none;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+	}
+	#laptop-right h2 {
+		font-size: 24px;
+		margin-top: 32px;
+	}
+	#laptop-right p {
+		width: 100%;
+		line-height: 22px;
+	}
+	#value-props {
+    padding: 40px 30px;
+	}
+	#value-props h3, .blue-heading {
+		font-size: 24px;
 	}
 }
