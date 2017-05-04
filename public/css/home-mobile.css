@@ -72,9 +72,85 @@
 		line-height: 22px;
 	}
 	#value-props {
-    padding: 40px 30px;
+    padding: 40px 0;
 	}
 	#value-props h3, .blue-heading {
 		font-size: 24px;
 	}
+	#value-props p#value-prop-subtitle {
+		width: 100%;
+		font-size: 18px;
+		margin-bottom: 30px;
+	}
+	#value-prop-icons {
+		display: block;
+	}
+	#value-prop-icons h4 {
+		margin-bottom: 10px;
+	}
+	#value-prop-icons p.value-prop-summary {
+		text-align: center;
+		margin-bottom: 30px;
+		width: 100%
+	}
+	#hero-strip-top .hero-strip-box {
+		width: 100%;
+	}
+	.hero-strip-box {
+    width: 100%;
+    font-size: 18px;
+    padding: 20px 0;
+	}
+		#blog-bio {
+			padding-top: 30px;
+			padding-bottom: 30px;
+		}
+		#blog-bio-left {
+			width: 100%;
+			float: none;
+			margin-left: 0;
+		}
+		.blog-bio-title {
+			margin-bottom: 15px;
+		}
+		#blog-post-image {
+			width: 100%;
+		}
+		.gray-box-link {
+			margin-top: 5px;
+			line-height: 22px;
+		}
+		.gray-box {
+			padding-bottom: 6px;
+		}
+		#blog-bio-right {
+			float: none;
+			width: 100%;
+			margin-top: 30px;
+		}
+		#bio, #bio:hover {
+			height: auto;
+			background: transparent;
+		}
+		#bio-left {
+			float: none;
+			width: 100%;
+		}
+		#bio-thumb {
+			float: none;
+			width: 100%;
+			border: 0;
+			border-radius: 0;
+		}
+		#bio-bottom.gray-box-link {
+			float: none;
+			margin-top: 0;
+		}
+		#bio-link {
+			display: none;
+		}
+
+		footer {
+			display: none;
+		}
 }
