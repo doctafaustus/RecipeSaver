@@ -278,6 +278,9 @@
 	#read-more-modal .close {
 		display: none;
 	}
+	#read-more-modal-pic {
+		width: 100%;
+	}
 
 	#read-more-modal-left {
 		width: 100%;
