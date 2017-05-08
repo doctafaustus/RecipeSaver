@@ -51,6 +51,9 @@
 			color: white;
 			letter-spacing: 1px;
 		}
+		#burger-menu {
+			display: none;
+		}
 		#nav {
 			border: 0;
 			min-width: 458px;
@@ -468,6 +471,7 @@
 			<img src="/images/home-logo.png">
 			<div id="home-logo-text">Recipe Saver</div>
 		</a>
+		<div id="burger-menu"></div>
 		<div id="nav">
 			<ul>
 				<li id="recipes"><a href="/recipes">My Recipes</a></li>
@@ -676,6 +680,9 @@
 		// Bio modal
 		var $modal = $('#read-more-modal');
 		var $overlay = $('#support-overlay');
+		var $supportModal = $('#support-modal');
+		var $burger = $('#burger-menu');
+		var $nav = $('#nav');
 
 		$('#bio').click(function(e) {
 			e.preventDefault();
@@ -683,10 +690,20 @@
 			$overlay.fadeIn();
 		});
 
-		$('#read-more-modal .close').click(function() {
+		$('#read-more-modal .close, #support-overlay').click(function() {
 			$modal.fadeOut();
+			$supportModal.fadeOut();
 			$overlay.fadeOut();
 		});
+
+		// Mobile Burger Menu
+		$burger.click(function() {
+			$(this).toggleClass('open');
+			$nav.slideToggle('fast');
+		});
+
+
+
 	</script>
 </body>
 </html>
