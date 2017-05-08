@@ -268,11 +268,17 @@
 	#support-modal {
 		width: 90%;
 		box-sizing: border-box;
+		text-align: center;
 	}
 	#read-more-modal {
 		width: 90%;
     box-sizing: border-box;
+    overflow-x: hidden;
 	}
+	#read-more-modal .close {
+		display: none;
+	}
+
 	#read-more-modal-left {
 		width: 100%;
     float: none;
