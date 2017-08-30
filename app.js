@@ -292,7 +292,7 @@ if ('OPTIONS' == req.method) {
 });
 
 app.enable('trust proxy');
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 31556952000 }, resave: true, saveUninitialized: true, store: new MongoStore(mongoStoreOptions) }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
