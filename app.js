@@ -63,7 +63,7 @@ var User = mongoose.model('User', new Schema({
   creationDate: {type: Date, default: Date.now},
   resetPasswordToken: String,
   resetPasswordExpires: String,
-}));
+}, { usePushEach: true }));
 
 var Recipe = mongoose.model('Recipe', new Schema({
 	id: ObjectId,
@@ -78,7 +78,7 @@ var Recipe = mongoose.model('Recipe', new Schema({
 	cals: String,
 	favorite: Boolean,
   creationDate: {type: Date, default: Date.now},
-}));
+}, { usePushEach: true }));
 
 
 // CUSTOM MODULES
