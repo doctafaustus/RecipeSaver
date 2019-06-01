@@ -139,6 +139,8 @@ passport.use(new FacebookStrategy({
 				console.log('fromApp (again): ' + req.session.fromApp);
 			}
 
+      console.log('facebookId', profile.id);
+
 			User.findOne({ 'facebookId': profile.id }, function(err, user) {
 				if (err) return done(err);
 				if (user) {
