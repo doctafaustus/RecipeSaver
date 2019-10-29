@@ -29,7 +29,7 @@
     "express-session": "^1.14.0",
     "ip": "^1.1.5",
     "mongodb-uri": "^0.9.7",
-    "mongoose": "^4.8.2",
+    "mongoose": "^5.7.5",
     "nodemailer": "^2.7.2",
     "nodemon": "^1.11.0",
     "on-finished": "^2.3.0",
