@@ -424,6 +424,7 @@ function addExtensionRecipe(req, res) {
 
 // Chrome Extension Post
 app.post('/extension', function(req, res) {
+	res.sendStatus(404);
 	console.log('/extension');
 	// Limit check
 	User.findOne({ '_id':  req.body.rs_id }, function(err, user) {
@@ -499,6 +500,19 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 // 		res.render('hold-message.ejs');
 // 	}
 // });
+
+
+// Add transfer message for 3.0 app upgrade
+app.get('*', function(req, res, next) {
+	console.log('IP ADDRESS: ' + req.ip);
+	// if (req.ip === '107.188.225.184' || req.ip === '::ffff:127.0.0.1') {
+	// 	console.log('Safety');
+	// 	return next();
+	// } else {
+		console.log('Not me');
+		res.render('app-upgrade-message.ejs');
+	//}
+});
 
 // If running through Heroku/live then redirect to HTTPS on all routes
 function requireHTTPS(req, res, next) {
