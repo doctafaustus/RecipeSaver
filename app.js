@@ -517,7 +517,7 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 // Redirect all https:// routes to recipesaver.me since DNSimple needs paid plan for this
 if (process.env.PORT) {
   app.use((req, res, next) => {
-		res.redirect('https://www.recipesaver.me?redirect=net');
+		res.redirect(301, 'https://www.recipesaver.me?redirect=net');
   });
 }
 
