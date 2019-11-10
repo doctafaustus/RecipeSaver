@@ -424,7 +424,7 @@ function addExtensionRecipe(req, res) {
 
 // Chrome Extension Post
 app.post('/extension', function(req, res) {
-	res.sendStatus(404);
+	return res.sendStatus(404);
 	console.log('/extension');
 	// Limit check
 	User.findOne({ '_id':  req.body.rs_id }, function(err, user) {
