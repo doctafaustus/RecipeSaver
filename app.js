@@ -518,7 +518,8 @@ function handleTagsAndSave(userId, requestTags, recipe, res, isEdit) {
 if (process.env.PORT) {
   app.use((req, res, next) => {
 		console.log(req.originalUrl);
-		res.redirect(301, 'https://www.recipesaver.me?redirect=net');
+		if (req.originalUrl.indexOf('/extension') > -1) next();
+		else res.redirect(301, 'https://www.recipesaver.me?redirect=net');
   });
 }
 
