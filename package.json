@@ -30,7 +30,7 @@
     "ip": "^1.1.5",
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.8.2",
-    "nodemailer": "^2.7.2",
+    "nodemailer": "^6.4.16",
     "nodemon": "^1.11.0",
     "on-finished": "^2.3.0",
     "passport": "^0.2.2",
